@@ -11,6 +11,7 @@ import AnatomyCanvas from '@components/AnatomyCanvas.vue';
 import MdxRepl from '@components/MdxRepl.vue';
 import MdxTableAPI from '@components/MdxTableAPI.vue';
 import Kbd from '@components/KeyboardKey.vue';
+import PreviewCard from '@components/PreviewCard.vue';
 
 import SliderThumb from './_partials/_sliderThumb.mdx';
 import Slider from './_partials/_slider.mdx';
@@ -399,6 +400,19 @@ The thumb element will receive the `aria-orientation` attribute, which is the sa
 #### Slider attributes
 
 The slider element will receive the `aria-orientation` attribute, which is the prop you pass to the slider.
+
+## Examples
+
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+  <PreviewCard
+    title="FM Radio"
+    description="Showcase of a slider built to look like a FM radio dial."
+    link="https://stackblitz.com/edit/formwerk-fm-radio"
+    src="/thumbs/fm-radio.mp4"
+    external
+    client:idle
+  />
+</div>
 
 ## API
 
