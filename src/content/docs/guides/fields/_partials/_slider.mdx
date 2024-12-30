@@ -25,8 +25,8 @@ const thumbData = useThumbMetadata(0);
       <Thumb />
     </div>
 
-    <div v-if="errorMessage" v-bind="errorMessageProps" class="error">
-      {{ errorMessage }}
+    <div v-bind="errorMessageProps" class="error">
+      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
   </div>
 </template>
@@ -36,6 +36,7 @@ const thumbData = useThumbMetadata(0);
   --color-text: #333;
   --color-error: #f00;
   display: flex;
+  width: 300px;
   align-items: center;
   gap: 6px 14px;
   flex-wrap: wrap;
@@ -65,16 +66,11 @@ const thumbData = useThumbMetadata(0);
   }
 
   .error {
-    display: none;
+    display: block;
+    min-height: 18px;
     font-size: 13px;
     color: #f00;
     width: 100%;
-  }
-
-  &:has([aria-invalid='true']) {
-    .error {
-      display: block;
-    }
   }
 
   &:has([aria-orientation='vertical']) {
