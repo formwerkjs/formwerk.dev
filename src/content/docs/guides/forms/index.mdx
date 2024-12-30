@@ -375,7 +375,11 @@ By default, native form submissions only collect the values of `input`, `select`
 
 </Aside>
 
-### isSubmitting
+### Submit State
+
+Forms and Fields expose several properties related to the submission state. They can be useful to build certain UI behaviors like showing submit progress spinners or disabling the submit button while the form is being submitted with an async handler.
+
+#### isSubmitting
 
 You can check the submission status with the `isSubmitting` property. This property is `true` when the form is being submitted and `false` otherwise. This is useful when you want to show a loading spinner or disable the submit button while the form is being submitted with an async handler.
 
@@ -414,6 +418,106 @@ const onSubmit = handleSubmit(async (data) => {
 </div>
 
 </MdxRepl>
+
+#### wasSubmitted
+
+The `wasSubmitted` property is `true` if the form was submitted and the handler was called without any errors thrown. This is useful when you want to show a success message or perform some custom logic after the form has been submitted.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!TextField.vue">
+  <TextFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { useForm } from '@formwerk/core';
+import TextField from './TextField.vue';
+
+const { handleSubmit, wasSubmitted } = useForm();
+
+const onSubmit = handleSubmit(async (data) => {
+  console.log(JSON.stringify(data.toObject(), null, 2));
+});
+</script>
+
+<template>
+  <form v-if="!wasSubmitted" @submit="onSubmit" novalidate>
+    <TextField name="email" label="Email" type="email" required />
+    <TextField name="password" label="Password" type="password" required />
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p v-else>Form was submitted</p>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+This state is reset when the form is [reset](#resetting-forms).
+
+#### submitAttemptsCount
+
+The `submitAttemptsCount` property returns the number of times the form has been submitted regardless of whether it was valid or not.
+
+This can be useful when you want to disable certain UI elements, or show some feedback to the user. You might even want to gather analytics! maybe your form is too hard?
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!TextField.vue">
+  <TextFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { useForm } from '@formwerk/core';
+import TextField from './TextField.vue';
+
+const { handleSubmit, submitAttemptsCount } = useForm();
+
+const onSubmit = handleSubmit(async (data) => {
+  console.log(JSON.stringify(data.toObject(), null, 2));
+});
+</script>
+
+<template>
+  <p>Submit attempts: {{ submitAttemptsCount }}</p>
+
+  <form @submit="onSubmit" novalidate>
+    <TextField name="email" label="Email" type="email" required />
+    <TextField name="password" label="Password" type="password" required />
+
+    <button type="submit">Submit</button>
+  </form>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+This state is reset when the form is [reset](#resetting-forms).
+
+#### isSubmitAttempted
+
+The `isSubmitAttempted` property is `true` if the form was submitted, but unlike `wasSubmitted`, it turns `true` even if the form is invalid.
+
+```ts
+import { useForm } from '@formwerk/core';
+
+const { handleSubmit, isSubmitAttempted } = useForm();
+
+const onSubmit = handleSubmit((data) => {
+  console.log(JSON.stringify(data.toObject(), null, 2));
+});
+```
 
 ### Scrolling to invalid fields
 
@@ -608,7 +712,7 @@ But you can also provide a form-level [Standard Schema](https://github.com/stand
 
 Here is an example of a form with a Standard Schema:
 
-<MdxRepl client:load>
+<MdxRepl client:load preview-size="lg">
 
 <div slot="!TextField.vue">
   <TextFieldPartial />
@@ -668,7 +772,7 @@ The only thing you need to be careful of is to not have conflicting validations 
 
 Here is an example for a field with all validation sources:
 
-<MdxRepl preview-size="sm" client:load>
+<MdxRepl preview-size="md" client:load>
 
 <div slot="!TextField.vue">
   <TextFieldPartial />
@@ -724,7 +828,7 @@ There are three ways to access errors with `useForm`:
 
 The `getError` function returns the error of a specific field. If the field has no error, it returns `undefined`.
 
-<MdxRepl  client:load>
+<MdxRepl preview-size="lg" client:load>
 
 <div slot="!TextField.vue">
   <TextFieldPartial />
@@ -851,6 +955,22 @@ const { handleSubmit, displayError } = useForm({
 </TabItem>
 
 </Tabs>
+
+## Submit Errors
+
+Unlike validation errors which are mostly "live" and react to the values changing regardless of when you display them, submit errors are only populated when the form is submitted. This is useful if you want to only show errors after submits rather than live.
+
+Each field exposes `submitErrorMessage` and `submitErrors`, using these will only display errors after the form is submitted.
+
+```ts
+import { useTextField } from '@formwerk/core';
+
+const { submitErrorMessage, submitErrors } = useTextField({
+  // ...
+});
+```
+
+Forms also expose `getSubmitError` and `getSubmitErrors` to get the submit error of a specific field or all fields respectively, if you need access to them on the form level.
 
 ## Resetting Forms
 

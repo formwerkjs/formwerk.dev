@@ -118,6 +118,9 @@ const store = useStore({
   builtinImportMap: computed(() =>
     merge(importMap.value, {
       imports: {
+        'klona/full': 'https://unpkg.com/klona@2.0.6/full/index.mjs',
+        '@standard-schema/utils':
+          'https://unpkg.com/@standard-schema/utils@0.3.0/dist/index.js',
         vue: `https://unpkg.com/vue@${version}/dist/vue.esm-browser.prod.js`,
         '@formwerk/core': `https://unpkg.com/@formwerk/core@${fwVersion}/dist/core.mjs`,
         zod: 'https://unpkg.com/@awaddev/zod@3.23.8-standard-schema/lib/index.mjs',
