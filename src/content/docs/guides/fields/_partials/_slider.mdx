@@ -26,7 +26,7 @@ const thumbData = useThumbMetadata(0);
     </div>
 
     <div v-bind="errorMessageProps" class="error">
-      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+      {{ errorMessage }}
     </div>
   </div>
 </template>
