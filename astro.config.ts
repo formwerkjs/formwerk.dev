@@ -40,6 +40,13 @@ export default defineConfig({
       },
       head: [
         {
+          tag: 'meta',
+          attrs: {
+            property: 'og:image',
+            content: '/og-image.jpg',
+          },
+        },
+        {
           tag: 'script',
           attrs: {
             type: 'text/partytown',
@@ -47,6 +54,7 @@ export default defineConfig({
             src: 'https://www.googletagmanager.com/gtag/js?id=G-CVDZRK6FZF',
           },
         },
+
         {
           tag: 'script',
           attrs: {
