@@ -1,8 +1,11 @@
 ```vue collapse={55-204}
 <script setup lang="ts">
+import { useId } from 'vue';
 import { useSelect, type SelectProps } from '@formwerk/core';
 
 const props = defineProps<SelectProps>();
+const id = useId();
+const triggerId = `--trigger-${id}`;
 
 const {
   triggerProps,
@@ -79,7 +82,7 @@ const {
     align-items: center;
     justify-content: space-between;
     /** CSS Anchor Positioning */
-    anchor-name: --trigger;
+    anchor-name: v-bind('triggerId');
     border: 1px solid var(--color-border);
     padding: 4px 8px;
     font-size: 14px;
@@ -129,7 +132,7 @@ const {
     }
 
     /** CSS Anchor Positioning */
-    position-anchor: --trigger;
+    position-anchor: v-bind('triggerId');
     inset-area: bottom center;
     position-area: bottom center;
     position-try-fallbacks:
