@@ -124,7 +124,7 @@ const store = useStore({
         vue: `https://unpkg.com/vue@${version}/dist/vue.esm-browser.prod.js`,
         '@formwerk/core': `https://unpkg.com/@formwerk/core@${fwVersion}/dist/core.mjs`,
         zod: 'https://unpkg.com/@awaddev/zod@3.23.8-standard-schema/lib/index.mjs',
-        '@vueuse/core': 'https://unpkg.com/@vueuse/core@11?module',
+        '@vueuse/core': 'https://unpkg.com/@vueuse/core?module',
       },
     }),
   ),
