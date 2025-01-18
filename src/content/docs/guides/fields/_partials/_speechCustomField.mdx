@@ -1,0 +1,175 @@
+```vue collapse={85-173}
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+// TODO: ADD USE CUSTOM FIELD ON RELEASE
+
+const props = defineProps<{
+  sentence: string;
+}>();
+
+const words = computed(() => props.sentence.split(' '));
+const results = ref<string[]>([]);
+const isListening = ref(false);
+const recognition = new (window.SpeechRecognition ||
+  window.webkitSpeechRecognition)();
+
+recognition.lang = 'en-US';
+recognition.interimResults = false;
+recognition.maxAlternatives = 1;
+
+function onSpeakClick() {
+  if (isListening.value) {
+    stopListening();
+    return;
+  }
+
+  results.value = [];
+  isListening.value = true;
+  recognition.start();
+  setTimeout(stopListening, 8000);
+}
+
+function stopListening() {
+  recognition.stop();
+  isListening.value = false;
+}
+
+recognition.onresult = (event) => {
+  results.value = event.results[0][0].transcript.toLowerCase().split(' ');
+};
+</script>
+
+<template>
+  <div class="speech-exercise">
+    <div class="challenge-container">
+      <div class="challenge-label">Say the following</div>
+      <div class="challenge">
+        <span
+          v-for="(word, idx) in words"
+          :key="`word-${idx}`"
+          class="challenge-word"
+          :class="{ 'is-spoken': results.includes(word.toLowerCase()) }"
+        >
+          {{ word }}
+        </span>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      @click="onSpeakClick"
+      :class="{ 'is-listening': isListening }"
+    >
+      <div class="button-content">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+          <line x1="12" y1="19" x2="12" y2="23" />
+          <line x1="8" y1="23" x2="16" y2="23" />
+        </svg>
+        {{ isListening ? 'Listening...' : 'Speak' }}
+      </div>
+    </button>
+  </div>
+</template>
+
+<style scoped>
+.speech-exercise {
+  background: white;
+  border-radius: 16px;
+}
+
+.challenge-container {
+  margin-bottom: 2rem;
+}
+
+.challenge {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #57534e;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.challenge-label {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 0.5rem;
+}
+
+.challenge-word {
+  &.is-spoken {
+    color: #059669;
+  }
+}
+
+.result {
+  font-size: 1.1rem;
+  color: #4b5563;
+}
+
+.result-label {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+}
+
+button {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #059669;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #10b981;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.is-listening {
+  background-color: #ef4444;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+</style>
+```

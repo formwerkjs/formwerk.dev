@@ -1,0 +1,153 @@
+---
+title: Custom Fields
+description: Learn how to build custom fields with Formwerk.
+---
+
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import AnatomyCanvas from '@components/AnatomyCanvas.vue';
+import AnatomyCustomField from '@components/AnatomyCustomField.vue';
+import MdxRepl from '@components/MdxRepl.vue';
+import MdxTableAPI from '@components/MdxTableAPI.vue';
+import SpeechCustomField from './_partials/_speechCustomField.mdx';
+
+Custom fields are fields that do not fit into the existing composable categories. In other words, they are a possibly complex widget that participates into your forms.
+
+Such fields have no specific UI as they are your own creation. Those fields might be used in very specific business domains, you will see a few examples of these in the page.
+
+## Features
+
+- Labels, descriptions, and error message displays are automatically linked to control and label elements with `aria-*` attributes.
+- Validation support with [Standard Schema](https://github.com/standard-schema/standard-schema) validation.
+- Support for `v-model` binding.
+
+## Anatomy
+
+<AnatomyCanvas>
+  <AnatomyCustomField />
+</AnatomyCanvas>
+
+## Building a Custom Field Component
+
+Now comes the fun part. Use your imagination to build a new kind of a field. This can be hard to do on demand, so we will instead build a "speak a sentence" field. Similar to what you would find in language learning apps like Duolingo.
+
+We will start by importing the `useCustomField` composable and using it in our custom field component.
+
+The `useCustomField` composable returns binding objects for the elements shown in the [anatomy](#anatomy). You will use `v-bind` to bind them to the corresponding DOM elements. The `control` element is anything that qualifies as the main interactive part of the input. In other words, it is the visual part that the user interacts with to enter the value.
+
+Now the value type of such a field could be a `string` as in you detect what the user says on the microphone and you present it as a string. We can use the [`SpeechRecognition` API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API) to detect what the user says on the microphone.
+
+Alternatively, we can just build the full experience of the field and make it so that it auto checks what the user says and if it matches the sentence, it will be marked as correct. This means the value type of the field will be a boolean rather than a string. It is up to you and your requirements, but here we will go with a boolean type.
+
+<MdxRepl client:load preview-size="lg">
+  <div slot="SpeakField.vue">
+    <SpeechCustomField />
+  </div>
+
+  <div slot="App.vue">
+
+    ```vue
+    <script setup lang="ts">
+    import SpeakField from './SpeakField.vue';
+    </script>
+
+    <template>
+      <SpeakField sentence="I went to the store" />
+    </template>
+    ```
+
+  </div>
+
+</MdxRepl>
+
+## Validation
+
+`useCustomField` supports [Standard Schema](https://github.com/standard-schema/standard-schema) validation through the `schema` prop. This includes multiple providers like [Zod](https://zod.dev/), [Valibot](https://valibot.dev/), [Arktype](https://arktype.dev/), and more.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!SpeakField.vue">
+  <SpeechCustomField />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import SpeakField from './SpeakField.vue';
+import { z } from 'zod';
+
+const schema = z.literal(true);
+</script>
+
+<template>
+  <SpeakField :schema="schema" sentence="I went to the store" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Triggering Validation
+
+Custom fields lack any signal to trigger validation. This is because we don't know what kind of elements you will be using, so you will have to trigger validation manually via the `validate` function exposed by the `useCustomField` composable.
+
+```vue
+<script setup lang="ts">
+import { useCustomField, type CustomFieldProps } from '@formwerk/core';
+
+const props = defineProps<CustomFieldProps>();
+
+const { validate, setValue } = useCustomField(props);
+
+function onValueChange(value: string) {
+  setValue(value);
+  validate();
+}
+</script>
+```
+
+## Wrapping 3rd Party Components
+
+Another use-case for custom fields is to wrap 3rd party components. Maybe you are using a UI library and would like to integrate it with Formwerk, custom fields are perfect for this since they have no expectations about the kind of markup you will use.
+
+However, this means you will have to hook up the moving parts yourself. In the following example, we are wrapping a 3rd party text input component from PrimeVue.
+
+<iframe
+  loading="lazy"
+  src="https://stackblitz.com/edit/vitejs-vite-sfck9h7b?ctl=1&embed=1&file=src%2Fcomponents%2FInputText.vue&hideNavigation=1"
+></iframe>
+
+The validation here is aggressive, it is up to you to decide when to show the error message.
+
+Keep in mind that this is an inefficient use of Formwerk, here you only gain validation state and the form API, since most UI libraries already have their accessibility and interactions built in. But, if you need to, this is how you could do it.
+
+## Usage
+
+### Disabled
+
+For custom fields, it is up to you to implement the disabled state. We don't know what disabled means for your field, so we leave it up to you to implement it.
+
+The disabled state is returned from `useCustomField` as `isDisabled` and it is one of the props accepted by the `useCustomField` composable. It behaves the same as other fields' disabled state, if a parent form or form group is disabled, the field will be disabled.
+
+What Formwerk does however, is it will not validate the field when it is disabled and it will not submit the field when it is disabled either.
+
+### Readonly
+
+For custom fields, it is up to you to implement the readonly state. We don't know what readonly means for your field, so we leave it up to you to implement it.
+
+Readonly fields are validated and submitted, but they do not accept user input. The field is still focusable, and the value is copyable in the case of text fields. So use this as your north star, make sure the field is focusable, but not editable.
+
+## API
+
+### Props
+
+These are the properties that can be passed to the `useCustomField` composable.
+
+<MdxTableAPI typeName="CustomFieldProps" />
+
+### Returns
+
+These are the properties in the object returned by the `useCustomField` composable.
+
+<MdxTableAPI fnName="useCustomField" />
