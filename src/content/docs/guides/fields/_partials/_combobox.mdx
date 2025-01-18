@@ -1,4 +1,4 @@
-```vue collapse={64-208}
+```vue collapse={67-218}
 <script setup lang="ts">
 import { useId } from 'vue';
 import {
@@ -22,6 +22,7 @@ const {
   errorMessageProps,
   errorMessage,
   listBoxProps,
+  isListEmpty,
 } = useComboBox(props, {
   filter: contains,
 });
@@ -50,6 +51,8 @@ const {
 
     <div v-bind="listBoxProps" popover class="listbox">
       <slot />
+
+      <div v-if="isListEmpty" class="empty-message">No Results</div>
     </div>
 
     <div v-if="description" v-bind="descriptionProps" class="hint">
@@ -198,6 +201,11 @@ const {
     .error {
       display: block;
     }
+  }
+
+  .empty-message {
+    color: var(--color-text);
+    font-size: 13px;
   }
 }
 
