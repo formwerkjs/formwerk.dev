@@ -387,9 +387,51 @@ import OptionItem from './OptionItem.vue';
 
 </MdxRepl>
 
+### Open listbox on focus
+
+You can open the listbox on focus by passing the `openOnFocus` prop.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="!OptionGroup.vue">
+  <OptionGroupPartial />
+</div>
+
+<div slot="!ComboBox.vue">
+  <ComboPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import ComboBox from './ComboBox.vue';
+import OptionGroup from './OptionGroup.vue';
+import OptionItem from './OptionItem.vue';
+</script>
+
+<template>
+  <ComboBox label="Pick a drink" open-on-focus placeholder="Search...">
+    <OptionItem label="Coffee ☕️" value="coffee" />
+    <OptionItem label="Tea 🍵" value="tea" />
+    <OptionItem label="Milk 🥛" value="milk" />
+  </ComboBox>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
 ### Custom Values
 
-ComboBoxes by default do not allow custom values. If you need to allow custom values, you need to pass the `onNewValue` prop/hander to `useComboBox`. The `onNewValue` prop is a function that must return the both the new value and the label to use for it.
+ComboBoxes by default do not allow custom values, you probably noticed that every time you blurred the text field without making a selection, the input value was reverted to the last value.
+
+If you need to allow custom values, you can pass the `onNewValue` prop/handler to `useComboBox`. The `onNewValue` prop is a function that must return the both the new value and the label to use for it.
 
 <MdxRepl client:load preview-size="lg">
 
@@ -416,6 +458,71 @@ const drinks = ref([
 ]);
 
 function onNewDrink(value: string) {
+  const newDrink = { value, label: `${value} 🍹` };
+  drinks.value.push(newDrink);
+
+  return newDrink;
+}
+</script>
+
+<template>
+  <ComboBox
+    label="Select a drink"
+    placeholder="Search..."
+    @new-value="onNewDrink"
+  >
+    <OptionItem
+      v-for="drink in drinks"
+      :key="drink.value"
+      :label="drink.label"
+      :value="drink.value"
+    />
+  </ComboBox>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+The `onNewValue` handler is called when all of the following conditions are met:
+
+- The current input value does not match any option value.
+- The current input value is not empty.
+- The user presses the `Enter` or the `Tab` keys, blurring the text field otherwise has no effect.
+
+You can also return `null` or `undefined` to prevent the new value from being added to the list.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!ComboBox.vue">
+  <ComboPartial />
+</div>
+
+<div slot="!OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue {13-16}
+<script setup lang="ts">
+import { ref } from 'vue';
+import ComboBox from './ComboBox.vue';
+import OptionItem from './OptionItem.vue';
+
+const drinks = ref([
+  { value: 'coffee', label: 'Coffee ☕️' },
+  { value: 'tea', label: 'Tea 🍵' },
+  { value: 'milk', label: 'Milk 🥛' },
+]);
+
+function onNewDrink(value: string) {
+  // Prevent adding more than 5 drinks
+  if (drinks.value.length >= 5) {
+    return null;
+  }
+
   const newDrink = { value, label: `${value} 🍹` };
   drinks.value.push(newDrink);
 

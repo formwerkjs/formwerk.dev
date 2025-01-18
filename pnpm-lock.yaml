@@ -36,8 +36,8 @@ importers:
         specifier: ^1.1.5
         version: 1.1.5(vue@3.5.13(typescript@5.7.2))
       '@formwerk/core':
-        specifier: ^0.6.1
-        version: 0.6.1(vue@3.5.13(typescript@5.7.2))
+        specifier: ^0.6.2
+        version: 0.6.2(vue@3.5.13(typescript@5.7.2))
       '@iconify-json/vscode-icons':
         specifier: ^1.2.8
         version: 1.2.8
@@ -866,8 +866,8 @@ packages:
   '@floating-ui/vue@1.1.5':
     resolution: {integrity: sha512-ynL1p5Z+woPVSwgMGqeDrx6HrJfGIDzFyESFkyqJKilGW1+h/8yVY29Khn0LaU6wHBRwZ13ntG6reiHWK6jyzw==}
 
-  '@formwerk/core@0.6.1':
-    resolution: {integrity: sha512-i3SimlpUAvtsCl+/2rHoMrZI4HXbdB1PMF3PaUFCnq8fRYOSsbrxQTMLgqpptf6p4cGY9y+HfOE5BnjbrroBdA==}
+  '@formwerk/core@0.6.2':
+    resolution: {integrity: sha512-lm3CtxhK1hWTei2rKVW5kez3GySIN23pMdcsMccvFaKxRhlmvIpkqJIDP3zZXU9Kg/JXP30T4AYSKf+1jufMbg==}
     peerDependencies:
       vue: '>=3.5.0'
 
@@ -5022,7 +5022,7 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@formwerk/core@0.6.1(vue@3.5.13(typescript@5.7.2))':
+  '@formwerk/core@0.6.2(vue@3.5.13(typescript@5.7.2))':
     dependencies:
       '@standard-schema/spec': 1.0.0-rc.0
       '@standard-schema/utils': 0.3.0
