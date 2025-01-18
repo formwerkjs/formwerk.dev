@@ -1,0 +1,477 @@
+---
+title: ComboBox Fields
+description: Learn how to build accessible ComboBox field Vue components with Formwerk.
+sidebar:
+  order: 5
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+import AnatomyCanvas from '@components/AnatomyCanvas.vue';
+import AnatomyComboBoxClosed from '@components/AnatomyComboBoxClosed.vue';
+import AnatomyComboBoxOpened from '@components/AnatomyComboBoxOpened.vue';
+import MdxRepl from '@components/MdxRepl.vue';
+import MdxTableAPI from '@components/MdxTableAPI.vue';
+import Kbd from '@components/KeyboardKey.vue';
+
+import OptionPartial from './_partials/_option.mdx';
+import OptionGroupPartial from './_partials/_optionGroup.mdx';
+import SelectPartial from './_partials/_select.mdx';
+
+ComboBoxes are common form fields. They combine text fields with a dropdown or a listbox to allow users to select an option from the list that matches the text they have entered.
+
+## Features
+
+- Labeling, descriptions, error message displays are automatically linked to input and label elements with `aria-*` attributes.
+- Support for single selections.
+- Support for option groups.
+- Support for option filtering with multiple filtering strategies.
+- First-class Support for `[popover]` popups for dropdowns/menus.
+- Generic typing support for options.
+- Validation support with HTML validation attributes and [Standard Schemas](https://github.com/standard-schema/standard-schema).
+- Support for `v-model` binding.
+- Supported Keyboard features:
+
+When focusing the text input, and menu is closed:
+
+| Key                                        | Description             |
+| ------------------------------------------ | ----------------------- |
+| <Kbd code="ArrowDown" label="ArrowDown" /> | Opens the options menu. |
+| <Kbd code="ArrowUp" label="ArrowUp" />     | Opens the options menu. |
+
+When focusing the text input, and menu is open:
+
+| Key                                         | Description                                  |
+| ------------------------------------------- | -------------------------------------------- |
+| <Kbd code="Enter" label="Enter" />          | Selects the highlighted option.              |
+| <Kbd code="ArrowDown" label="Arrow Down" /> | Highlights the next option if available.     |
+| <Kbd code="ArrowUp" label="Arrow Up" />     | Highlights the previous option if available. |
+| <Kbd code="Home" label="Home" />            | Highlights the first option.                 |
+| <Kbd code="PageUp" label="Page Up" />       | Highlights the first option.                 |
+| <Kbd code="End" label="End" />              | Highlights the last option.                  |
+| <Kbd code="PageDown" label="Page Down" />   | Highlights the last option.                  |
+
+Most people aren't aware of these keyboard shortcuts, but they do make a big difference in the user experience for keyboard users.
+
+## Anatomy
+
+<AnatomyCanvas>
+  <AnatomyComboBoxClosed />
+
+  <AnatomyComboBoxOpened />
+</AnatomyCanvas>
+
+## Building a Select Field
+
+The select field is one of the most complex fields with multiple moving parts. It is what Formwerk considers a "compound component" because it is made up of an ecosystem of components that work together to create a single field.
+
+From the anatomy diagram above, you can see that the core select field is made up of the following parts:
+
+- **Trigger:** A trigger element that is used to open the options menu, doubles as the selected value display.
+- **Popup:** An options menu that contains the list of options.
+- **Option:** An option component that represents each option in the list.
+- **Option Group:** Not illustrated above, an option group that groups options together based on some categorization.
+
+Formwerk handles all of these parts and abstracts them into the following component ecosystem:
+
+- **Select**: Contains the trigger and popup parts. You will use `useSelect` to build it.
+- **Option**: Represents an option in the list. You will use `useOption` to build it.
+- **OptionGroup**: Represents a group of options in the list. You will use `useOptionGroup` to build it.
+
+Notice that the popup is not a separate component. This is because popups today can be done in different ways, so Formwerk while offers the open state along with some accessability attributes, it does not have a specific popup component implementation. But we offer out of the box support for [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) if you happen to use one for the popup element.
+
+### Building an Option Component
+
+We can start by using `useOption` to create our option component. This component will be responsible for rendering each option in the list.
+
+<OptionPartial />
+
+Notice that we are using the `OptionProps` type to define the props for our component. This type is generic and allows you to specify the type of the option value. In this case, we are using `any` to represent any type of value.
+
+The `label` is available inside `OptionProps` and we will display it to the user.
+
+### Building a ComboBox Component
+
+Next, you will use `useSelect` to create our select component. This component will be responsible for rendering the trigger and popup parts.
+
+The `useSelect` composable returns binding objects for some of the elements shown in the [anatomy](#anatomy), you will use `v-bind` to bind them to the corresponding DOM elements.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="SelectField.vue">
+  <SelectPartial />
+</div>
+
+<div slot="OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import SelectField from './SelectField.vue';
+import OptionItem from './OptionItem.vue';
+</script>
+
+<template>
+  <SelectField label="Select a drink">
+    <OptionItem label="Coffee ☕️" value="coffee" />
+    <OptionItem label="Tea 🍵" value="tea" />
+    <OptionItem label="Milk 🥛" value="milk" />
+  </SelectField>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Building an Option Group Component
+
+Building an option group component is similar to building an option component. You will use `useOptionGroup` to create the component.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="OptionGroup.vue">
+  <OptionGroupPartial />
+</div>
+
+<div slot="!SelectField.vue">
+  <SelectPartial />
+</div>
+
+<div slot="!OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import SelectField from './SelectField.vue';
+import OptionGroup from './OptionGroup.vue';
+import OptionItem from './OptionItem.vue';
+
+const groups = [
+  { label: 'Africa', options: ['Egypt', 'Nigeria', 'Ghana', 'Kenya'] },
+  { label: 'Asia', options: ['China', 'India', 'Japan'] },
+  { label: 'Europe', options: ['France', 'Germany', 'Italy'] },
+  { label: 'North America', options: ['Canada', 'Mexico', 'United States'] },
+  { label: 'South America', options: ['Argentina', 'Brazil', 'Chile'] },
+];
+</script>
+
+<template>
+  <SelectField label="Select a country">
+    <OptionGroup
+      v-for="group in groups"
+      :key="group.label"
+      :label="group.label"
+    >
+      <OptionItem
+        v-for="country in group.options"
+        :key="country"
+        :label="country"
+        :value="country"
+      />
+    </OptionGroup>
+  </SelectField>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+## Validation
+
+Because selects in Formwerk are a fully custom component, it doesn't support any HTML validation attributes. You can however, use Standard Schemas to validate the value of the select.
+
+In the future when customizable selects are available in the browser, Formwerk will leverage that to provide better validation support for the native HTML constraints.
+
+### Standard Schema
+
+`useSelect` supports [Standard Schema](https://github.com/standard-schema/standard-schema) validation through the `schema` prop. This includes multiple providers like [Zod](https://zod.dev/), [Valibot](https://valibot.dev/), [Arktype](https://arktype.dev/), and more.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!SelectField.vue">
+  <SelectPartial />
+</div>
+
+<div slot="!OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import SelectField from './SelectField.vue';
+import OptionItem from './OptionItem.vue';
+import { z } from 'zod';
+
+const schema = z
+  .string()
+  .min(1, 'Please select a drink')
+  .endsWith('coffee', 'WRONG ANSWER!');
+</script>
+
+<template>
+  <SelectField label="Select a drink" :schema="schema">
+    <OptionItem label="Coffee ☕️" value="coffee" />
+    <OptionItem label="Tea 🍵" value="tea" />
+    <OptionItem label="Milk 🥛" value="milk" />
+  </SelectField>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+## Usage
+
+### Multiple Select
+
+The `useSelect` composable accepts a `multiple` prop, it adjusts behaviors to what users expect out of a multi-select field.
+
+<MdxRepl preview-size="lg" client:load>
+
+<div slot="!OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="!OptionGroup.vue">
+  <OptionGroupPartial />
+</div>
+
+<div slot="!SelectField.vue">
+  <SelectPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import SelectField from './SelectField.vue';
+import OptionGroup from './OptionGroup.vue';
+import OptionItem from './OptionItem.vue';
+
+const groups = [
+  { label: 'Africa', options: ['Egypt', 'Nigeria', 'Ghana', 'Kenya'] },
+  { label: 'Asia', options: ['China', 'India', 'Japan'] },
+  { label: 'Europe', options: ['France', 'Germany', 'Italy'] },
+  { label: 'North America', options: ['Canada', 'Mexico', 'United States'] },
+  { label: 'South America', options: ['Argentina', 'Brazil', 'Chile'] },
+];
+</script>
+
+<template>
+  <SelectField label="Pick countries" multiple>
+    <OptionGroup
+      v-for="group in groups"
+      :key="group.label"
+      :label="group.label"
+    >
+      <OptionItem
+        v-for="country in group.options"
+        :key="country"
+        :label="country"
+        :value="country"
+      />
+    </OptionGroup>
+  </SelectField>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Disabled
+
+Use disabled to mark fields as non-interactive, disabled fields are not validated and are not submitted.
+
+If you need to prevent the user from interacting with the field while still allowing it to submit, consider using `readonly` instead.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="!OptionGroup.vue">
+  <OptionGroupPartial />
+</div>
+
+<div slot="!SelectField.vue">
+  <SelectPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import SelectField from './SelectField.vue';
+import OptionGroup from './OptionGroup.vue';
+import OptionItem from './OptionItem.vue';
+</script>
+
+<template>
+  <SelectField label="Pick a drink" disabled>
+    <OptionItem label="Coffee ☕️" value="coffee" />
+    <OptionItem label="Tea 🍵" value="tea" />
+    <OptionItem label="Milk 🥛" value="milk" />
+  </SelectField>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+You can also mark individual options as disabled by passing a `disabled` prop to the `OptionItem` component. Note that disabled options are skipped from the focus order when using shortcuts or the search functionality.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="!OptionGroup.vue">
+  <OptionGroupPartial />
+</div>
+
+<div slot="!SelectField.vue">
+  <SelectPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import SelectField from './SelectField.vue';
+import OptionGroup from './OptionGroup.vue';
+import OptionItem from './OptionItem.vue';
+</script>
+
+<template>
+  <SelectField label="Pick a drink">
+    <OptionItem label="Coffee ☕️" value="coffee" />
+    <OptionItem label="Tea 🍵" disabled value="tea" />
+    <OptionItem label="Milk 🥛" value="milk" />
+  </SelectField>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Readonly
+
+Readonly fields are validated and submitted, but they do not accept user input. The field is still focusable and the popup is still openable. For more info, check the [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/readonly).
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="!OptionGroup.vue">
+  <OptionGroupPartial />
+</div>
+
+<div slot="!SelectField.vue">
+  <SelectPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import SelectField from './SelectField.vue';
+import OptionGroup from './OptionGroup.vue';
+import OptionItem from './OptionItem.vue';
+</script>
+
+<template>
+  <SelectField label="Pick a drink" readonly>
+    <OptionItem label="Coffee ☕️" value="coffee" />
+    <OptionItem label="Tea 🍵" value="tea" />
+    <OptionItem label="Milk 🥛" value="milk" />
+  </SelectField>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+## Styling
+
+When styling the select field, you need to be aware of the following...
+
+#### Option attributes
+
+When an option is selected, it will receive the `aria-selected="true"` attribute if the select field is a single choice select.
+
+If the select field is a multi-choice select, the selected options will receive the `aria-checked="true"` attribute instead.
+
+// TODO: TRIGGER ATTRIBUTES
+
+#### Trigger attributes
+
+The trigger element will receive the `aria-expanded` attribute. So you can style the trigger according to the popover state if needed.
+
+#### Popover Attributes
+
+The popover (listbox) element will receive the `aria-activedescendant` attribute when an option is focused that corresponds to the id of the focused option.
+
+Furthermore, the popover element will receive the `aria-multiselectable` attribute if the select field is a multi-choice select.
+
+## API
+
+### Option
+
+#### Props
+
+These are the properties that can be passed to the `useOption` composable.
+
+<MdxTableAPI typeName="OptionProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useOption` composable.
+
+<MdxTableAPI fnName="useOption" />
+
+### Option Group
+
+#### Props
+
+These are the properties that can be passed to the `useOptionGroup` composable.
+
+<MdxTableAPI typeName="OptionGroupProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useOptionGroup` composable.
+
+<MdxTableAPI fnName="useOptionGroup" />
+
+### ComboBox
+
+#### Props
+
+These are the properties that can be passed to the `useComboBox` composable.
+
+<MdxTableAPI typeName="ComboBoxProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useSelect` composable.
+
+<MdxTableAPI fnName="useComboBox" />
