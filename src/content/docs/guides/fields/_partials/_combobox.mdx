@@ -1,49 +1,58 @@
-```vue collapse={58-207}
+```vue collapse={67-218}
 <script setup lang="ts">
 import { useId } from 'vue';
-import { useSelect, type SelectProps } from '@formwerk/core';
+import {
+  useComboBox,
+  type ComboBoxProps,
+  useDefaultFilter,
+} from '@formwerk/core';
 
-const props = defineProps<SelectProps>();
+const props = defineProps<ComboBoxProps>();
 const id = useId();
-const triggerId = `--trigger-${id}`;
+const anchorId = `--anchor-${id}`;
+
+const { contains } = useDefaultFilter({
+  caseSensitive: false,
+});
 
 const {
-  triggerProps,
+  buttonProps,
+  inputProps,
   labelProps,
   errorMessageProps,
-  isTouched,
   errorMessage,
-  fieldValue,
   listBoxProps,
-} = useSelect(props);
+  isListEmpty,
+} = useComboBox(props, {
+  filter: contains,
+});
 </script>
 
 <template>
-  <div class="select">
-    <div v-bind="labelProps" class="select-label">{{ label }}</div>
+  <div class="combobox">
+    <div v-bind="labelProps" class="combobox-label">{{ label }}</div>
 
-    <div v-bind="triggerProps" class="trigger">
-      <div v-if="multiple && fieldValue?.length" class="multi-value-display">
-        <span v-for="selected in fieldValue">{{ selected }}</span>
-      </div>
-      <span v-else class="placeholder">
-        {{ fieldValue?.length ? fieldValue : 'Pick a value' }}
-      </span>
+    <div class="control">
+      <input v-bind="inputProps" />
 
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="14"
-        height="14"
-        viewBox="0 0 256 256"
-      >
-        <path
-          d="M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z"
-        ></path>
-      </svg>
+      <button v-bind="buttonProps">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 256 256"
+        >
+          <path
+            d="M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z"
+          ></path>
+        </svg>
+      </button>
     </div>
 
     <div v-bind="listBoxProps" popover class="listbox">
       <slot />
+
+      <div v-if="isListEmpty" class="empty-message">No Results</div>
     </div>
 
     <div v-if="description" v-bind="descriptionProps" class="hint">
@@ -57,7 +66,7 @@ const {
 </template>
 
 <style scoped>
-.select {
+.combobox {
   --color-text: #333;
   --color-hint: #666;
   --color-focus: #059669;
@@ -69,7 +78,7 @@ const {
   flex-direction: column;
   width: max-content;
 
-  .select-label {
+  .combobox-label {
     color: var(--color-text);
     display: block;
     margin-bottom: 0.25rem;
@@ -77,14 +86,13 @@ const {
     font-weight: 500;
   }
 
-  .trigger {
+  .control {
     display: flex;
     align-items: center;
     justify-content: space-between;
     /** CSS Anchor Positioning */
-    anchor-name: v-bind('triggerId');
+    anchor-name: v-bind('anchorId');
     border: 1px solid var(--color-border);
-    padding: 4px 8px;
     font-size: 14px;
     color: var(--color-text);
     border-radius: 0.375rem;
@@ -98,6 +106,21 @@ const {
     &:focus {
       outline: none;
       border: 1px solid var(--color-focus);
+    }
+
+    button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    input {
+      border: none;
+      height: 100%;
+      width: 100%;
+      outline: none;
+      padding: 4px 8px;
+      background: transparent;
     }
   }
 
@@ -132,7 +155,7 @@ const {
     }
 
     /** CSS Anchor Positioning */
-    position-anchor: v-bind('triggerId');
+    position-anchor: v-bind('anchorId');
     inset-area: bottom center;
     position-area: bottom center;
     position-try-fallbacks:
@@ -180,21 +203,9 @@ const {
     }
   }
 
-  .multi-value-display {
-    display: flex;
-    gap: 3px;
-
-    span {
-      padding: 2px 4px;
-      background: #10b981;
-      font-size: 13px;
-      color: #fff;
-      border-radius: 4px;
-    }
-  }
-
-  .placeholder {
-    color: var(--color-hint);
+  .empty-message {
+    color: var(--color-text);
+    font-size: 13px;
   }
 }
 

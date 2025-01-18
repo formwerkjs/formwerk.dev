@@ -8,7 +8,8 @@ sidebar:
 import { Aside } from '@astrojs/starlight/components';
 
 import AnatomyCanvas from '@components/AnatomyCanvas.vue';
-import AnatomySelect from '@components/AnatomySelect.vue';
+import AnatomySelectClosed from '@components/AnatomySelectClosed.vue';
+import AnatomySelectOpened from '@components/AnatomySelectOpened.vue';
 import MdxRepl from '@components/MdxRepl.vue';
 import MdxTableAPI from '@components/MdxTableAPI.vue';
 import Kbd from '@components/KeyboardKey.vue';
@@ -69,7 +70,8 @@ Most people aren't aware of these keyboard shortcuts, but they do make a big dif
 ## Anatomy
 
 <AnatomyCanvas>
-  <AnatomySelect />
+  <AnatomySelectClosed />
+  <AnatomySelectOpened />
 </AnatomyCanvas>
 
 ## Building a Select Field
@@ -79,17 +81,17 @@ The select field is one of the most complex fields with multiple moving parts. I
 From the anatomy diagram above, you can see that the core select field is made up of the following parts:
 
 - **Trigger:** A trigger element that is used to open the options menu, doubles as the selected value display.
-- **Popup:** An options menu that contains the list of options.
+- **Listbox:** An options menu that contains the list of options.
 - **Option:** An option component that represents each option in the list.
 - **Option Group:** Not illustrated above, an option group that groups options together based on some categorization.
 
 Formwerk handles all of these parts and abstracts them into the following component ecosystem:
 
-- **Select**: Contains the trigger and popup parts. You will use `useSelect` to build it.
+- **Select**: Contains the trigger and listbox parts. You will use `useSelect` to build it.
 - **Option**: Represents an option in the list. You will use `useOption` to build it.
 - **OptionGroup**: Represents a group of options in the list. You will use `useOptionGroup` to build it.
 
-Notice that the popup is not a separate component. This is because popups today can be done in different ways, so Formwerk while offers the open state along with some accessability attributes, it does not have a specific popup component implementation. But we offer out of the box support for [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) if you happen to use one for the popup element.
+Notice that the listbox is not a separate component. This is because popups today can be done in different ways, so Formwerk while offers the open state along with some accessability attributes, it does not have a specific listbox component implementation. But we offer out of the box support for [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) if you happen to use one for the listbox element.
 
 ### Building an Option Component
 
@@ -103,7 +105,7 @@ The `label` is available inside `OptionProps` and we will display it to the user
 
 ### Building a Select Component
 
-Next, you will use `useSelect` to create our select component. This component will be responsible for rendering the trigger and popup parts.
+Next, you will use `useSelect` to create our select component. This component will be responsible for rendering the trigger and listbox parts.
 
 The `useSelect` composable returns binding objects for some of the elements shown in the [anatomy](#anatomy), you will use `v-bind` to bind them to the corresponding DOM elements.
 
@@ -435,11 +437,11 @@ If the select field is a multi-choice select, the selected options will receive 
 
 The trigger element will receive the `aria-expanded` attribute. So you can style the trigger according to the popover state if needed.
 
-#### Popover Attributes
+It will also receive the `aria-activedescendant` attribute when an option is focused.
 
-The popover (listbox) element will receive the `aria-activedescendant` attribute when an option is focused that corresponds to the id of the focused option.
+#### ListBox attributes
 
-Furthermore, the popover element will receive the `aria-multiselectable` attribute if the select field is a multi-choice select.
+The listbox element will receive the `aria-multiselectable` attribute if the select field is a multi-choice select.
 
 ## API
 
