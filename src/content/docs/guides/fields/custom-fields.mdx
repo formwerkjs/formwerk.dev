@@ -51,7 +51,7 @@ Alternatively, we can just build the full experience of the field and make it so
     </script>
 
     <template>
-      <SpeakField sentence="I went to the store" />
+      <SpeakField name="challenge" label="Say the following" sentence="I went to the store" />
     </template>
     ```
 
@@ -80,7 +80,12 @@ const schema = z.literal(true);
 </script>
 
 <template>
-  <SpeakField :schema="schema" sentence="I went to the store" />
+  <SpeakField
+    name="challenge"
+    label="Say the following"
+    :schema="schema"
+    sentence="I went to the store"
+  />
 </template>
 ```
 

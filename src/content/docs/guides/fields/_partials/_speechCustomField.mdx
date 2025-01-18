@@ -1,11 +1,23 @@
-```vue collapse={85-173}
+```vue collapse={117-211}
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-// TODO: ADD USE CUSTOM FIELD ON RELEASE
+import { useCustomField, type CustomFieldProps } from '@formwerk/core';
 
-const props = defineProps<{
-  sentence: string;
-}>();
+const props = defineProps<
+  CustomFieldProps & {
+    sentence: string;
+  }
+>();
+
+const {
+  labelProps,
+  controlProps,
+  setValue,
+  errorMessage,
+  errorMessageProps,
+  setTouched,
+  isTouched,
+} = useCustomField<boolean>(props);
 
 const words = computed(() => props.sentence.split(' '));
 const results = ref<string[]>([]);
@@ -26,23 +38,33 @@ function onSpeakClick() {
   results.value = [];
   isListening.value = true;
   recognition.start();
-  setTimeout(stopListening, 8000);
+  setTimeout(() => stopListening(true), 8000);
 }
 
-function stopListening() {
+function isAllSpoken() {
+  return results.value.every((word) => words.value.includes(word));
+}
+
+function stopListening(done = false) {
   recognition.stop();
   isListening.value = false;
+
+  if (done) {
+    setTouched(true);
+    setValue(isAllSpoken());
+  }
 }
 
 recognition.onresult = (event) => {
   results.value = event.results[0][0].transcript.toLowerCase().split(' ');
+  setValue(isAllSpoken());
 };
 </script>
 
 <template>
   <div class="speech-exercise">
     <div class="challenge-container">
-      <div class="challenge-label">Say the following</div>
+      <div class="challenge-label" v-bind="labelProps">{{ label }}</div>
       <div class="challenge">
         <span
           v-for="(word, idx) in words"
@@ -57,6 +79,7 @@ recognition.onresult = (event) => {
 
     <button
       type="button"
+      v-bind="controlProps"
       @click="onSpeakClick"
       :class="{ 'is-listening': isListening }"
     >
@@ -80,6 +103,14 @@ recognition.onresult = (event) => {
         {{ isListening ? 'Listening...' : 'Speak' }}
       </div>
     </button>
+
+    <div
+      v-if="errorMessage && isTouched"
+      v-bind="errorMessageProps"
+      class="error"
+    >
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
@@ -170,6 +201,12 @@ button:active {
   100% {
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
   }
+}
+
+.error {
+  color: #ef4444;
+  font-size: 14px;
+  margin-top: 0.5rem;
 }
 </style>
 ```
