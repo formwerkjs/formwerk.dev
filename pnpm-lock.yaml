@@ -36,8 +36,8 @@ importers:
         specifier: ^1.1.5
         version: 1.1.5(vue@3.5.13(typescript@5.7.2))
       '@formwerk/core':
-        specifier: ^0.5.0
-        version: 0.5.0(vue@3.5.13(typescript@5.7.2))
+        specifier: ^0.6.1
+        version: 0.6.1(vue@3.5.13(typescript@5.7.2))
       '@iconify-json/vscode-icons':
         specifier: ^1.2.8
         version: 1.2.8
@@ -866,8 +866,8 @@ packages:
   '@floating-ui/vue@1.1.5':
     resolution: {integrity: sha512-ynL1p5Z+woPVSwgMGqeDrx6HrJfGIDzFyESFkyqJKilGW1+h/8yVY29Khn0LaU6wHBRwZ13ntG6reiHWK6jyzw==}
 
-  '@formwerk/core@0.5.0':
-    resolution: {integrity: sha512-8oyhQQ1OXg6ZMH2z4GryUzU/FCz/yrILbDwUa6PAXo598wQFolr/IRWdbTFLhhWfPXnPeC8xOQgJon6TWbOilw==}
+  '@formwerk/core@0.6.1':
+    resolution: {integrity: sha512-i3SimlpUAvtsCl+/2rHoMrZI4HXbdB1PMF3PaUFCnq8fRYOSsbrxQTMLgqpptf6p4cGY9y+HfOE5BnjbrroBdA==}
     peerDependencies:
       vue: '>=3.5.0'
 
@@ -1237,8 +1237,8 @@ packages:
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
 
-  '@standard-schema/spec@1.0.0-beta.4':
-    resolution: {integrity: sha512-d3IxtzLo7P1oZ8s8YNvxzBUXRXojSut8pbPrTYtzsc5sn4+53jVqbk66pQerSZbZSJZQux6LkclB/+8IDordHg==}
+  '@standard-schema/spec@1.0.0-rc.0':
+    resolution: {integrity: sha512-DcY/ICFcZIESNTLTexIT108HOqd1FtxsiLV4ZYGluySWyjF6TZ6troNyXjiqoHU6j0wN3A6SmYnTA5CHQp9blw==}
 
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
@@ -3696,6 +3696,10 @@ packages:
     resolution: {integrity: sha512-yCxltHW07Nkhv/1F6wWBr8kz+5BGMfP+RbRSYFnegVb0qV/UMT0G0ElBloPVerqn4M2ZV80Ir1FtCcYv1cT6vQ==}
     engines: {node: '>=16'}
 
+  type-fest@4.32.0:
+    resolution: {integrity: sha512-rfgpoi08xagF3JSdtJlCwMq9DGNDE0IMh3Mkpc1wUypg9vPi786AiqeBBKcqvIkq42azsBM85N490fyZjeUftw==}
+    engines: {node: '>=16'}
+
   typesafe-path@0.2.2:
     resolution: {integrity: sha512-OJabfkAg1WLZSqJAJ0Z6Sdt3utnbzr/jh+NAHoyWHJe8CMSy79Gm085094M9nvTPy22KzTVn5Zq5mbapCI/hPA==}
 
@@ -5018,12 +5022,12 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@formwerk/core@0.5.0(vue@3.5.13(typescript@5.7.2))':
+  '@formwerk/core@0.6.1(vue@3.5.13(typescript@5.7.2))':
     dependencies:
-      '@standard-schema/spec': 1.0.0-beta.4
+      '@standard-schema/spec': 1.0.0-rc.0
       '@standard-schema/utils': 0.3.0
       klona: 2.0.6
-      type-fest: 4.31.0
+      type-fest: 4.32.0
       vue: 3.5.13(typescript@5.7.2)
 
   '@humanfs/core@0.19.1': {}
@@ -5362,7 +5366,7 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
-  '@standard-schema/spec@1.0.0-beta.4': {}
+  '@standard-schema/spec@1.0.0-rc.0': {}
 
   '@standard-schema/utils@0.3.0': {}
 
@@ -8530,6 +8534,8 @@ snapshots:
       prelude-ls: 1.2.1
 
   type-fest@4.31.0: {}
+
+  type-fest@4.32.0: {}
 
   typesafe-path@0.2.2: {}
 

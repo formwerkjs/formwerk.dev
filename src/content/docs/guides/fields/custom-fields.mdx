@@ -76,17 +76,51 @@ Alternatively, we can just build the full experience of the field and make it so
 import SpeakField from './SpeakField.vue';
 import { z } from 'zod';
 
-const schema = z;
+const schema = z.literal(true);
 </script>
 
 <template>
-  <SpeakField schema="schema" sentence="I went to the store" />
+  <SpeakField :schema="schema" sentence="I went to the store" />
 </template>
 ```
 
 </div>
 
 </MdxRepl>
+
+### Triggering Validation
+
+Custom fields lack any signal to trigger validation. This is because we don't know what kind of elements you will be using, so you will have to trigger validation manually via the `validate` function exposed by the `useCustomField` composable.
+
+```vue
+<script setup lang="ts">
+import { useCustomField, type CustomFieldProps } from '@formwerk/core';
+
+const props = defineProps<CustomFieldProps>();
+
+const { validate, setValue } = useCustomField(props);
+
+function onValueChange(value: string) {
+  setValue(value);
+  validate();
+}
+</script>
+```
+
+## Wrapping 3rd Party Components
+
+Another use-case for custom fields is to wrap 3rd party components. Maybe you are using a UI library and would like to integrate it with Formwerk, custom fields are perfect for this since they have no expectations about the kind of markup you will use.
+
+However, this means you will have to hook up the moving parts yourself. In the following example, we are wrapping a 3rd party text input component from PrimeVue.
+
+<iframe
+  loading="lazy"
+  src="https://stackblitz.com/edit/vitejs-vite-sfck9h7b?ctl=1&embed=1&file=src%2Fcomponents%2FInputText.vue&hideNavigation=1"
+></iframe>
+
+The validation here is aggressive, it is up to you to decide when to show the error message.
+
+Keep in mind that this is an inefficient use of Formwerk, here you only gain validation state and the form API, since most UI libraries already have their accessibility and interactions built in. But, if you need to, this is how you could do it.
 
 ## Usage
 
@@ -110,10 +144,10 @@ Readonly fields are validated and submitted, but they do not accept user input. 
 
 These are the properties that can be passed to the `useCustomField` composable.
 
-{/* <MdxTableAPI typeName="CustomFieldProps" /> */}
+<MdxTableAPI typeName="CustomFieldProps" />
 
 ### Returns
 
 These are the properties in the object returned by the `useCustomField` composable.
 
-{/* <MdxTableAPI fnName="useCustomField" /> */}
+<MdxTableAPI fnName="useCustomField" />
