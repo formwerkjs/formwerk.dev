@@ -16,7 +16,7 @@ import Kbd from '@components/KeyboardKey.vue';
 
 import OptionPartial from './_partials/_option.mdx';
 import OptionGroupPartial from './_partials/_optionGroup.mdx';
-import SelectPartial from './_partials/_select.mdx';
+import ComboPartial from './_partials/_combobox.mdx';
 
 ComboBoxes are common form fields. They combine text fields with a dropdown or a listbox to allow users to select an option from the list that matches the text they have entered.
 
@@ -61,24 +61,25 @@ Most people aren't aware of these keyboard shortcuts, but they do make a big dif
   <AnatomyComboBoxOpened />
 </AnatomyCanvas>
 
-## Building a Select Field
+## Building a ComboBox Field
 
-The select field is one of the most complex fields with multiple moving parts. It is what Formwerk considers a "compound component" because it is made up of an ecosystem of components that work together to create a single field.
+The combobox field is one of the most complex fields with multiple moving parts. It is what Formwerk considers a "compound component" because it is made up of an ecosystem of components that work together to create a single field.
 
-From the anatomy diagram above, you can see that the core select field is made up of the following parts:
+From the anatomy diagram above, you can see that the core combobox field is made up of the following parts:
 
-- **Trigger:** A trigger element that is used to open the options menu, doubles as the selected value display.
-- **Popup:** An options menu that contains the list of options.
+- **Input:** A text input that is used to filter the options and trigger the Listbox.
+- **Button:** A trigger element that is used to open the Listbox popup.
+- **Listbox:** An options menu that contains the list of options.
 - **Option:** An option component that represents each option in the list.
 - **Option Group:** Not illustrated above, an option group that groups options together based on some categorization.
 
 Formwerk handles all of these parts and abstracts them into the following component ecosystem:
 
-- **Select**: Contains the trigger and popup parts. You will use `useSelect` to build it.
+- **ComboBox**: Contains the input, button, and listbox parts. You will use `useComboBox` to build it.
 - **Option**: Represents an option in the list. You will use `useOption` to build it.
 - **OptionGroup**: Represents a group of options in the list. You will use `useOptionGroup` to build it.
 
-Notice that the popup is not a separate component. This is because popups today can be done in different ways, so Formwerk while offers the open state along with some accessability attributes, it does not have a specific popup component implementation. But we offer out of the box support for [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) if you happen to use one for the popup element.
+Notice that the listbox is not a separate component. This is because popups today can be done in different ways, so Formwerk while offers the open state along with some accessability attributes, it does not have a specific popup component implementation. But we offer out of the box support for [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) if you happen to use one for the listbox element.
 
 ### Building an Option Component
 
@@ -88,18 +89,18 @@ We can start by using `useOption` to create our option component. This component
 
 Notice that we are using the `OptionProps` type to define the props for our component. This type is generic and allows you to specify the type of the option value. In this case, we are using `any` to represent any type of value.
 
-The `label` is available inside `OptionProps` and we will display it to the user.
+The `label` is available inside `OptionProps` and we will display it to the user. Option components can also be used in other fields like [select fields](/guides/fields/selects/).
 
 ### Building a ComboBox Component
 
-Next, you will use `useSelect` to create our select component. This component will be responsible for rendering the trigger and popup parts.
+Next, you will use `useComboBox` to create our combobox component. This component will be responsible for rendering the trigger and popup parts.
 
-The `useSelect` composable returns binding objects for some of the elements shown in the [anatomy](#anatomy), you will use `v-bind` to bind them to the corresponding DOM elements.
+The `useComboBox` composable returns binding objects for some of the elements shown in the [anatomy](#anatomy), you will use `v-bind` to bind them to the corresponding DOM elements.
 
 <MdxRepl client:load preview-size="lg">
 
-<div slot="SelectField.vue">
-  <SelectPartial />
+<div slot="ComboBox.vue">
+  <ComboPartial />
 </div>
 
 <div slot="OptionItem.vue">
@@ -110,16 +111,16 @@ The `useSelect` composable returns binding objects for some of the elements show
 
 ```vue
 <script setup lang="ts">
-import SelectField from './SelectField.vue';
+import ComboBox from './ComboBox.vue';
 import OptionItem from './OptionItem.vue';
 </script>
 
 <template>
-  <SelectField label="Select a drink">
+  <ComboBox label="Select a drink" placeholder="Search...">
     <OptionItem label="Coffee ☕️" value="coffee" />
     <OptionItem label="Tea 🍵" value="tea" />
     <OptionItem label="Milk 🥛" value="milk" />
-  </SelectField>
+  </ComboBox>
 </template>
 ```
 
@@ -137,8 +138,8 @@ Building an option group component is similar to building an option component. Y
   <OptionGroupPartial />
 </div>
 
-<div slot="!SelectField.vue">
-  <SelectPartial />
+<div slot="!ComboBox.vue">
+  <ComboPartial />
 </div>
 
 <div slot="!OptionItem.vue">
@@ -149,7 +150,7 @@ Building an option group component is similar to building an option component. Y
 
 ```vue
 <script setup lang="ts">
-import SelectField from './SelectField.vue';
+import ComboBox from './ComboBox.vue';
 import OptionGroup from './OptionGroup.vue';
 import OptionItem from './OptionItem.vue';
 
@@ -163,7 +164,7 @@ const groups = [
 </script>
 
 <template>
-  <SelectField label="Select a country">
+  <ComboBox label="Select a country" placeholder="Search...">
     <OptionGroup
       v-for="group in groups"
       :key="group.label"
@@ -176,13 +177,15 @@ const groups = [
         :value="country"
       />
     </OptionGroup>
-  </SelectField>
+  </ComboBox>
 </template>
 ```
 
 </div>
 
 </MdxRepl>
+
+OptionGroup components can also be used in other fields like [select fields](/guides/fields/selects/).
 
 ## Validation
 
@@ -192,12 +195,12 @@ In the future when customizable selects are available in the browser, Formwerk w
 
 ### Standard Schema
 
-`useSelect` supports [Standard Schema](https://github.com/standard-schema/standard-schema) validation through the `schema` prop. This includes multiple providers like [Zod](https://zod.dev/), [Valibot](https://valibot.dev/), [Arktype](https://arktype.dev/), and more.
+`useComboBox` supports [Standard Schema](https://github.com/standard-schema/standard-schema) validation through the `schema` prop. This includes multiple providers like [Zod](https://zod.dev/), [Valibot](https://valibot.dev/), [Arktype](https://arktype.dev/), and more.
 
 <MdxRepl client:load preview-size="lg">
 
-<div slot="!SelectField.vue">
-  <SelectPartial />
+<div slot="!ComboBox.vue">
+  <ComboPartial />
 </div>
 
 <div slot="!OptionItem.vue">
@@ -208,7 +211,7 @@ In the future when customizable selects are available in the browser, Formwerk w
 
 ```vue
 <script setup lang="ts">
-import SelectField from './SelectField.vue';
+import ComboBox from './ComboBox.vue';
 import OptionItem from './OptionItem.vue';
 import { z } from 'zod';
 
@@ -219,11 +222,11 @@ const schema = z
 </script>
 
 <template>
-  <SelectField label="Select a drink" :schema="schema">
+  <ComboBox label="Select a drink" :schema="schema" placeholder="Search...">
     <OptionItem label="Coffee ☕️" value="coffee" />
     <OptionItem label="Tea 🍵" value="tea" />
     <OptionItem label="Milk 🥛" value="milk" />
-  </SelectField>
+  </ComboBox>
 </template>
 ```
 
@@ -232,63 +235,6 @@ const schema = z
 </MdxRepl>
 
 ## Usage
-
-### Multiple Select
-
-The `useSelect` composable accepts a `multiple` prop, it adjusts behaviors to what users expect out of a multi-select field.
-
-<MdxRepl preview-size="lg" client:load>
-
-<div slot="!OptionItem.vue">
-  <OptionPartial />
-</div>
-
-<div slot="!OptionGroup.vue">
-  <OptionGroupPartial />
-</div>
-
-<div slot="!SelectField.vue">
-  <SelectPartial />
-</div>
-
-<div slot="App.vue">
-
-```vue
-<script setup lang="ts">
-import SelectField from './SelectField.vue';
-import OptionGroup from './OptionGroup.vue';
-import OptionItem from './OptionItem.vue';
-
-const groups = [
-  { label: 'Africa', options: ['Egypt', 'Nigeria', 'Ghana', 'Kenya'] },
-  { label: 'Asia', options: ['China', 'India', 'Japan'] },
-  { label: 'Europe', options: ['France', 'Germany', 'Italy'] },
-  { label: 'North America', options: ['Canada', 'Mexico', 'United States'] },
-  { label: 'South America', options: ['Argentina', 'Brazil', 'Chile'] },
-];
-</script>
-
-<template>
-  <SelectField label="Pick countries" multiple>
-    <OptionGroup
-      v-for="group in groups"
-      :key="group.label"
-      :label="group.label"
-    >
-      <OptionItem
-        v-for="country in group.options"
-        :key="country"
-        :label="country"
-        :value="country"
-      />
-    </OptionGroup>
-  </SelectField>
-</template>
-```
-
-</div>
-
-</MdxRepl>
 
 ### Disabled
 
@@ -306,25 +252,25 @@ If you need to prevent the user from interacting with the field while still allo
   <OptionGroupPartial />
 </div>
 
-<div slot="!SelectField.vue">
-  <SelectPartial />
+<div slot="!ComboBox.vue">
+  <ComboPartial />
 </div>
 
 <div slot="App.vue">
 
 ```vue
 <script setup lang="ts">
-import SelectField from './SelectField.vue';
+import ComboBox from './ComboBox.vue';
 import OptionGroup from './OptionGroup.vue';
 import OptionItem from './OptionItem.vue';
 </script>
 
 <template>
-  <SelectField label="Pick a drink" disabled>
+  <ComboBox label="Pick a drink" disabled>
     <OptionItem label="Coffee ☕️" value="coffee" />
     <OptionItem label="Tea 🍵" value="tea" />
     <OptionItem label="Milk 🥛" value="milk" />
-  </SelectField>
+  </ComboBox>
 </template>
 ```
 
@@ -344,25 +290,25 @@ You can also mark individual options as disabled by passing a `disabled` prop to
   <OptionGroupPartial />
 </div>
 
-<div slot="!SelectField.vue">
-  <SelectPartial />
+<div slot="!ComboBox.vue">
+  <ComboPartial />
 </div>
 
 <div slot="App.vue">
 
 ```vue
 <script setup lang="ts">
-import SelectField from './SelectField.vue';
+import ComboBox from './ComboBox.vue';
 import OptionGroup from './OptionGroup.vue';
 import OptionItem from './OptionItem.vue';
 </script>
 
 <template>
-  <SelectField label="Pick a drink">
+  <ComboBox label="Pick a drink" placeholder="Search...">
     <OptionItem label="Coffee ☕️" value="coffee" />
     <OptionItem label="Tea 🍵" disabled value="tea" />
     <OptionItem label="Milk 🥛" value="milk" />
-  </SelectField>
+  </ComboBox>
 </template>
 ```
 
@@ -384,25 +330,25 @@ Readonly fields are validated and submitted, but they do not accept user input. 
   <OptionGroupPartial />
 </div>
 
-<div slot="!SelectField.vue">
-  <SelectPartial />
+<div slot="!ComboBox.vue">
+  <ComboPartial />
 </div>
 
 <div slot="App.vue">
 
 ```vue
 <script setup lang="ts">
-import SelectField from './SelectField.vue';
+import ComboBox from './ComboBox.vue';
 import OptionGroup from './OptionGroup.vue';
 import OptionItem from './OptionItem.vue';
 </script>
 
 <template>
-  <SelectField label="Pick a drink" readonly>
+  <ComboBox label="Pick a drink" readonly placeholder="Search...">
     <OptionItem label="Coffee ☕️" value="coffee" />
     <OptionItem label="Tea 🍵" value="tea" />
     <OptionItem label="Milk 🥛" value="milk" />
-  </SelectField>
+  </ComboBox>
 </template>
 ```
 
@@ -416,21 +362,13 @@ When styling the select field, you need to be aware of the following...
 
 #### Option attributes
 
-When an option is selected, it will receive the `aria-selected="true"` attribute if the select field is a single choice select.
+When an option is focused, it will receive the `aria-selected="true"` attribute.
 
-If the select field is a multi-choice select, the selected options will receive the `aria-checked="true"` attribute instead.
+#### Input attributes
 
-// TODO: TRIGGER ATTRIBUTES
+The text input element will receive the `aria-expanded` attribute. So you can style the trigger according to the popover state if needed.
 
-#### Trigger attributes
-
-The trigger element will receive the `aria-expanded` attribute. So you can style the trigger according to the popover state if needed.
-
-#### Popover Attributes
-
-The popover (listbox) element will receive the `aria-activedescendant` attribute when an option is focused that corresponds to the id of the focused option.
-
-Furthermore, the popover element will receive the `aria-multiselectable` attribute if the select field is a multi-choice select.
+It will also receive the `aria-activedescendant` attribute when an option is focused.
 
 ## API
 
