@@ -14,7 +14,7 @@ const {
   isTouched,
   errorMessage,
   fieldValue,
-  popupProps,
+  listBoxProps,
 } = useSelect(props);
 </script>
 
@@ -42,7 +42,7 @@ const {
       </svg>
     </div>
 
-    <div v-bind="popupProps" popover class="listbox">
+    <div v-bind="listBoxProps" popover class="listbox">
       <slot />
     </div>
 
