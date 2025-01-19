@@ -8,15 +8,17 @@
     @mouseleave="onLeave"
   >
     <div class="h-40 bg-gray-300">
-      <video
-        ref="videoEl"
-        loop
-        muted
-        :src="src"
-        role="presentation"
-        :poster="src?.replace('.mp4', '.webp')"
-        class="h-full w-full object-cover"
-      />
+      <slot>
+        <video
+          ref="videoEl"
+          loop
+          muted
+          :src="src"
+          role="presentation"
+          :poster="src?.replace('.mp4', '.webp')"
+          class="h-full w-full object-cover"
+        />
+      </slot>
     </div>
 
     <div class="p-4">
