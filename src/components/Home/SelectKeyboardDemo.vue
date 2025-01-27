@@ -101,11 +101,11 @@ const steps = reactive({
 
         await new Promise((resolve) => setTimeout(resolve, 200));
 
-        const sel = document.querySelector('#interactive-select');
-        const listbox = sel?.querySelector('[aria-activedescendant]');
+        const demo = document.querySelector('#sel-demo');
+        const listbox = demo?.querySelector('[aria-activedescendant]');
         const optId = listbox?.getAttribute('aria-activedescendant');
         if (optId && document.activeElement?.id === optId) {
-          const option = listbox?.querySelector(`#${optId}`);
+          const option = demo?.querySelector(`#${optId}`);
           steps.search.done = option?.textContent === 'Egypt';
 
           return true;
@@ -180,6 +180,7 @@ onMounted(() => {
 
 <template>
   <div
+    id="sel-demo"
     class="flex flex-col items-stretch rounded-lg border border-zinc-700/70 bg-zinc-800/60 py-8 backdrop-blur-sm lg:flex-row lg:px-8 lg:py-0"
   >
     <div class="flex w-full flex-shrink items-center justify-center pr-8">
