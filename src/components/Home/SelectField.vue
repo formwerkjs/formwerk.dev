@@ -27,7 +27,7 @@ const {
   isTouched,
   displayError,
   fieldValue,
-  popupProps,
+  listBoxProps,
   listBoxEl,
   isPopupOpen,
 } = useSelect(props);
@@ -97,7 +97,7 @@ const selectedOption = computed(() => {
     </div>
 
     <div
-      v-bind="popupProps"
+      v-bind="listBoxProps"
       popover
       class="listbox"
       :style="floatingStyles"
