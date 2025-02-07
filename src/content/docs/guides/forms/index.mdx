@@ -598,7 +598,7 @@ Forms track the touched state of each field in the form. A field is considered t
 
 The form also tracks the overall touched state of the form, which is `true` if any field in the form has been touched.
 
-Each field composable returns an `isTouched` property. `useForm` exposes its own `isTouched` property that you can use to check if the form has been interacted with. It also exposes `isFieldTouched` to query the touched state of a field.
+Each field composable returns an `isTouched` property. `useForm` exposes its own `isTouched` method that you can use to check if the form has been interacted with or if a field has been touched.
 
 <MdxRepl client:load preview-size="xl">
 
@@ -613,7 +613,7 @@ Each field composable returns an `isTouched` property. `useForm` exposes its own
 import { useForm } from '@formwerk/core';
 import TextField from './TextField.vue';
 
-const { handleSubmit, isTouched, isFieldTouched } = useForm();
+const { handleSubmit, isTouched } = useForm();
 
 const onSubmit = handleSubmit((data) => {
   console.log('All fields should be touched now');
@@ -625,9 +625,9 @@ const onSubmit = handleSubmit((data) => {
     <TextField name="email" label="Email" type="email" />
     <TextField name="password" label="Password" type="password" />
 
-    <pre>Email Touched: {{ isFieldTouched('email') }}</pre>
-    <pre>Password Touched: {{ isFieldTouched('password') }}</pre>
-    <pre>Form Touched: {{ isTouched }}</pre>
+    <pre>Email Touched: {{ isTouched('email') }}</pre>
+    <pre>Password Touched: {{ isTouched('password') }}</pre>
+    <pre>Form Touched: {{ isTouched() }}</pre>
 
     <button type="submit">Submit</button>
   </form>
@@ -638,15 +638,17 @@ const onSubmit = handleSubmit((data) => {
 
 </MdxRepl>
 
-You can set the touched state of a field manually with the `setFieldTouched` function.
+You can set the touched state of fields manually with the `setTouched` function.
 
 ```ts
 import { useForm } from '@formwerk/core';
 
-const { setFieldTouched } = useForm();
+const { setTouched } = useForm();
 
 function onFieldBlur() {
-  setFieldTouched('email', true);
+  setTouched('email', true);
+  // Or set all fields to touched
+  setTouched(true);
 }
 ```
 
@@ -667,16 +669,16 @@ Forms also track the dirty state of each field in the form. A field is considere
 import { useForm } from '@formwerk/core';
 import TextField from './TextField.vue';
 
-const { isDirty, isFieldDirty } = useForm();
+const { isDirty } = useForm();
 </script>
 
 <template>
   <TextField name="email" label="Email" type="email" />
   <TextField name="password" label="Password" type="password" />
 
-  <pre>Email Dirty: {{ isFieldDirty('email') }}</pre>
-  <pre>Password Dirty: {{ isFieldDirty('password') }}</pre>
-  <pre>Form Dirty: {{ isDirty }}</pre>
+  <pre>Email Dirty: {{ isDirty('email') }}</pre>
+  <pre>Password Dirty: {{ isDirty('password') }}</pre>
+  <pre>Form Dirty: {{ isDirty() }}</pre>
 </template>
 ```
 
