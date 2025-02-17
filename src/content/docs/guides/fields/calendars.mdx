@@ -267,6 +267,49 @@ const max = new Date('2025-01-20');
 
 </MdxRepl>
 
+## Usage as a picker
+
+You can use the `Calendar` component as a picker which can be useful to pair with a [date field](/guides/fields/date-fields/).
+
+To do that, you can use the `usePicker` composable:
+
+<MdxRepl client:load preview-size="xl">
+
+<div slot="!Calendar.vue">
+  <CalendarPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { usePicker } from '@formwerk/core';
+import Calendar from './Calendar.vue';
+
+const { pickerProps, pickerTriggerProps } = usePicker({
+  label: 'Pick a date',
+});
+
+const date = ref();
+</script>
+
+<template>
+  <pre>Selected date: {{ date || 'none' }}</pre>
+  <button v-bind="pickerTriggerProps">Open Calendar</button>
+
+  <div v-bind="pickerProps" popover>
+    <Calendar label="Calendar" v-model="date" />
+  </div>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+In that example, we are using the popover API, but you can use any other floating UI solution you prefer.
+
 ## API
 
 ### useCalendar
