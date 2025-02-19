@@ -228,11 +228,47 @@ import DateField from './DateField.vue';
 
 </MdxRepl>
 
+### Format Options
+
+You can pass any `Intl.DateTimeFormatOptions` to the `formatOptions` prop to customize the date field's display format.
+
+<MdxRepl client:load>
+
+<div slot="!DateField.vue">
+  <DateFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import DateField from './DateField.vue';
+</script>
+
+<template>
+  <DateField
+    label="Format Options"
+    :formatOptions="{
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }"
+  />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
 ### Locale and Calendar Support
 
 The `calendar` prop can be used to specify which calendar to use, along with the `locale` prop to set the locale of the date field.
 
-You can use `@internationalized/date` to create calendar objects. In this example, we will use the `islamic-umalqura` calendar along with the `ar-EG` locale.
+You can use `@internationalized/date` to create calendar objects. In this example, we will use the `islamic-umalqura` calendar along with the `ar-SA` locale.
 
 <MdxRepl client:load preview-size="xl">
 
@@ -260,7 +296,12 @@ const calendar = createCalendar('islamic-umalqura');
 </script>
 
 <template>
-  <DateField label="Hijri Date" :calendar="calendar" locale="ar-EG" />
+  <DateField
+    label="Hijri Date"
+    :value="new Date('2025-02-11')"
+    :calendar="calendar"
+    locale="ar-SA"
+  />
 </template>
 ```
 
