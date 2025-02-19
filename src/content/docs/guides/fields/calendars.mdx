@@ -16,9 +16,9 @@ import MdxTableAPI from '@components/MdxTableAPI.vue';
 
 <Aside title="Dependency Disclaimer">
 
-In order to deliver true i18n for international audiences, Formwerk calendar component depends on [@internationalized/date](https://react-spectrum.adobe.com/internationalized/date/index.html) to provide these functionalities.
+In order to deliver true i18n for international audiences, Formwerk's calendar composable depends on [@internationalized/date](https://react-spectrum.adobe.com/internationalized/date/index.html) to provide these functionalities.
 
-If you do not use Calendar or Date Field components, the dependency will not be included in your bundle as it is fully tree-shakable.
+If you do not use the Calendar or Date Field composables, the dependency will not be included in your bundle as it is fully tree-shakable.
 
 Formwerk fully intends on migrating to the [Temporal API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal) in the future once they receive full or partial baseline support.
 
@@ -235,7 +235,7 @@ We're interested in hearing from users who work with different calendar systems 
 
 </Aside>
 
-### Min and Max Dates
+### Min and Max
 
 You can pass `min` and `max` props to set the minimum and maximum dates that can be selected. You will still need to handle styling those dates, out of range dates will be marked with `aria-disabled` attribute.
 

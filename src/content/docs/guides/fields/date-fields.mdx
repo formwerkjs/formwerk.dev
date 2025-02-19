@@ -4,3 +4,336 @@ description: Learn how to build accessible date field Vue components with Formwe
 sidebar:
   order: 9
 ---
+
+import Kbd from '@components/KeyboardKey.vue';
+import { Aside } from '@astrojs/starlight/components';
+import AnatomyCanvas from '@components/AnatomyCanvas.vue';
+import AnatomyDateField from '@components/AnatomyDateField.vue';
+import MdxRepl from '@components/MdxRepl.vue';
+import DateFieldPartial from './_partials/_dateFieldPartial.mdx';
+import CalendarPartial from './_partials/_calendarPartial.mdx';
+import MdxTableAPI from '@components/MdxTableAPI.vue';
+import DateFieldPartialWithCalendar from './_partials/_dateFieldPartialWithCalendar.mdx';
+
+<Aside title="Dependency Disclaimer">
+
+In order to deliver true i18n for international audiences, Formwerk's date field composable depends on [@internationalized/date](https://react-spectrum.adobe.com/internationalized/date/index.html) to provide these functionalities.
+
+If you do not use the Calendar or Date Field composables, the dependency will not be included in your bundle as it is fully tree-shakable.
+
+Formwerk fully intends on migrating to the [Temporal API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal) in the future once they receive full or partial baseline support.
+
+</Aside>
+
+Date fields are a type of input field that allows users to enter a date. They are a common feature in many web applications, and Formwerk provides a `useDateTimeField` composable that can be used to create date fields in your application.
+
+## Features
+
+- Labeling, Descriptions, and error messages are automatically linked to the date field elements.
+- Support for multiple calendars (e.g: `islamic-umalqura`, `japanese`, etc).
+- Supports minimum and maximum date boundaries.
+- Validation support with [Standard Schemas](https://github.com/standard-schema/standard-schema).
+- Auto directionality based on the locale.
+- Focus management and auto navigation for date segments.
+- Support for `v-model` binding.
+- Comprehensive keyboard shortcuts support.
+
+### Keyboard Features
+
+| Key                                          | Description                                                                                           |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| <Kbd code="ArrowDown" label="ArrowDown" />   | Decrements selected segment by 1.                                                                     |
+| <Kbd code="ArrowUp" label="ArrowUp" />       | Increments selected segment by 1.                                                                     |
+| <Kbd code="ArrowLeft" label="ArrowLeft" />   | Moves the focus to the previous segment.                                                              |
+| <Kbd code="ArrowRight" label="ArrowRight" /> | Moves the focus to the next segment.                                                                  |
+| <Kbd code="Delete" label="Delete" />         | Clears the current segment.                                                                           |
+| <Kbd code="Backspace" label="Backspace" />   | Clears the current segment.                                                                           |
+| <Kbd code="Tab" label="Tab" />               | Moves the focus to the next segment or next element in the tab index order if it is the last segment. |
+
+## Anatomy
+
+<AnatomyCanvas>
+  <AnatomyDateField />
+</AnatomyCanvas>
+
+## Building a Date Field Component
+
+Just like the [native HTML date field](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date), the date field in Formwork is compromised of date segments, each segment represents a part of the date/time value (e.g: day, month, year, hour, minute, etc).
+
+The segments are generated for you automatically based on the `formatOptions` you pass to the `useDateTimeField` composable. You will need to bind the prop objects returned by the composable to the corresponding DOM elements in the [anatomy](#anatomy).
+
+If you do not pass the `formatOptions` prop, the date field will use the default format options for the locale of your app.
+
+<MdxRepl client:load>
+
+<div slot="DateField.vue">
+  <DateFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import DateField from './DateField.vue';
+</script>
+
+<template>
+  <DateField name="date" label="Date" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+The `DateTimeSegment` component is used to render each segment of the date field. We provide one for convenience that you can use. You can also build your own with `useDateTimeSegment` composable.
+
+```vue
+<script setup lang="ts">
+import { useDateTimeSegment, type DateTimeSegmentProps } from '@formwerk/core';
+
+const props = defineProps<DateTimeSegmentProps>();
+
+const { segmentProps, label } = useDateTimeSegment(props);
+</script>
+
+<template>
+  <div v-bind="segmentProps">
+    {{ label }}
+  </div>
+</template>
+```
+
+## Validation
+
+### Standard Schema
+
+`useDateTimeField` supports [Standard Schema](https://github.com/standard-schema/standard-schema) validation through the `schema` prop. This includes multiple providers like [Zod](https://zod.dev/), [Valibot](https://valibot.dev/), [Arktype](https://arktype.dev/), and more.
+
+<Aside>
+
+Depending on the schema validation provider you are using, the API might slightly differ. Check the supported validation providers for more information. In this example, we are using the `zod` schema validation provider.
+
+</Aside>
+
+In this example, we are validating that the date field is between January 1st, 2025 and December 31st, 2025.
+
+<MdxRepl client:load>
+
+<div slot="!DateField.vue">
+  <DateFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { z } from 'zod';
+import DateField from './DateField.vue';
+
+const schema = z.date().min(new Date('2025-01-01')).max(new Date('2025-12-31'));
+</script>
+
+<template>
+  <DateField label="Standard Schema" :schema="schema" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+## Usage
+
+### Disabled
+
+Use the `disabled` prop to disable the date field. Disabled date fields are not validated and are not submitted.
+
+<MdxRepl client:load>
+
+<div slot="!DateField.vue">
+  <DateFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import DateField from './DateField.vue';
+</script>
+
+<template>
+  <DateField label="Disabled" :value="new Date('2025-02-11')" disabled />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Readonly
+
+Use the `readonly` prop to make the date field read-only. Read-only date fields are not validated and are not submitted.
+
+<MdxRepl client:load>
+
+<div slot="!DateField.vue">
+  <DateFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import DateField from './DateField.vue';
+</script>
+
+<template>
+  <DateField label="Readonly" :value="new Date('2025-02-11')" readonly />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Min and Max
+
+You can pass `min` and `max` props to set the minimum and maximum dates that can be entered.
+
+<MdxRepl client:load>
+
+<div slot="!DateField.vue">
+  <DateFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import DateField from './DateField.vue';
+</script>
+
+<template>
+  <DateField
+    label="Limited"
+    :value="new Date('2025-02-11')"
+    :min="new Date('2025-02-01')"
+    :max="new Date('2025-02-15')"
+  />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Locale and Calendar Support
+
+The `calendar` prop can be used to specify which calendar to use, along with the `locale` prop to set the locale of the date field.
+
+You can use `@internationalized/date` to create calendar objects. In this example, we will use the `islamic-umalqura` calendar along with the `ar-EG` locale.
+
+<MdxRepl client:load preview-size="xl">
+
+<div slot="!DateField.vue">
+  <DateFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import {
+  createCalendar,
+  IslamicUmalquraCalendar,
+} from '@internationalized/date';
+import DateField from './DateField.vue';
+
+// This will import all calendars available.
+// Resulting in a larger bundle size.
+const calendar = createCalendar('islamic-umalqura');
+
+// This will import only the Islamic Umalqura calendar.
+// This allows tree-shaking, reducing the bundle size.
+// const calendar = IslamicUmalquraCalendar;
+</script>
+
+<template>
+  <DateField label="Hijri Date" :calendar="calendar" locale="ar-EG" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+<Aside title="Value type with `calendar` prop" type="caution">
+
+When using a non-Gregorian calendar system (like Islamic or Japanese calendars), the `calendar` composable will still use JavaScript's native `Date` objects internally. This means that even though you may see dates displayed in your chosen calendar system, the actual value emitted by the component will be the equivalent Gregorian date.
+
+For example, if you select "1 Muharram 1445" in the Islamic calendar, the emitted value will be a `Date` object representing "July 19, 2023" in the Gregorian calendar.
+
+We're interested in hearing from users who work with different calendar systems - how would you prefer to handle these date values? Please share your feedback with us.
+
+</Aside>
+
+## Usage with Calendar Component
+
+You can use the `DateField` component with the `Calendar` component to allow users to select a date. First check out the [Calendar](/guides/fields/calendars/) guide to build your own calendar component so that you can use it in the next example.
+
+<MdxRepl client:load preview-size="xl">
+
+<div slot="DateField.vue">
+  <DateFieldPartialWithCalendar />
+</div>
+
+<div slot="Calendar.vue">
+  <CalendarPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import DateField from './DateField.vue';
+</script>
+
+<template>
+  <DateField label="Date" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+## API
+
+### useDateTimeField
+
+#### Props
+
+These are the properties that can be passed to the `useDateTimeField` composable.
+
+<MdxTableAPI typeName="DateTimeFieldProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useDateTimeField` composable.
+
+<MdxTableAPI fnName="useDateTimeField" />
+
+### useDateTimeSegment
+
+#### Props
+
+These are the properties that can be passed to the `useDateTimeSegment` composable.
+
+<MdxTableAPI typeName="DateTimeSegmentProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useDateTimeSegment` composable.
+
+<MdxTableAPI fnName="useDateTimeSegment" />

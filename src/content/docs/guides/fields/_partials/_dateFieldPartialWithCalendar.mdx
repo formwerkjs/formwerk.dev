@@ -1,0 +1,164 @@
+```vue collapse={60-163}
+<script setup lang="ts">
+import { useDateTimeField, DateTimeSegment, usePicker } from '@formwerk/core';
+import Calendar from './Calendar.vue';
+
+import { type DateTimeFieldProps } from '@formwerk/core';
+
+const props = defineProps<DateTimeFieldProps>();
+
+const {
+  controlProps,
+  isTouched,
+  labelProps,
+  errorMessageProps,
+  errorMessage,
+  segments,
+  direction,
+  calendarProps,
+} = useDateTimeField(props);
+
+const { pickerProps, pickerTriggerProps } = usePicker({
+  label: 'Pick a date',
+});
+</script>
+
+<template>
+  <div class="InputDate" :class="{ touched: isTouched }" :dir="direction">
+    <span class="label">{{ label }}</span>
+
+    <div class="control">
+      <div v-bind="controlProps">
+        <DateTimeSegment
+          v-for="segment in segments"
+          v-bind="segment"
+          class="segment"
+        />
+      </div>
+
+      <button class="picker-trigger" v-bind="pickerTriggerProps">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="#000000"
+          viewBox="0 0 256 256"
+        >
+          <path
+            d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z"
+          ></path>
+        </svg>
+      </button>
+    </div>
+    <div v-bind="pickerProps" popover>
+      <Calendar v-bind="calendarProps" />
+    </div>
+
+    <span class="error-message">
+      {{ errorMessage }}
+    </span>
+  </div>
+</template>
+
+<style scoped>
+.InputDate {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.5em;
+
+  --color-primary: #10b981;
+  --color-text-primary: #333;
+  --color-text-secondary: #666;
+  --color-border: #d4d4d8;
+  --color-focus: var(--color-primary);
+  --color-error: #f00;
+  --color-background: #fff;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  width: max-content;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.control:focus-within {
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 1px var(--color-focus);
+  outline: none;
+}
+
+.segment {
+  padding: 0.125rem;
+  border-radius: 0.25rem;
+  caret-color: transparent;
+}
+
+.segment:focus {
+  background-color: var(--color-focus);
+  color: #fff;
+  outline: none;
+}
+
+.error-message {
+  display: none;
+  position: absolute;
+  left: 0;
+  margin-top: 0.25rem;
+  font-size: 13px;
+  color: var(--color-error);
+}
+
+.picker-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-border);
+  }
+}
+
+[popover] {
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+
+.InputDate:has(:user-invalid),
+.InputDate:has(.error-message:not(:empty)) {
+  --color-border: var(--color-error);
+  --color-focus: var(--color-error);
+}
+
+.InputDate:has(:user-invalid) .error-message,
+.InputDate:has(.error-message:not(:empty)) .error-message {
+  display: block;
+}
+
+.InputDate:has(:disabled) .control {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+</style>
+```
