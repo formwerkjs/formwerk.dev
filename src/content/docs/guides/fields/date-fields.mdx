@@ -268,7 +268,7 @@ import DateField from './DateField.vue';
 
 The `calendar` prop can be used to specify which calendar to use, along with the `locale` prop to set the locale of the date field.
 
-You can use `@internationalized/date` to create calendar objects. In this example, we will use the `islamic-umalqura` calendar along with the `ar-EG` locale.
+You can use `@internationalized/date` to create calendar objects. In this example, we will use the `islamic-umalqura` calendar along with the `ar-SA` locale.
 
 <MdxRepl client:load preview-size="xl">
 
@@ -300,7 +300,7 @@ const calendar = createCalendar('islamic-umalqura');
     label="Hijri Date"
     :value="new Date('2025-02-11')"
     :calendar="calendar"
-    locale="ar-EG"
+    locale="ar-SA"
   />
 </template>
 ```

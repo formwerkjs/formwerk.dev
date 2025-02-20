@@ -189,7 +189,7 @@ import Calendar from './Calendar.vue';
 
 The `calendar` prop can be used to specify which calendar to use, along with the `locale` prop to set the locale of the calendar.
 
-You can use `@internationalized/date` to create calendar objects. In this example, we will use the `islamic-umalqura` calendar along with the `ar-EG` locale.
+You can use `@internationalized/date` to create calendar objects. In this example, we will use the `islamic-umalqura` calendar along with the `ar-SA` locale.
 
 <MdxRepl client:load preview-size="xl">
 
@@ -217,7 +217,7 @@ const calendar = createCalendar('islamic-umalqura');
 </script>
 
 <template>
-  <Calendar label="Calendar" :calendar="calendar" locale="ar-EG" />
+  <Calendar label="Calendar" :calendar="calendar" locale="ar-SA" />
 </template>
 ```
 
