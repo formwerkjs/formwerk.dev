@@ -123,6 +123,7 @@ const store = useStore({
           'https://unpkg.com/@standard-schema/utils@0.3.0/dist/index.js',
         vue: `https://unpkg.com/vue@${version}/dist/vue.esm-browser.prod.js`,
         '@formwerk/core': `https://unpkg.com/@formwerk/core@${fwVersion}/dist/core.mjs`,
+        '@internationalized/date': `https://esm.sh/@internationalized/date`,
         zod: 'https://unpkg.com/@awaddev/zod@3.23.8-standard-schema/lib/index.mjs',
         '@vueuse/core': 'https://unpkg.com/@vueuse/core?module',
       },

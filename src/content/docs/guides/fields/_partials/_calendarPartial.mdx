@@ -1,0 +1,182 @@
+```vue collapse={85-176}
+<script setup lang="ts">
+import { useCalendar, CalendarCell, type CalendarProps } from '@formwerk/core';
+
+const props = defineProps<CalendarProps>();
+
+const {
+  calendarProps,
+  gridProps,
+  nextButtonProps,
+  previousButtonProps,
+  gridLabelProps,
+  gridLabel,
+  currentView,
+} = useCalendar(props);
+</script>
+
+<template>
+  <div class="calendar" v-bind="calendarProps">
+    <div class="calendar-header">
+      <button class="calendar-header-button" v-bind="previousButtonProps">
+        &lt;
+      </button>
+
+      <span v-bind="gridLabelProps">
+        {{ gridLabel }}
+      </span>
+
+      <button class="calendar-header-button" v-bind="nextButtonProps">
+        &gt;
+      </button>
+    </div>
+
+    <div
+      v-if="currentView.type === 'weeks'"
+      v-bind="gridProps"
+      class="calendar-grid weeks-grid"
+    >
+      <div v-for="day in currentView.weekDays" :key="day" class="weekday-label">
+        {{ day }}
+      </div>
+
+      <CalendarCell
+        v-for="day in currentView.days"
+        v-bind="day"
+        class="calendar-cell"
+        :class="{
+          'outside-month': day.isOutsideMonth,
+          today: day.isToday,
+        }"
+      >
+        {{ day.label }}
+      </CalendarCell>
+    </div>
+
+    <div
+      v-if="currentView.type === 'months'"
+      v-bind="gridProps"
+      class="calendar-grid months-grid"
+    >
+      <CalendarCell
+        v-for="month in currentView.months"
+        v-bind="month"
+        class="calendar-cell"
+      >
+        {{ month.label }}
+      </CalendarCell>
+    </div>
+
+    <div
+      v-if="currentView.type === 'years'"
+      v-bind="gridProps"
+      class="calendar-grid years-grid"
+    >
+      <CalendarCell
+        v-for="year in currentView.years"
+        v-bind="year"
+        class="calendar-cell"
+      >
+        {{ year.label }}
+      </CalendarCell>
+    </div>
+  </div>
+</template>
+
+<style>
+.calendar {
+  background-color: #fff;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #000;
+}
+
+.calendar-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.weeks-grid {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.weekday-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 10px;
+}
+
+.calendar-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  color: #000;
+  width: 35px;
+  height: 35px;
+  border-radius: 999999px;
+}
+
+.calendar-cell:focus {
+  border-color: #059669;
+  outline: none;
+}
+
+.calendar-cell[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.calendar-cell[aria-selected='true'] {
+  background-color: #059669;
+  font-weight: 500;
+  color: white;
+}
+
+.calendar-cell[aria-disabled='true'] {
+  opacity: 0.1;
+  cursor: not-allowed;
+}
+
+.outside-month {
+  opacity: 0.4;
+}
+
+.months-grid,
+.years-grid {
+  margin-top: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  .calendar-cell {
+    padding: 2px 4px;
+    width: auto;
+    height: unset;
+  }
+}
+
+.calendar-header-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 6px;
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.today {
+  border-color: #059669;
+}
+</style>
+```

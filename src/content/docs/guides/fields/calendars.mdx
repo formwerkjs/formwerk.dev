@@ -1,0 +1,341 @@
+---
+title: Calendars
+description: Learn how to build accessible calendar Vue components with Formwerk.
+sidebar:
+  order: 10
+---
+
+import Kbd from '@components/KeyboardKey.vue';
+import { Aside } from '@astrojs/starlight/components';
+
+import AnatomyCanvas from '@components/AnatomyCanvas.vue';
+import AnatomyCalendar from '@components/AnatomyCalendar.vue';
+import CalendarPartial from './_partials/_calendarPartial.mdx';
+import MdxRepl from '@components/MdxRepl.vue';
+import MdxTableAPI from '@components/MdxTableAPI.vue';
+
+<Aside title="Dependency Disclaimer">
+
+In order to deliver true i18n for international audiences, Formwerk's calendar composable depends on [@internationalized/date](https://react-spectrum.adobe.com/internationalized/date/index.html) to provide these functionalities.
+
+If you do not use the Calendar or Date Field composables, the dependency will not be included in your bundle as it is fully tree-shakable.
+
+Formwerk fully intends on migrating to the [Temporal API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal) in the future once they receive full or partial baseline support.
+
+</Aside>
+
+Calendars are used to allow users to select a date, for example to select a date of birth or a date for a reservation.
+
+Calendar components in Formwerk can be used with a [date field](/guides/fields/date-fields/) or as a standalone component.
+
+## Features
+
+- Labeling, Descriptions, and error messages are automatically linked to the calendar elements.
+- Supports different views (week, month, year) to allow for large date range navigation.
+- Support for multiple calendars (e.g: `islamic-umalqura`, `japanese`, etc).
+- Supports minimum and maximum date boundaries.
+- Validation support with [Standard Schemas](https://github.com/standard-schema/standard-schema).
+- Auto directionality based on the locale.
+- Cell states for today, selected, disabled and outside month dates.
+- Support for `v-model` binding.
+- Comprehensive keyboard shortcuts support.
+
+### Keyboard Features
+
+#### Week view
+
+| Key                                          | Description                                                                                                                                 |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Kbd code="ArrowDown" label="ArrowDown" />   | Moves the focus to the same day of the next week.                                                                                           |
+| <Kbd code="ArrowUp" label="ArrowUp" />       | Moves the focus to the same day of the previous week.                                                                                       |
+| <Kbd code="ArrowLeft" label="ArrowLeft" />   | Moves the focus to the previous day.                                                                                                        |
+| <Kbd code="ArrowRight" label="ArrowRight" /> | Moves the focus to the next day.                                                                                                            |
+| <Kbd code="Home" label="Home" />             | Moves the focus to the first day of the current month. If already on the first day, moves the focus to the first day of the previous month. |
+| <Kbd code="End" label="End" />               | Moves the focus to the last day of the current month. If already on the last day, moves the focus to the last day of the next month.        |
+| <Kbd code="PageUp" label="PageUp" />         | Moves the focus to the same day of the previous month.                                                                                      |
+| <Kbd code="PageDown" label="PageDown" />     | Moves the focus to the same day of the next month.                                                                                          |
+
+#### Month view
+
+| Key                                          | Description                                                                                                                             |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| <Kbd code="ArrowDown" label="ArrowDown" />   | Moves the focus to the next quarter.                                                                                                    |
+| <Kbd code="ArrowUp" label="ArrowUp" />       | Moves the focus to the previous quarter.                                                                                                |
+| <Kbd code="ArrowLeft" label="ArrowLeft" />   | Moves the focus to the previous month.                                                                                                  |
+| <Kbd code="ArrowRight" label="ArrowRight" /> | Moves the focus to the next month.                                                                                                      |
+| <Kbd code="Home" label="Home" />             | Moves the focus to the first month of the year. If already on the first month, moves the focus to the first month of the previous year. |
+| <Kbd code="End" label="End" />               | Moves the focus to the last month of the year. If already on the last month, moves the focus to the last month of the next year.        |
+| <Kbd code="PageUp" label="PageUp" />         | Moves the focus to the same month of the previous year.                                                                                 |
+| <Kbd code="PageDown" label="PageDown" />     | Moves the focus to the same month of the next year.                                                                                     |
+
+#### Year view
+
+TBD
+
+## Anatomy
+
+<AnatomyCanvas>
+  <AnatomyCalendar client:load />
+</AnatomyCanvas>
+
+## Building a Calendar Component
+
+You can start by importing the `useCalendar` composable and using it in your calendar component.
+
+The `useCalendar` composable returns binding objects for the elements shown in the [anatomy](#anatomy). You will use `v-bind` to bind them to the corresponding DOM elements.
+
+<MdxRepl client:load preview-size="xl">
+
+<div slot="Calendar.vue">
+  <CalendarPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Calendar from './Calendar.vue';
+import { ref } from 'vue';
+
+const date = ref(new Date('2025-09-14'));
+</script>
+
+<template>
+  <Calendar label="Select a date" v-model="date" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+Note that Formwerk already exposes a `CalendarCell` component that renders a span by default for convenience. It provides handling for user interactions and accessibility attributes.
+
+You can build your own calendar cell component and customize it as needed with `useCalendarCell` composable.
+
+```vue
+<script setup lang="ts">
+import { useCalendarCell, type CalendarCellProps } from '@formwerk/core';
+
+const props = defineProps<CalendarCellProps>();
+
+const { cellProps, label } = useCalendarCell(props);
+</script>
+
+<template>
+  <div v-bind="cellProps">
+    {{ label }}
+  </div>
+</template>
+```
+
+## Usage
+
+### Disabled
+
+Use `disabled` to mark calendar as non-interactive. Disabled calendars are not validated and are not submitted.
+
+If you need to prevent the user from interacting with the calendar while still allowing it to submit, consider using `readonly` instead.
+
+<MdxRepl client:load preview-size="xl">
+
+<div slot="!Calendar.vue">
+  <CalendarPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Calendar from './Calendar.vue';
+</script>
+
+<template>
+  <Calendar label="Disabled Calendar" disabled />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Readonly
+
+Readonly calendars are validated and submitted, but they do not accept user input. The calendar is still focusable. For more info, check the [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/readonly).
+
+<MdxRepl client:load preview-size="xl">
+
+<div slot="!Calendar.vue">
+  <CalendarPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Calendar from './Calendar.vue';
+</script>
+
+<template>
+  <Calendar label="Readonly Calendar" readonly />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Locale and Calendar Support
+
+The `calendar` prop can be used to specify which calendar to use, along with the `locale` prop to set the locale of the calendar.
+
+You can use `@internationalized/date` to create calendar objects. In this example, we will use the `islamic-umalqura` calendar along with the `ar-SA` locale.
+
+<MdxRepl client:load preview-size="xl">
+
+<div slot="!Calendar.vue">
+  <CalendarPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import {
+  createCalendar,
+  IslamicUmalquraCalendar,
+} from '@internationalized/date';
+import Calendar from './Calendar.vue';
+
+// This will import all calendars available.
+// Resulting in a larger bundle size.
+const calendar = createCalendar('islamic-umalqura');
+
+// This will import only the Islamic Umalqura calendar.
+// This allows tree-shaking, reducing the bundle size.
+// const calendar = IslamicUmalquraCalendar;
+</script>
+
+<template>
+  <Calendar label="Calendar" :calendar="calendar" locale="ar-SA" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+<Aside title="Value type with `calendar` prop" type="caution">
+
+When using a non-Gregorian calendar system (like Islamic or Japanese calendars), the `calendar` composable will still use JavaScript's native `Date` objects internally. This means that even though you may see dates displayed in your chosen calendar system, the actual value emitted by the component will be the equivalent Gregorian date.
+
+For example, if you select "1 Muharram 1445" in the Islamic calendar, the emitted value will be a `Date` object representing "July 19, 2023" in the Gregorian calendar.
+
+We're interested in hearing from users who work with different calendar systems - how would you prefer to handle these date values? Please share your feedback with us.
+
+</Aside>
+
+### Min and Max
+
+You can pass `min` and `max` props to set the minimum and maximum dates that can be selected. You will still need to handle styling those dates, out of range dates will be marked with `aria-disabled` attribute.
+
+<MdxRepl client:load preview-size="xl">
+
+<div slot="!Calendar.vue">
+  <CalendarPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Calendar from './Calendar.vue';
+
+// You need to be careful with the time component of the date object.
+// JS date objects fills the date time with the current time component.
+const min = new Date(2025, 0, 4, 0, 0, 0, 0);
+const value = new Date('2025-01-15');
+const max = new Date('2025-01-20');
+</script>
+
+<template>
+  <Calendar label="Calendar" :value="value" :min="min" :max="max" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+## Usage as a picker
+
+You can use the `Calendar` component as a picker which can be useful to pair with a [date field](/guides/fields/date-fields/).
+
+To do that, you can use the `usePicker` composable:
+
+<MdxRepl client:load preview-size="xl">
+
+<div slot="!Calendar.vue">
+  <CalendarPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { usePicker } from '@formwerk/core';
+import Calendar from './Calendar.vue';
+
+const { pickerProps, pickerTriggerProps } = usePicker({
+  label: 'Pick a date',
+});
+
+const date = ref();
+</script>
+
+<template>
+  <pre>Selected date: {{ date || 'none' }}</pre>
+  <button v-bind="pickerTriggerProps">Open Calendar</button>
+
+  <div v-bind="pickerProps" popover>
+    <Calendar label="Calendar" v-model="date" />
+  </div>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+In that example, we are using the popover API, but you can use any other floating UI solution you prefer.
+
+## API
+
+### useCalendar
+
+#### Props
+
+These are the properties that can be passed to the `useCalendar` composable.
+
+<MdxTableAPI typeName="CalendarProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useCalendar` composable.
+
+<MdxTableAPI fnName="useCalendar" />
+
+### useCalendarCell
+
+#### Props
+
+These are the properties that can be passed to the `useCalendarCell` composable.
+
+<MdxTableAPI typeName="CalendarCellProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useCalendarCell` composable.
+
+<MdxTableAPI fnName="useCalendarCell" />
