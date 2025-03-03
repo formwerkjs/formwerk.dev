@@ -976,6 +976,8 @@ Forms also expose `getSubmitError` and `getSubmitErrors` to get the submit error
 
 ## Resetting Forms
 
+### with `reset()`
+
 Form state can be reset with the `reset` function. Calling this function will reset the current values back to the initial values, revert the touched state for all fields back to `false`, and clear any custom errors.
 
 <MdxRepl client:load preview-size="lg">
@@ -1117,6 +1119,53 @@ function onReset() {
 }
 ```
 
+### event handler with `handleReset()`
+
+You can also use `handleReset()` to create an event handler that responds to the native `reset` event.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!TextField.vue">
+  <TextFieldPartial />
+</div>
+
+<div slot="!Checkbox.vue">
+  <CheckboxPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { useForm } from '@formwerk/core';
+import TextField from './TextField.vue';
+
+const { handleSubmit, handleReset } = useForm();
+
+const onSubmit = handleSubmit((data) => {
+  alert(JSON.stringify(data.toObject(), null, 2));
+});
+
+const onReset = handleReset(() => {
+  alert('after reset');
+});
+</script>
+
+<template>
+  <form @reset="onReset" @submit="onSubmit" novalidate>
+    <TextField name="email" label="Email" type="email" required />
+    <TextField name="password" label="Password" type="password" required />
+
+    <button type="submit">Submit</button>
+    <button type="reset">Reset</button>
+  </form>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
 ## Form Types
 
 Forms support typing your form values with TypeScript. This is done through a couple of generic type parameters.
@@ -1209,6 +1258,18 @@ const onSubmit = handleSubmit((data) => {
 ```
 
 For getting the most out of type safety, it is recommended to use Standard Schemas over manually providing types via the `initialValues` prop.
+
+## Getting access to the form context
+
+You may need to access the form context from within a component that is a child of the form. Common examples are button components that may need to be aware of the submitting state or the dirty state.
+
+To do this, you can use the `useFormContext` composable.
+
+```ts
+import { useFormContext } from '@formwerk/core';
+
+const { isSubmitting } = useFormContext();
+```
 
 ## API
 
