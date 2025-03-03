@@ -36,8 +36,8 @@ importers:
         specifier: ^1.1.6
         version: 1.1.6(vue@3.5.13(typescript@5.8.2))
       '@formwerk/core':
-        specifier: ^0.8.2
-        version: 0.8.2(vue@3.5.13(typescript@5.8.2))
+        specifier: ^0.8.3
+        version: 0.8.3(vue@3.5.13(typescript@5.8.2))
       '@iconify-json/vscode-icons':
         specifier: ^1.2.16
         version: 1.2.16
@@ -731,13 +731,13 @@ packages:
   '@floating-ui/vue@1.1.6':
     resolution: {integrity: sha512-XFlUzGHGv12zbgHNk5FN2mUB7ROul3oG2ENdTpWdE+qMFxyNxWSRmsoyhiEnpmabNm6WnUvR1OvJfUfN4ojC1A==}
 
-  '@formwerk/core@0.8.2':
-    resolution: {integrity: sha512-JFVmrEVKQnWZVFkP94HXUtmnJ1rmAw5ogOP25vW44YvFpbeSDnWAcrTLlZIWaolvjP/JsfV/crEdLpJmTuMpJQ==}
+  '@formwerk/core@0.8.3':
+    resolution: {integrity: sha512-RHnwz8Q51bI17QrAURadUyLXutrWigCC3Yf4/2LZEWVQfh1lwJWXluKNQDqPpS2yFXitlx+RltcfaofanyRwkw==}
     peerDependencies:
       vue: '>=3.5.0'
 
-  '@formwerk/devtools@0.8.2':
-    resolution: {integrity: sha512-a518GdWsEUNyKyMLBr98p4jph/JYnpVow3hgjPSTpzlm1vYpdsSrLr3/XQBMJJkeVEyQ2bbKuh/byDkzswPsPA==}
+  '@formwerk/devtools@0.8.3':
+    resolution: {integrity: sha512-W7owmiIkGDeY6OWsGvj+eKi5TYXvHHFVfPoHqGfn/FDRpAnw9ecupw2UkT0PH+YVwyrtdI7MI9iwtn1sBhYxcg==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -4914,9 +4914,9 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@formwerk/core@0.8.2(vue@3.5.13(typescript@5.8.2))':
+  '@formwerk/core@0.8.3(vue@3.5.13(typescript@5.8.2))':
     dependencies:
-      '@formwerk/devtools': 0.8.2
+      '@formwerk/devtools': 0.8.3
       '@internationalized/date': 3.7.0
       '@standard-schema/spec': 1.0.0
       '@standard-schema/utils': 0.3.0
@@ -4924,7 +4924,7 @@ snapshots:
       type-fest: 4.36.0
       vue: 3.5.13(typescript@5.8.2)
 
-  '@formwerk/devtools@0.8.2':
+  '@formwerk/devtools@0.8.3':
     dependencies:
       '@vue/devtools-api': 7.7.2
       '@vue/devtools-kit': 7.7.2

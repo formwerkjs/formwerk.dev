@@ -86,12 +86,16 @@ const {
   padding: 0.125rem;
   border-radius: 0.25rem;
   caret-color: transparent;
-}
 
-.segment:focus {
-  background-color: var(--color-focus);
-  color: #fff;
-  outline: none;
+  &:focus {
+    background-color: var(--color-focus);
+    color: #fff;
+    outline: none;
+  }
+
+  &[aria-disabled='true'] {
+    opacity: 0.4;
+  }
 }
 
 .error-message {

@@ -201,7 +201,7 @@ import DateField from './DateField.vue';
 
 You can pass `min` and `max` props to set the minimum and maximum dates that can be entered.
 
-<MdxRepl client:load>
+<MdxRepl client:load preview-size="xl">
 
 <div slot="!DateField.vue">
   <DateFieldPartial />
@@ -216,10 +216,21 @@ import DateField from './DateField.vue';
 
 <template>
   <DateField
-    label="Limited"
-    :value="new Date('2025-02-11')"
+    label="Same Year and Month"
     :min="new Date('2025-02-01')"
     :max="new Date('2025-02-15')"
+  />
+
+  <DateField
+    label="Same Year"
+    :min="new Date('2025-01-01')"
+    :max="new Date('2025-12-31')"
+  />
+
+  <DateField
+    label="Different Year"
+    :min="new Date('2024-01-01')"
+    :max="new Date('2025-12-31')"
   />
 </template>
 ```
@@ -227,6 +238,10 @@ import DateField from './DateField.vue';
 </div>
 
 </MdxRepl>
+
+Notice in the previous examples, some parts of the date field are disabled.
+
+This is because when providing both a `min` and a `max`, Formwerk checks the possibilities of the date segments, and if a segment has only one possible value then it automatically sets it and disables it. Just like the native `input[type="date"]` element.
 
 ### Format Options
 
