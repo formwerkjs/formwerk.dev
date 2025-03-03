@@ -32,7 +32,7 @@ Note that [customizable selects](https://developer.chrome.com/blog/rfc-customiza
 - Support for option searching with starting characters.
 - First-class Support for `[popover]` popups for dropdowns/menus.
 - Generic typing support for options.
-- Validation support with [Standard Schemas](https://github.com/standard-schema/standard-schema).
+- Validation support with native HTML constraints or [Standard Schemas](https://github.com/standard-schema/standard-schema).
 - Support for `v-model` binding.
 - Supported Keyboard features:
 
@@ -199,9 +199,44 @@ const groups = [
 
 ## Validation
 
-Because selects in Formwerk are a fully custom component, it doesn't support any HTML validation attributes. You can however, use Standard Schemas to validate the value of the select.
+### HTML Constraints
 
-In the future when customizable selects are available in the browser, Formwerk will leverage that to provide better validation support for the native HTML constraints.
+You can use the following properties to validate the date field with native HTML constraint validation:
+
+| Name       | Type      | Description                           |
+| ---------- | --------- | ------------------------------------- |
+| `required` | `boolean` | Whether the select field is required. |
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!SelectField.vue">
+  <SelectPartial />
+</div>
+
+<div slot="!OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import SelectField from './SelectField.vue';
+import OptionItem from './OptionItem.vue';
+</script>
+
+<template>
+  <SelectField label="Select a drink (HTML Constraints)" required>
+    <OptionItem label="Coffee ☕️" value="coffee" />
+    <OptionItem label="Tea 🍵" value="tea" />
+    <OptionItem label="Milk 🥛" value="milk" />
+  </SelectField>
+</template>
+```
+
+</div>
+
+</MdxRepl>
 
 ### Standard Schema
 
@@ -232,7 +267,51 @@ const schema = z
 </script>
 
 <template>
-  <SelectField label="Select a drink" :schema="schema">
+  <SelectField label="Select a drink (Standard Schema)" :schema="schema">
+    <OptionItem label="Coffee ☕️" value="coffee" />
+    <OptionItem label="Tea 🍵" value="tea" />
+    <OptionItem label="Milk 🥛" value="milk" />
+  </SelectField>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Mixed Validation
+
+All select fields created with Formwerk support mixed validation, which means you can use both HTML constraints and Standard Schema validation to validate the field, and they work seamlessly together.
+
+Note that HTML constraints are validated first, so any errors from the HTML constraints will be displayed first. Then, once all HTML constraints are satisfied, the Standard Schema is validated.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!SelectField.vue">
+  <SelectPartial />
+</div>
+
+<div slot="!OptionItem.vue">
+  <OptionPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import SelectField from './SelectField.vue';
+import OptionItem from './OptionItem.vue';
+import { z } from 'zod';
+
+const schema = z.string().endsWith('coffee', 'WRONG ANSWER!');
+</script>
+
+<template>
+  <SelectField
+    label="Select a drink (Mixed Validation)"
+    required
+    :schema="schema"
+  >
     <OptionItem label="Coffee ☕️" value="coffee" />
     <OptionItem label="Tea 🍵" value="tea" />
     <OptionItem label="Milk 🥛" value="milk" />

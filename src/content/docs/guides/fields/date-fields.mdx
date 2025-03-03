@@ -32,7 +32,7 @@ Date fields are a type of input field that allows users to enter a date. They ar
 - Labeling, Descriptions, and error messages are automatically linked to the date field elements.
 - Support for multiple calendars (e.g: `islamic-umalqura`, `japanese`, etc).
 - Supports minimum and maximum date boundaries.
-- Validation support with [Standard Schemas](https://github.com/standard-schema/standard-schema).
+- Validation support with native HTML constraints or [Standard Schemas](https://github.com/standard-schema/standard-schema).
 - Auto directionality based on the locale.
 - Focus management and auto navigation for date segments.
 - Support for `v-model` binding.
@@ -106,6 +106,43 @@ const { segmentProps, label } = useDateTimeSegment(props);
 
 ## Validation
 
+### HTML Constraints
+
+You can use the following properties to validate the date field with native HTML constraint validation:
+
+| Name       | Type      | Description                           |
+| ---------- | --------- | ------------------------------------- |
+| `min`      | `Date`    | The minimum date that can be entered. |
+| `max`      | `Date`    | The maximum date that can be entered. |
+| `required` | `boolean` | Whether the date field is required.   |
+
+<MdxRepl client:load>
+
+<div slot="!DateField.vue">
+  <DateFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import DateField from './DateField.vue';
+</script>
+
+<template>
+  <DateField
+    label="HTML Constraints"
+    required
+    :min="new Date('2025-01-01')"
+    :max="new Date('2025-12-31')"
+  />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
 ### Standard Schema
 
 `useDateTimeField` supports [Standard Schema](https://github.com/standard-schema/standard-schema) validation through the `schema` prop. This includes multiple providers like [Zod](https://zod.dev/), [Valibot](https://valibot.dev/), [Arktype](https://arktype.dev/), and more.
@@ -136,6 +173,37 @@ const schema = z.date().min(new Date('2025-01-01')).max(new Date('2025-12-31'));
 
 <template>
   <DateField label="Standard Schema" :schema="schema" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Mixed Validation
+
+All date fields created with Formwerk support mixed validation, which means you can use both HTML constraints and Standard Schema validation to validate the field, and they work seamlessly together.
+
+Note that HTML constraints are validated first, so any errors from the HTML constraints will be displayed first. Then, once all HTML constraints are satisfied, the Standard Schema is validated.
+
+<MdxRepl client:load>
+
+<div slot="!DateField.vue">
+  <DateFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { z } from 'zod';
+import DateField from './DateField.vue';
+
+const schema = z.date().min(new Date('2025-01-01')).max(new Date('2025-12-31'));
+</script>
+
+<template>
+  <DateField label="Mixed Validation" :schema="schema" required />
 </template>
 ```
 
@@ -199,7 +267,7 @@ import DateField from './DateField.vue';
 
 ### Min and Max
 
-You can pass `min` and `max` props to set the minimum and maximum dates that can be entered.
+You can pass `min` and `max` props to set the minimum and maximum dates that can be entered, not only they are used for validation but they affect the date segments that are available for selection and interaction.
 
 <MdxRepl client:load preview-size="xl">
 
