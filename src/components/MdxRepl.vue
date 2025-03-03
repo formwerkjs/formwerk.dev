@@ -126,6 +126,7 @@ const store = useStore({
         '@internationalized/date': `https://esm.sh/@internationalized/date`,
         zod: 'https://unpkg.com/@awaddev/zod@3.23.8-standard-schema/lib/index.mjs',
         '@vueuse/core': 'https://unpkg.com/@vueuse/core?module',
+        '@formwerk/devtools': 'https://esm.sh/@formwerk/devtools',
       },
     }),
   ),
