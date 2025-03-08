@@ -34,7 +34,7 @@ Calendar components in Formwerk can be used with a [date field](/guides/fields/d
 - Supports different views (week, month, year) to allow for large date range navigation.
 - Support for multiple calendars (e.g: `islamic-umalqura`, `japanese`, etc).
 - Supports minimum and maximum date boundaries.
-- Validation support with [Standard Schemas](https://github.com/standard-schema/standard-schema).
+- Validation support with native HTML constraints or [Standard Schemas](https://github.com/standard-schema/standard-schema).
 - Auto directionality based on the locale.
 - Cell states for today, selected, disabled and outside month dates.
 - Support for `v-model` binding.
@@ -70,7 +70,12 @@ Calendar components in Formwerk can be used with a [date field](/guides/fields/d
 
 #### Year view
 
-TBD
+| Key                                          | Description                                          |
+| -------------------------------------------- | ---------------------------------------------------- |
+| <Kbd code="ArrowDown" label="ArrowDown" />   | Moves the focus to the next year row (+3 years).     |
+| <Kbd code="ArrowUp" label="ArrowUp" />       | Moves the focus to the previous year row (-3 years). |
+| <Kbd code="ArrowLeft" label="ArrowLeft" />   | Moves the focus to the previous year.                |
+| <Kbd code="ArrowRight" label="ArrowRight" /> | Moves the focus to the next year.                    |
 
 ## Anatomy
 
@@ -128,6 +133,20 @@ const { cellProps, label } = useCalendarCell(props);
   </div>
 </template>
 ```
+
+## Validation
+
+### HTML Constraints
+
+You can use the following properties to validate the calendar field with HTML constraint validation:
+
+| Name       | Type      | Description                           |
+| ---------- | --------- | ------------------------------------- |
+| `min`      | `Date`    | The minimum date that can be entered. |
+| `max`      | `Date`    | The maximum date that can be entered. |
+| `required` | `boolean` | Whether the date field is required.   |
+
+### Standard Schema
 
 ## Usage
 
@@ -267,7 +286,7 @@ const max = new Date('2025-01-20');
 
 </MdxRepl>
 
-## Usage as a picker
+### Calendar as a picker
 
 You can use the `Calendar` component as a picker which can be useful to pair with a [date field](/guides/fields/date-fields/).
 
@@ -309,6 +328,38 @@ const date = ref();
 </MdxRepl>
 
 In that example, we are using the popover API, but you can use any other floating UI solution you prefer.
+
+### Disabling calendar views
+
+The calendar will have the 3 views enabled by default. You switch between the views by clicking the header of the calendar.
+
+While we do not recommend disabling the views as your users may expect being able to navigate with them, you can still allow specific views by passing the `allowedViews` prop.
+
+In the following example, we are disabling the year view:
+
+<MdxRepl client:load preview-size="xl">
+
+<div slot="!Calendar.vue">
+  <CalendarPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Calendar from './Calendar.vue';
+</script>
+
+<template>
+  <Calendar label="Calendar" :allowed-views="['weeks', 'months']" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+Now if you click the header of the calendar, you will get the months view, if you click again you will remain on the months view rather than going to the years view.
 
 ## API
 

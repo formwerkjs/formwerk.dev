@@ -9,7 +9,7 @@
       </select>
     </div>
 
-    <div class="flex w-full items-center justify-between">
+    <div class="mt-6 flex w-full items-center justify-between">
       <AnatomyPart text="Previous Month" position="top">
         <PhCaretLeft />
       </AnatomyPart>
