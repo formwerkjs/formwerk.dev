@@ -1,4 +1,4 @@
-```vue
+```vue collapse={33-91}
 <template>
   <div class="otp-field">
     <div class="otp-field__label" v-bind="labelProps">{{ label }}</div>
@@ -18,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { useOtpField, type OTPFieldProps, OtpSlot } from '@formwerk/core';
+import { useOtpField, type OtpFieldProps, OtpSlot } from '@formwerk/core';
 
-const props = defineProps<OTPFieldProps>();
+const props = defineProps<OtpFieldProps>();
 
 const {
   controlProps,
@@ -32,8 +32,6 @@ const {
 </script>
 
 <style scoped>
-@reference "../style.css";
-
 .otp-field {
   display: flex;
   flex-direction: column;
