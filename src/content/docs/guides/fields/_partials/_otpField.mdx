@@ -42,6 +42,7 @@ const {
   --fw-text-color: #000;
   --fw-error-color: #ff0000;
   --fw-focus-color: #10b981;
+  --fw-disabled-bg: #e4e4e7;
 }
 
 .otp-field__label {
@@ -72,11 +73,11 @@ const {
     background-color: #f0fdf4;
     caret-color: transparent;
   }
-}
 
-[data-otp-slot][aria-disabled='true'] {
-  background-color: var(--fw-disabled-bg);
-  opacity: 0.5;
+  &:disabled {
+    background-color: var(--fw-disabled-bg);
+    opacity: 0.5;
+  }
 }
 
 .otp-field__error-message {
