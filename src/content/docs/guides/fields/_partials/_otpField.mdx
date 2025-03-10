@@ -1,0 +1,92 @@
+```vue collapse={33-91}
+<template>
+  <div class="otp-field">
+    <div class="otp-field__label" v-bind="labelProps">{{ label }}</div>
+
+    <div class="otp-field__control" v-bind="controlProps">
+      <OtpSlot
+        v-for="slot in fieldSlots"
+        v-bind="slot"
+        class="otp-field__slot"
+      />
+    </div>
+
+    <span v-bind="errorMessageProps" class="otp-field__error-message">
+      {{ errorMessage }}
+    </span>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useOtpField, type OtpFieldProps, OtpSlot } from '@formwerk/core';
+
+const props = defineProps<OtpFieldProps>();
+
+const {
+  controlProps,
+  labelProps,
+  errorMessage,
+  errorMessageProps,
+  fieldSlots,
+} = useOtpField(props);
+</script>
+
+<style scoped>
+.otp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  --fw-border-color: #aaa;
+  --fw-input-bg: #fff;
+  --fw-text-color: #000;
+  --fw-error-color: #ff0000;
+  --fw-focus-color: #10b981;
+  --fw-disabled-bg: #e4e4e7;
+}
+
+.otp-field__label {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--fw-text-color);
+}
+
+.otp-field__control {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.otp-field__slot {
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--fw-border-color);
+  background-color: var(--fw-input-bg);
+  align-content: center;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--fw-text-color);
+  vertical-align: middle;
+  &:focus {
+    outline: 1px solid #059669;
+    background-color: #f0fdf4;
+    caret-color: transparent;
+  }
+
+  &:disabled {
+    background-color: var(--fw-disabled-bg);
+    opacity: 0.5;
+  }
+}
+
+.otp-field__error-message {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fw-error-color);
+  font-size: 0.875rem;
+}
+</style>
+```

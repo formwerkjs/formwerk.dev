@@ -1,0 +1,416 @@
+---
+title: OTP Fields
+description: Learn how to build accessible OTP field Vue components with Formwerk.
+sidebar:
+  order: 10
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+import AnatomyCanvas from '@components/AnatomyCanvas.vue';
+import AnatomyOtp from '@components/AnatomyOtp.vue';
+import MdxTableAPI from '@components/MdxTableAPI.vue';
+import Kbd from '@components/KeyboardKey.vue';
+import OtpFieldPartial from './_partials/_otpField.mdx';
+import MdxRepl from '@components/MdxRepl.vue';
+
+OTP fields are used to allow users to input a one-time password or a code. Usually used for 2FA (MFA) or authentication purposes.
+
+## Features
+
+- Use `input` or any other element to create an OTP field and its slots.
+- Labels, descriptions, and error message displays are automatically linked to input and label elements with `aria-*` attributes.
+- Validation support with native HTML constraint validation or [Standard Schema](https://github.com/standard-schema/standard-schema) validation.
+- Support for `v-model` binding.
+- Supports masking (hiding) the entered characters with a custom character.
+- Supports prefixes (e.g. `F-{code}`).
+- Supports custom length.
+- Supports both numeric and alphanumeric OTPs.
+- Comprehensively supports keyboard navigation.
+- Auto management of focus during user interaction.
+- Handles paste events.
+- Auto submit on completion.
+
+### Keyboard Features
+
+| Key                                          | Description                                                           |
+| -------------------------------------------- | --------------------------------------------------------------------- |
+| <Kbd code="ArrowRight" label="ArrowRight" /> | Moves the focus to the next OTP slot.                                 |
+| <Kbd code="ArrowLeft" label="ArrowLeft" />   | Moves the focus to the previous OTP slot.                             |
+| <Kbd code="Backspace" label="Backspace" />   | Clears the current OTP slot and moves the focus to the previous slot. |
+| <Kbd code="Tab" label="Tab" />               | Moves the focus to the next OTP slot.                                 |
+| <Kbd code="Enter" label="Enter" />           | Moves the focus to the next OTP slot.                                 |
+
+## Anatomy
+
+<AnatomyCanvas>
+  <AnatomyOtp />
+</AnatomyCanvas>
+
+## Building an OTP Field Component
+
+First, import the `useOtpField` composable and use it in your OTP field component.
+
+The `useOtpField` composable returns binding objects for the elements shown in the [anatomy](#anatomy). You will use `v-bind` to bind them to the corresponding DOM elements.
+
+<MdxRepl client:load>
+
+<div slot="OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+</script>
+
+<template>
+  <OtpField label="Your code" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+For your convenience, Formwerk already implements an OTP Slot component that you can use in your OTP field directly, but you can still build your own with `useOtpSlot`.
+
+## Validation
+
+### HTML Constraints
+
+You can use the following properties to validate the OTP field with native HTML constraint validation:
+
+| Name       | Type      | Description                         |
+| ---------- | --------- | ----------------------------------- |
+| `required` | `boolean` | Whether the text field is required. |
+
+<Aside>
+
+For OTP fields, even if one slot is missing, the field is considered "empty" and thus it would show the "required" error message.
+
+</Aside>
+
+<MdxRepl client:load>
+
+<div slot="!OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+</script>
+
+<template>
+  <OtpField label="Your code" required />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Standard Schema
+
+`useOtpField` also supports [Standard Schema](https://github.com/standard-schema/standard-schema) validation through the `schema` prop. This includes multiple providers like [Zod](https://zod.dev/), [Valibot](https://valibot.dev/), [Arktype](https://arktype.dev/), and more.
+
+<MdxRepl client:load>
+
+<div slot="!OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+import { z } from 'zod';
+
+const schema = z.string().length(6);
+</script>
+
+<template>
+  <OtpField label="Your code" :schema="schema" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Mixed Validation
+
+All OTP fields created with Formwerk support mixed validation, which means you can use both HTML constraints and Standard Schema validation to validate the field, and they work seamlessly together.
+
+Note that HTML constraints are validated first, so any errors from the HTML constraints will be displayed first. Then, once all HTML constraints are satisfied, the Standard Schema is validated.
+
+<MdxRepl client:load>
+
+<div slot="!OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+import { z } from 'zod';
+
+const schema = z.string().length(6).startsWith('abc');
+</script>
+
+<template>
+  <OtpField label="Your code" :schema="schema" required />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+This makes schemas lighter; however, we recommend sticking to one or the other per form for maintainability.
+
+If you need to disable the native validation, you can do so by setting the `disableHtmlValidation` prop to `true`.
+
+## Usage
+
+### Disabled
+
+Use `disabled` to mark fields as non-interactive. Disabled fields are not validated and are not submitted.
+
+If you need to prevent the user from interacting with the field while still allowing it to submit, consider using `readonly` instead.
+
+<MdxRepl client:load>
+
+<div slot="!OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+</script>
+
+<template>
+  <OtpField label="Disabled Code" disabled value="123456" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Readonly
+
+Use `readonly` to mark fields as non-editable. Readonly fields are not validated and are not submitted.
+
+<MdxRepl client:load>
+
+<div slot="!OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+</script>
+
+<template>
+  <OtpField label="Readonly Code" readonly value="123456" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Accepting Specific Characters
+
+The OTP field accepts a `accept` prop to specify the type of characters that can be entered.
+
+You can have one of the following values:
+
+| Value          | Description                                                                                         |
+| -------------- | --------------------------------------------------------------------------------------------------- |
+| `alphanumeric` | Alphanumeric characters are accepted (i.e: English letters and numbers), this is the default value. |
+| `numeric`      | Only numeric characters are accepted.                                                               |
+| `all`          | All characters are accepted.                                                                        |
+
+<MdxRepl client:load>
+
+<div slot="!OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+</script>
+
+<template>
+  <OtpField label="Numeric Code" accept="numeric" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Masking Characters
+
+The OTP field accepts a `mask` prop to specify the character to use for masking the entered characters, your model and submitted values be the actual values. The mask prop can either be a boolean which will apply a masked default, or a character that will be used to mask the entered value.
+
+<MdxRepl client:load preview-size="lg">
+
+<div slot="!OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+</script>
+
+<template>
+  <OtpField label="Secret Code" mask />
+
+  <OtpField label="Custom mask" mask="*" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Prefix
+
+OTP fields can have a prefix, prefixes cannot be changed or edited by the user.
+
+<MdxRepl client:load>
+
+<div slot="!OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+</script>
+
+<template>
+  <OtpField label="Prefixed Code" prefix="F-" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Custom Length
+
+OTP fields accept a `length` prop to specify the number of OTP slots. By default the length is 6 without a prefix, and with a prefix it will be 4.
+
+<MdxRepl client:load>
+
+<div slot="!OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+</script>
+
+<template>
+  <OtpField label="Custom Length" length="5" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### onCompleted Handler
+
+The OTP field accepts an `onCompleted` handler to be notified when the user has filled all the OTP slots with valid characters.
+
+<MdxRepl client:load>
+
+<div slot="!OtpField.vue">
+  <OtpFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import OtpField from './OtpField.vue';
+
+function onCompleted(value: string) {
+  alert(`Code completed: ${value}`);
+}
+</script>
+
+<template>
+  <OtpField label="Enter Code" @completed="onCompleted" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### RTL
+
+At this time, OTP fields do not support RTL (right-to-left) text direction. This is mainly because we want to get more feedback on this, from personal experience OTP codes are still LTR even in RTL web apps.
+
+Feel free to open an issue on [GitHub](https://github.com/formwerkjs/formwerk/issues) if you have any feedback on this.
+
+## API
+
+### useOtpField
+
+#### Props
+
+These are the properties that can be passed to the `useOtpField` composable.
+
+<MdxTableAPI typeName="OtpFieldProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useOtpField` composable.
+
+<MdxTableAPI fnName="useOtpField" />
+
+### useOtpSlot
+
+#### Props
+
+These are the properties that can be passed to the `useOtpSlot` composable.
+
+<MdxTableAPI typeName="OtpSlotProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useOtpSlot` composable.
+
+<MdxTableAPI fnName="useOtpSlot" />
