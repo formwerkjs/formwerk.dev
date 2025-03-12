@@ -36,8 +36,8 @@ importers:
         specifier: ^1.1.6
         version: 1.1.6(vue@3.5.13(typescript@5.8.2))
       '@formwerk/core':
-        specifier: ^0.9.0
-        version: 0.9.0(vue@3.5.13(typescript@5.8.2))
+        specifier: ^0.9.2
+        version: 0.9.2(vue@3.5.13(typescript@5.8.2))
       '@iconify-json/vscode-icons':
         specifier: ^1.2.16
         version: 1.2.16
@@ -731,13 +731,13 @@ packages:
   '@floating-ui/vue@1.1.6':
     resolution: {integrity: sha512-XFlUzGHGv12zbgHNk5FN2mUB7ROul3oG2ENdTpWdE+qMFxyNxWSRmsoyhiEnpmabNm6WnUvR1OvJfUfN4ojC1A==}
 
-  '@formwerk/core@0.9.0':
-    resolution: {integrity: sha512-FxIZqokOGdvht1PnNAwqNynIDF6buc1IKN9WoHdenLdkVvmYhFlGdFYzPD98ecaTAtf1Ur82P2uUK7uc6WbHKw==}
+  '@formwerk/core@0.9.2':
+    resolution: {integrity: sha512-FdF4C2a3Ss29+0GwrpnxGgAwO5Lk46SbjvwAWYh3aDYdQa10RIhZdkZP27iWYdzDkfA5kK82xP6D2qXqivHGBw==}
     peerDependencies:
       vue: '>=3.5.0'
 
-  '@formwerk/devtools@0.9.0':
-    resolution: {integrity: sha512-ww9l1MtW3oO7Wm7YjyRKXUFg83fJinxYG0f4LSK3GuG8BzSLcepn1gm84DKnO0QELcgJVKrRezKzHq/NhNp6cQ==}
+  '@formwerk/devtools@0.9.2':
+    resolution: {integrity: sha512-MmhBTHzT968KGCGTyvKeQvA5hadrzramtPYIlWU7SsDjWU2olq4n/28tDNKXjzqQN1r+8ZwDoAZHMDmsf+9T0g==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -3659,6 +3659,10 @@ packages:
     resolution: {integrity: sha512-3T/PUdKTCnkUmhQU6FFJEHsLwadsRegktX3TNHk+2JJB9HlA8gp1/VXblXVDI93kSnXF2rdPx0GMbHtJIV2LPg==}
     engines: {node: '>=16'}
 
+  type-fest@4.37.0:
+    resolution: {integrity: sha512-S/5/0kFftkq27FPNye0XM1e2NsnoD/3FS+pBmbjmmtLT6I+i344KoOf7pvXreaFsDamWeaJX55nczA1m5PsBDg==}
+    engines: {node: '>=16'}
+
   typesafe-path@0.2.2:
     resolution: {integrity: sha512-OJabfkAg1WLZSqJAJ0Z6Sdt3utnbzr/jh+NAHoyWHJe8CMSy79Gm085094M9nvTPy22KzTVn5Zq5mbapCI/hPA==}
 
@@ -4914,22 +4918,22 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@formwerk/core@0.9.0(vue@3.5.13(typescript@5.8.2))':
+  '@formwerk/core@0.9.2(vue@3.5.13(typescript@5.8.2))':
     dependencies:
-      '@formwerk/devtools': 0.9.0
+      '@formwerk/devtools': 0.9.2
       '@internationalized/date': 3.7.0
       '@standard-schema/spec': 1.0.0
       '@standard-schema/utils': 0.3.0
       klona: 2.0.6
-      type-fest: 4.36.0
+      type-fest: 4.37.0
       vue: 3.5.13(typescript@5.8.2)
 
-  '@formwerk/devtools@0.9.0':
+  '@formwerk/devtools@0.9.2':
     dependencies:
       '@vue/devtools-api': 7.7.2
       '@vue/devtools-kit': 7.7.2
       klona: 2.0.6
-      type-fest: 4.36.0
+      type-fest: 4.37.0
 
   '@humanfs/core@0.19.1': {}
 
@@ -8534,6 +8538,8 @@ snapshots:
       prelude-ls: 1.2.1
 
   type-fest@4.36.0: {}
+
+  type-fest@4.37.0: {}
 
   typesafe-path@0.2.2: {}
 
