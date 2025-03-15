@@ -36,8 +36,8 @@ importers:
         specifier: ^1.1.6
         version: 1.1.6(vue@3.5.13(typescript@5.8.2))
       '@formwerk/core':
-        specifier: https://pkg.pr.new/formwerkjs/formwerk/@formwerk/core@153
-        version: https://pkg.pr.new/formwerkjs/formwerk/@formwerk/core@153(vue@3.5.13(typescript@5.8.2))
+        specifier: ^0.9.2
+        version: 0.9.2(vue@3.5.13(typescript@5.8.2))
       '@iconify-json/vscode-icons':
         specifier: ^1.2.16
         version: 1.2.16
@@ -731,15 +731,13 @@ packages:
   '@floating-ui/vue@1.1.6':
     resolution: {integrity: sha512-XFlUzGHGv12zbgHNk5FN2mUB7ROul3oG2ENdTpWdE+qMFxyNxWSRmsoyhiEnpmabNm6WnUvR1OvJfUfN4ojC1A==}
 
-  '@formwerk/core@https://pkg.pr.new/formwerkjs/formwerk/@formwerk/core@153':
-    resolution: {tarball: https://pkg.pr.new/formwerkjs/formwerk/@formwerk/core@153}
-    version: 0.9.2
+  '@formwerk/core@0.9.2':
+    resolution: {integrity: sha512-FdF4C2a3Ss29+0GwrpnxGgAwO5Lk46SbjvwAWYh3aDYdQa10RIhZdkZP27iWYdzDkfA5kK82xP6D2qXqivHGBw==}
     peerDependencies:
       vue: '>=3.5.0'
 
-  '@formwerk/devtools@https://pkg.pr.new/formwerkjs/formwerk/@formwerk/devtools@431676d9e970aaee17b0620e7a125ddd054cee0a':
-    resolution: {tarball: https://pkg.pr.new/formwerkjs/formwerk/@formwerk/devtools@431676d9e970aaee17b0620e7a125ddd054cee0a}
-    version: 0.9.2
+  '@formwerk/devtools@0.9.2':
+    resolution: {integrity: sha512-MmhBTHzT968KGCGTyvKeQvA5hadrzramtPYIlWU7SsDjWU2olq4n/28tDNKXjzqQN1r+8ZwDoAZHMDmsf+9T0g==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -4920,9 +4918,9 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@formwerk/core@https://pkg.pr.new/formwerkjs/formwerk/@formwerk/core@153(vue@3.5.13(typescript@5.8.2))':
+  '@formwerk/core@0.9.2(vue@3.5.13(typescript@5.8.2))':
     dependencies:
-      '@formwerk/devtools': https://pkg.pr.new/formwerkjs/formwerk/@formwerk/devtools@431676d9e970aaee17b0620e7a125ddd054cee0a
+      '@formwerk/devtools': 0.9.2
       '@internationalized/date': 3.7.0
       '@standard-schema/spec': 1.0.0
       '@standard-schema/utils': 0.3.0
@@ -4930,7 +4928,7 @@ snapshots:
       type-fest: 4.37.0
       vue: 3.5.13(typescript@5.8.2)
 
-  '@formwerk/devtools@https://pkg.pr.new/formwerkjs/formwerk/@formwerk/devtools@431676d9e970aaee17b0620e7a125ddd054cee0a':
+  '@formwerk/devtools@0.9.2':
     dependencies:
       '@vue/devtools-api': 7.7.2
       '@vue/devtools-kit': 7.7.2
