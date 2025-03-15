@@ -24,13 +24,13 @@ File fields are a type of input field that allows users to submit or upload file
 - Support for `v-model` binding.
 - Basic upload handling support.
 - Multiple file selection support.
-- Drag and drop support.
+- Drag and drop support for "dropzone" components.
 - Auto previews for images and videos.
 
 ## Anatomy
 
 <AnatomyCanvas>
-  <AnatomyFileField />
+  <AnatomyFileField client:load />
 </AnatomyCanvas>
 
 ## Building a File Field Component
@@ -197,10 +197,6 @@ import FileField from './FileField.vue';
 
 </MdxRepl>
 
-### Readonly
-
-TODO:
-
 ### Drag and Drop
 
 You can use `useFileField` to build a "dropzone" component that allows users to drag and drop files to upload them.
@@ -232,6 +228,60 @@ import Dropzone from './Dropzone.vue';
 One important thing is to no forget the `groupProps` binding object, which contains the listeners needed to make the dropzone work.
 
 You can also build your own `FileEntry` component with the `useFileEntry` composable.
+
+This dropzone component isn't multiple by default, but you can use the `multiple` prop to allow users to select multiple files.
+
+### Multiple Files
+
+You can use the `multiple` prop to allow users to select multiple files.
+
+<MdxRepl client:load>
+
+<div slot="!Dropzone.vue">
+  <DropzonePartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Dropzone from './Dropzone.vue';
+</script>
+
+<template>
+  <Dropzone label="Multiple Files" multiple />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Allowing Picking Directories
+
+You can use the `allowDirectory` prop to allow users to pick directories if the file is `multiple`.
+
+<MdxRepl client:load>
+
+<div slot="!Dropzone.vue">
+  <DropzonePartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Dropzone from './Dropzone.vue';
+</script>
+
+<template>
+  <Dropzone label="Allow Directory" multiple allow-directory />
+</template>
+```
+
+</div>
+
+</MdxRepl>
 
 ### Uploading Files
 
