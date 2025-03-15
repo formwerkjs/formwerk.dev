@@ -1,0 +1,163 @@
+```vue collapse={65-160}
+<script setup lang="ts">
+import { useFileField, type FileFieldProps, FileEntry } from '@formwerk/core';
+
+const props = defineProps<FileFieldProps>();
+
+const {
+  inputProps,
+  triggerProps,
+  entry,
+  errorMessageProps,
+  errorMessage,
+  remove,
+  removeButtonProps,
+  isUploading,
+} = useFileField(props);
+</script>
+
+<template>
+  <div class="field">
+    <input v-bind="inputProps" class="sr-only" />
+
+    <button v-bind="triggerProps" class="trigger">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="icon"
+        viewBox="0 0 256 256"
+      >
+        <path
+          v-if="isUploading"
+          class="icon-uploading"
+          d="M236,128a108,108,0,0,1-216,0c0-42.52,24.73-81.34,63-98.9A12,12,0,1,1,93,50.91C63.24,64.57,44,94.83,44,128a84,84,0,0,0,168,0c0-33.17-19.24-63.43-49-77.09A12,12,0,1,1,173,29.1C211.27,46.66,236,85.48,236,128Z"
+        ></path>
+        <path
+          v-else
+          d="M248,128a56.06,56.06,0,0,1-56,56H48a40,40,0,0,1,0-80H192a24,24,0,0,1,0,48H80a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H48a24,24,0,0,0,0,48H192a40,40,0,0,0,0-80H80a8,8,0,0,1,0-16H192A56.06,56.06,0,0,1,248,128Z"
+        ></path>
+      </svg>
+      Choose a file
+    </button>
+
+    <p v-if="!entry" class="empty-state">No file selected</p>
+
+    <div v-else class="file-entry">
+      <span>{{ entry.file.name }}</span>
+
+      <button v-bind="removeButtonProps" class="delete-button" @click="remove">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon"
+          viewBox="0 0 256 256"
+        >
+          <path
+            d="M208.49,191.51a12,12,0,0,1-17,17L128,145,64.49,208.49a12,12,0,0,1-17-17L111,128,47.51,64.49a12,12,0,0,1,17-17L128,111l63.51-63.52a12,12,0,0,1,17,17L145,128Z"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <div v-if="errorMessage" v-bind="errorMessageProps" class="error">
+      {{ errorMessage }}
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.field {
+  --color-primary: #10b981;
+  --color-text-primary: #333;
+  --color-text-secondary: #666;
+  --color-border: #d4d4d8;
+  --color-focus: var(--color-primary);
+  --color-error: #f00;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: max-content;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.trigger:hover {
+  background-color: color-mix(in srgb, var(--color-primary) 85%, black);
+}
+
+.trigger:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 25%, white);
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.empty-state {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.file-entry {
+  font-size: 13px;
+  color: var(--color-text-primary);
+  padding: 0.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.error {
+  font-size: 13px;
+  color: var(--color-error);
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.delete-button:hover {
+  color: var(--color-error);
+}
+
+.icon-uploading {
+  animation: spin 1s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>
+```
