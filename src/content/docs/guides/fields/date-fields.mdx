@@ -217,6 +217,8 @@ const schema = z.date().min(new Date('2025-01-01')).max(new Date('2025-12-31'));
 
 Use the `disabled` prop to disable the date field. Disabled date fields are not validated and are not submitted.
 
+If you need to prevent the user from interacting with the field while still allowing it to submit, consider using `readonly` instead.
+
 <MdxRepl client:load>
 
 <div slot="!DateField.vue">
@@ -241,7 +243,7 @@ import DateField from './DateField.vue';
 
 ### Readonly
 
-Use the `readonly` prop to make the date field read-only. Read-only date fields are not validated and are not submitted.
+Use the `readonly` prop to make the date field read-only. Read-only date fields are still validated and submitted.
 
 <MdxRepl client:load>
 
