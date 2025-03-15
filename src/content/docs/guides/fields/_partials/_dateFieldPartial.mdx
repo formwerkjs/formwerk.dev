@@ -1,12 +1,12 @@
-```vue collapse={41-121}
+```vue collapse={41-124}
 <script setup lang="ts">
 import {
-  useDateTimeField,
-  type DateTimeFieldProps,
+  useDateField,
+  type DateFieldProps,
   DateTimeSegment,
 } from '@formwerk/core';
 
-const props = defineProps<DateTimeFieldProps>();
+const props = defineProps<DateFieldProps>();
 
 const {
   controlProps,
@@ -16,7 +16,7 @@ const {
   errorMessage,
   segments,
   direction,
-} = useDateTimeField(props);
+} = useDateField(props);
 </script>
 
 <template>

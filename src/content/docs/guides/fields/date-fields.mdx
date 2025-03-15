@@ -19,7 +19,7 @@ import DateFieldPartialWithCalendar from './_partials/_dateFieldPartialWithCalen
 
 In order to deliver true i18n for international audiences, Formwerk's date field composable depends on [@internationalized/date](https://react-spectrum.adobe.com/internationalized/date/index.html) to provide these functionalities.
 
-If you do not use the Calendar or Date Field composables, the dependency will not be included in your bundle as it is fully tree-shakable.
+If you do not use the Calendar, Date Field or Time Field composables, the dependency will not be included in your bundle as it is fully tree-shakable.
 
 Formwerk fully intends on migrating to the [Temporal API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal) in the future once they receive full or partial baseline support.
 
@@ -434,25 +434,25 @@ import DateField from './DateField.vue';
 
 ## API
 
-### useDateTimeField
+### useDateField
 
 #### Props
 
-These are the properties that can be passed to the `useDateTimeField` composable.
+These are the properties that can be passed to the `useDateField` composable.
 
-<MdxTableAPI typeName="DateTimeFieldProps" />
+<MdxTableAPI typeName="DateFieldProps" />
 
 #### Returns
 
-These are the properties in the object returned by the `useDateTimeField` composable.
+These are the properties in the object returned by the `useDateField` composable.
 
-<MdxTableAPI fnName="useDateTimeField" />
+<MdxTableAPI fnName="useDateField" />
 
-### useDateTimeSegment
+### useDateSegment
 
 #### Props
 
-These are the properties that can be passed to the `useDateTimeSegment` composable.
+These are the properties that can be passed to the `useDateSegment` composable.
 
 <MdxTableAPI typeName="DateTimeSegmentProps" />
 
