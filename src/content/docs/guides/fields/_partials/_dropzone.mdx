@@ -6,7 +6,7 @@ const props = defineProps<FileFieldProps>();
 
 const {
   inputProps,
-  groupProps,
+  dropzoneProps,
   triggerProps,
   entries,
   errorMessageProps,
@@ -15,7 +15,7 @@ const {
 </script>
 
 <template>
-  <div v-bind="groupProps" class="dropzone">
+  <div v-bind="dropzoneProps" class="dropzone">
     <input v-bind="inputProps" class="sr-only" />
 
     <div v-if="entries.length === 0" class="empty-state">

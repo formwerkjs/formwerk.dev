@@ -45,7 +45,7 @@
 
     <template v-if="view === 'dropzone'">
       <AnatomyPart
-        text="Control Group"
+        text="Dropzone"
         position="left"
         class="flex w-full flex-col items-center rounded-md border border-dashed border-zinc-500 p-4"
       >
