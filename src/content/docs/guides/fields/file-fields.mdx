@@ -61,6 +61,34 @@ import FileField from './FileField.vue';
 
 </MdxRepl>
 
+## Building a Dropzone Component
+
+You can use `useFileField` to build a "dropzone" component that allows users to drag and drop files to upload them.
+
+In this case, we can use the `FileEntry` component to render the file entry, the `FileEntry` component exposes various slot props to manage, and preview the file entry if it is an image or a video.
+
+<MdxRepl client:load>
+
+<div slot="Dropzone.vue">
+  <DropzonePartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Dropzone from './Dropzone.vue';
+</script>
+
+<template>
+  <Dropzone label="Dropzone" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
 ## Validation
 
 ### HTML Constraints
@@ -197,34 +225,6 @@ import FileField from './FileField.vue';
 
 </MdxRepl>
 
-### Drag and Drop
-
-You can use `useFileField` to build a "dropzone" component that allows users to drag and drop files to upload them.
-
-In this case, we can use the `FileEntry` component to render the file entry, the `FileEntry` component exposes various slot props to manage, and preview the file entry if it is an image or a video.
-
-<MdxRepl client:load>
-
-<div slot="Dropzone.vue">
-  <DropzonePartial />
-</div>
-
-<div slot="App.vue">
-
-```vue
-<script setup lang="ts">
-import Dropzone from './Dropzone.vue';
-</script>
-
-<template>
-  <Dropzone label="Dropzone" />
-</template>
-```
-
-</div>
-
-</MdxRepl>
-
 One important thing is to no forget the `groupProps` binding object, which contains the listeners needed to make the dropzone work.
 
 You can also build your own `FileEntry` component with the `useFileEntry` composable.
@@ -327,6 +327,15 @@ const value = ref<string>();
 </div>
 
 </MdxRepl>
+
+### Initial Data
+
+At the moment, `useFileField` doesn't support initial data because you cannot really set a "file" value to an `input` element due to security restrictions. There are a few ideas we have like:
+
+- Given a URL, we reconstruct the file object and set it as the initial value.
+- Create a "fake" file object that we can set as the initial value.
+
+We are open to suggestions, join our [Discord server](https://discord.gg/sT73ZGUy7X) or [open an issue](https://github.com/formwerk/formwerk/issues) if you have any ideas!
 
 ## API
 
