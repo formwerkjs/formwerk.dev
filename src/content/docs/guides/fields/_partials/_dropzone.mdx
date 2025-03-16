@@ -1,0 +1,218 @@
+```vue collapse={75-217}
+<script setup lang="ts">
+import { useFileField, type FileFieldProps, FileEntry } from '@formwerk/core';
+
+const props = defineProps<FileFieldProps>();
+
+const {
+  inputProps,
+  dropzoneProps,
+  triggerProps,
+  entries,
+  errorMessageProps,
+  errorMessage,
+} = useFileField(props);
+</script>
+
+<template>
+  <div v-bind="dropzoneProps" class="dropzone">
+    <input v-bind="inputProps" class="sr-only" />
+
+    <div v-if="entries.length === 0" class="empty-state">
+      <button v-bind="triggerProps" class="trigger">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="icon"
+          viewBox="0 0 256 256"
+        >
+          <path
+            d="M248,128a56.06,56.06,0,0,1-56,56H48a40,40,0,0,1,0-80H192a24,24,0,0,1,0,48H80a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H48a24,24,0,0,0,0,48H192a40,40,0,0,0,0-80H80a8,8,0,0,1,0-16H192A56.06,56.06,0,0,1,248,128Z"
+          ></path>
+        </svg>
+        Choose a file
+      </button>
+
+      <p class="empty-message">No file selected</p>
+    </div>
+
+    <div v-else class="file-grid">
+      <ul>
+        <FileEntry
+          as="li"
+          v-for="entry in entries"
+          v-bind="entry"
+          class="file-entry"
+          v-slot="{ removeButtonProps, previewProps, hasPreview }"
+        >
+          <component
+            :is="previewProps.as"
+            v-bind="previewProps"
+            class="preview"
+          />
+
+          <button v-bind="removeButtonProps" class="delete-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon"
+              viewBox="0 0 256 256"
+            >
+              <path
+                d="M208.49,191.51a12,12,0,0,1-17,17L128,145,64.49,208.49a12,12,0,0,1-17-17L111,128,47.51,64.49a12,12,0,0,1,17-17L128,111l63.51-63.52a12,12,0,0,1,17,17L145,128Z"
+              ></path>
+            </svg>
+          </button>
+
+          <span v-if="!hasPreview" class="filename">{{ entry.file.name }}</span>
+        </FileEntry>
+      </ul>
+    </div>
+
+    <div v-if="errorMessage" v-bind="errorMessageProps" class="error">
+      {{ errorMessage }}
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.dropzone {
+  --color-primary: #10b981;
+  --color-text-primary: #333;
+  --color-text-secondary: #666;
+  --color-border: #d4d4d8;
+  --color-focus: var(--color-primary);
+  --color-error: #f00;
+  --color-background: #fff;
+  --color-background-hover: color-mix(
+    in srgb,
+    var(--color-background) 97%,
+    black
+  );
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 32rem;
+  padding: 1rem;
+  border: 2px dashed var(--color-border);
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.dropzone:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-background-hover);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.trigger:hover {
+  background-color: color-mix(in srgb, var(--color-primary) 85%, black);
+}
+
+.trigger:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 25%, white);
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.empty-message {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.file-grid ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.file-entry {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.375rem;
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+
+.delete-button {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.25rem;
+  color: white;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: var(--color-error);
+}
+
+.filename {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.25rem;
+  font-size: 12px;
+  color: var(--color-text-primary);
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 0 0 0.375rem 0.375rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.error {
+  font-size: 13px;
+  color: var(--color-error);
+}
+</style>
+```

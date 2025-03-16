@@ -1,0 +1,360 @@
+---
+title: File Fields
+description: Learn how to build accessible file field Vue components with Formwerk.
+sidebar:
+  order: 12
+---
+
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import AnatomyCanvas from '@components/AnatomyCanvas.vue';
+import AnatomyFileField from '@components/AnatomyFileField.vue';
+import MdxRepl from '@components/MdxRepl.vue';
+import MdxTableAPI from '@components/MdxTableAPI.vue';
+
+import DropzonePartial from './_partials/_dropzone.mdx';
+import FileFieldPartial from './_partials/_fileField.mdx';
+
+File fields are a type of input field that allows users to submit or upload files.
+
+## Features
+
+- Uses `input` element.
+- Labeling, Descriptions, and error messages are automatically linked to their corresponding elements.
+- Validation support with native HTML constraint validation or [Standard Schema](https://github.com/standard-schema/standard-schema) validation.
+- Support for `v-model` binding.
+- Basic upload handling support.
+- Multiple file selection support.
+- Drag and drop support for "dropzone" components.
+- Auto previews for images and videos.
+
+## Anatomy
+
+<AnatomyCanvas>
+  <AnatomyFileField client:load />
+</AnatomyCanvas>
+
+## Building a File Field Component
+
+You can start by importing the `useFileField` composable and using it in your file field component.
+
+The `useFileField` composable returns binding objects for the elements shown in the [anatomy](#anatomy). You will use `v-bind` to bind them to the corresponding DOM elements.
+
+<MdxRepl client:load>
+
+<div slot="FileField.vue">
+  <FileFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import FileField from './FileField.vue';
+</script>
+
+<template>
+  <FileField label="File" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+## Building a Dropzone Component
+
+You can use `useFileField` to build a "dropzone" component that allows users to drag and drop files to upload them.
+
+In this case, we can use the `FileEntry` component to render the file entry, the `FileEntry` component exposes various slot props to manage, and preview the file entry if it is an image or a video.
+
+<MdxRepl client:load>
+
+<div slot="Dropzone.vue">
+  <DropzonePartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Dropzone from './Dropzone.vue';
+</script>
+
+<template>
+  <Dropzone label="Dropzone" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+## Validation
+
+### HTML Constraints
+
+You can use the following properties to validate the file field with native HTML constraint validation:
+
+| Name       | Type      | Description                         |
+| ---------- | --------- | ----------------------------------- |
+| `required` | `boolean` | Whether the file field is required. |
+
+Here is an example of how to use the `required` property to make the file field required.
+
+<MdxRepl client:load>
+
+<div slot="!FileField.vue">
+  <FileFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import FileField from './FileField.vue';
+</script>
+
+<template>
+  <FileField label="File" required />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Standard Schema
+
+You can use the `useFileField` composable to validate the file field with [Standard Schema](https://github.com/standard-schema/standard-schema).
+
+<Aside>
+
+Depending on the schema validation provider you are using, the API might slightly differ. Check the supported validation providers for more information. In this example, we are using the `zod` schema validation provider.
+
+</Aside>
+
+In this example, we are validating the file size to be 1MB maximum.
+
+<MdxRepl client:load>
+
+<div slot="!FileField.vue">
+  <FileFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { z } from 'zod';
+import FileField from './FileField.vue';
+
+const schema = z.object({
+  size: z.number().max(1 * 1024 * 1024, 'Size must be less than 1MB'),
+});
+</script>
+
+<template>
+  <FileField label="File" :schema="schema" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Mixed Validation
+
+All file fields created with Formwerk support mixed validation, which means you can use both HTML constraints and Standard Schema validation to validate the field, and they work seamlessly together.
+
+Note that HTML constraints are validated first, so any errors from the HTML constraints will be displayed first. Then, once all HTML constraints are satisfied, the Standard Schema is validated.
+
+Here we are mixing both the `required` HTML constraint and the Zod size validation.
+
+<MdxRepl client:load>
+
+<div slot="!FileField.vue">
+  <FileFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { z } from 'zod';
+import FileField from './FileField.vue';
+
+const schema = z.object({
+  size: z.number().max(1 * 1024 * 1024, 'Size must be less than 1MB'),
+});
+</script>
+
+<template>
+  <FileField label="File" :schema="schema" required />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+## Usage
+
+### Disabled
+
+Use `disabled` to mark fields as non-interactive. Disabled fields are not validated and are not submitted.
+
+<MdxRepl client:load>
+
+<div slot="!FileField.vue">
+  <FileFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import FileField from './FileField.vue';
+</script>
+
+<template>
+  <FileField label="Disabled Field" disabled />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+One important thing is to no forget the `dropzoneProps` binding object, which contains the listeners needed to make the dropzone work.
+
+You can also build your own `FileEntry` component with the `useFileEntry` composable.
+
+This dropzone component isn't multiple by default, but you can use the `multiple` prop to allow users to select multiple files.
+
+### Multiple Files
+
+You can use the `multiple` prop to allow users to select multiple files.
+
+<MdxRepl client:load>
+
+<div slot="!Dropzone.vue">
+  <DropzonePartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Dropzone from './Dropzone.vue';
+</script>
+
+<template>
+  <Dropzone label="Multiple Files" multiple />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Allowing Picking Directories
+
+You can use the `allowDirectory` prop to allow users to pick directories if the file is `multiple`.
+
+<MdxRepl client:load>
+
+<div slot="!Dropzone.vue">
+  <DropzonePartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import Dropzone from './Dropzone.vue';
+</script>
+
+<template>
+  <Dropzone label="Allow Directory" multiple allow-directory />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Uploading Files
+
+The `useFileField` composable accepts an `onUpload` handler that is called with the file to be uploaded. The `onUpload` handler receives a `FileUploadContext` object with the following properties:
+
+<MdxTableAPI typeName="FileUploadContext" />
+
+The upload handler should return a string value that will be swapped with the file in the form when it submits. The string value is usually an identifier that your server can use to identify the file.
+
+<MdxRepl client:load>
+
+<div slot="!FileField.vue">
+  <FileFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { type FileUploadContext } from '@formwerk/core';
+
+import FileField from './FileField.vue';
+
+function onUpload({ file }: FileUploadContext) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(Date.now().toString());
+    }, 1000);
+  });
+}
+
+const value = ref<string>();
+</script>
+
+<template>
+  Field value: {{ value }}
+
+  <FileField label="File" v-model="value" @upload="onUpload" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Initial Data
+
+At the moment, `useFileField` doesn't support initial data because you cannot really set a "file" value to an `input` element due to security restrictions. There are a few ideas we have like:
+
+- Given a URL, we reconstruct the file object and set it as the initial value.
+- Create a "fake" file object that we can set as the initial value.
+
+We are open to suggestions, join our [Discord server](https://discord.gg/sT73ZGUy7X) or [open an issue](https://github.com/formwerk/formwerk/issues) if you have any ideas!
+
+## API
+
+### useFileField
+
+#### Props
+
+<MdxTableAPI typeName="FileFieldProps" />
+
+#### Returns
+
+<MdxTableAPI fnName="useFileField" />
+
+### useFileEntry
+
+#### Props
+
+<MdxTableAPI typeName="FileEntryProps" />
+
+#### Returns
+
+<MdxTableAPI fnName="useFileEntry" />
