@@ -19,7 +19,7 @@ import DateFieldPartialWithCalendar from './_partials/_dateFieldPartialWithCalen
 
 In order to deliver true i18n for international audiences, Formwerk's date field composable depends on [@internationalized/date](https://react-spectrum.adobe.com/internationalized/date/index.html) to provide these functionalities.
 
-If you do not use the Calendar or Date Field composables, the dependency will not be included in your bundle as it is fully tree-shakable.
+If you do not use the Calendar, Date Field or Time Field composables, the dependency will not be included in your bundle as it is fully tree-shakable.
 
 Formwerk fully intends on migrating to the [Temporal API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal) in the future once they receive full or partial baseline support.
 
@@ -217,6 +217,8 @@ const schema = z.date().min(new Date('2025-01-01')).max(new Date('2025-12-31'));
 
 Use the `disabled` prop to disable the date field. Disabled date fields are not validated and are not submitted.
 
+If you need to prevent the user from interacting with the field while still allowing it to submit, consider using `readonly` instead.
+
 <MdxRepl client:load>
 
 <div slot="!DateField.vue">
@@ -241,7 +243,7 @@ import DateField from './DateField.vue';
 
 ### Readonly
 
-Use the `readonly` prop to make the date field read-only. Read-only date fields are not validated and are not submitted.
+Use the `readonly` prop to make the date field read-only. Read-only date fields are still validated and submitted.
 
 <MdxRepl client:load>
 
@@ -434,25 +436,25 @@ import DateField from './DateField.vue';
 
 ## API
 
-### useDateTimeField
+### useDateField
 
 #### Props
 
-These are the properties that can be passed to the `useDateTimeField` composable.
+These are the properties that can be passed to the `useDateField` composable.
 
-<MdxTableAPI typeName="DateTimeFieldProps" />
+<MdxTableAPI typeName="DateFieldProps" />
 
 #### Returns
 
-These are the properties in the object returned by the `useDateTimeField` composable.
+These are the properties in the object returned by the `useDateField` composable.
 
-<MdxTableAPI fnName="useDateTimeField" />
+<MdxTableAPI fnName="useDateField" />
 
-### useDateTimeSegment
+### useDateSegment
 
 #### Props
 
-These are the properties that can be passed to the `useDateTimeSegment` composable.
+These are the properties that can be passed to the `useDateSegment` composable.
 
 <MdxTableAPI typeName="DateTimeSegmentProps" />
 

@@ -1,11 +1,11 @@
 ```vue collapse={60-163}
 <script setup lang="ts">
-import { useDateTimeField, DateTimeSegment, usePicker } from '@formwerk/core';
+import { useDateField, DateTimeSegment, usePicker } from '@formwerk/core';
 import Calendar from './Calendar.vue';
 
-import { type DateTimeFieldProps } from '@formwerk/core';
+import { type DateFieldProps } from '@formwerk/core';
 
-const props = defineProps<DateTimeFieldProps>();
+const props = defineProps<DateFieldProps>();
 
 const {
   controlProps,
@@ -16,7 +16,7 @@ const {
   segments,
   direction,
   calendarProps,
-} = useDateTimeField(props);
+} = useDateField(props);
 
 const { pickerProps, pickerTriggerProps } = usePicker({
   label: 'Pick a date',

@@ -1,0 +1,364 @@
+---
+title: Time Fields
+description: Learn how to build accessible time field Vue components with Formwerk.
+sidebar:
+  order: 10
+---
+
+import Kbd from '@components/KeyboardKey.vue';
+import { Aside } from '@astrojs/starlight/components';
+import AnatomyTimeField from '@components/AnatomyTimeField.vue';
+import AnatomyCanvas from '@components/AnatomyCanvas.vue';
+import MdxRepl from '@components/MdxRepl.vue';
+import MdxTableAPI from '@components/MdxTableAPI.vue';
+
+import TimeFieldPartial from './_partials/_timeField.mdx';
+
+<Aside title="Dependency Disclaimer">
+
+In order to deliver true i18n for international audiences, Formwerk's date field composable depends on [@internationalized/date](https://react-spectrum.adobe.com/internationalized/date/index.html) to provide these functionalities.
+
+If you do not use the Calendar, Date Field or Time Field composables, the dependency will not be included in your bundle as it is fully tree-shakable.
+
+Formwerk fully intends on migrating to the [Temporal API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal) in the future once they receive full or partial baseline support.
+
+</Aside>
+
+Time fields are a type of input field that allows users to enter a time, usually in the format of `hh:mm`.
+
+## Features
+
+- Labeling, Descriptions, and error messages are automatically linked to the time field elements.
+- Validation support with native HTML constraints or [Standard Schemas](https://github.com/standard-schema/standard-schema).
+- Support for `v-model` binding.
+- Comprehensive keyboard shortcuts support.
+- Focus management and auto navigation for time segments.
+
+### Keyboard Features
+
+| Key                                          | Description                                                                                           |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| <Kbd code="ArrowDown" label="ArrowDown" />   | Decrements selected segment by 1.                                                                     |
+| <Kbd code="ArrowUp" label="ArrowUp" />       | Increments selected segment by 1.                                                                     |
+| <Kbd code="ArrowLeft" label="ArrowLeft" />   | Moves the focus to the previous segment.                                                              |
+| <Kbd code="ArrowRight" label="ArrowRight" /> | Moves the focus to the next segment.                                                                  |
+| <Kbd code="Delete" label="Delete" />         | Clears the current segment.                                                                           |
+| <Kbd code="Backspace" label="Backspace" />   | Clears the current segment.                                                                           |
+| <Kbd code="Tab" label="Tab" />               | Moves the focus to the next segment or next element in the tab index order if it is the last segment. |
+
+## Anatomy
+
+<AnatomyCanvas>
+  <AnatomyTimeField />
+</AnatomyCanvas>
+
+## Building a Time Field Component
+
+Just like the [native HTML time field](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time), the time field in Formwerk is comprised of time segments, each segment represents a part of the time value (e.g: hour, minute).
+
+The segments are generated for you automatically based on the `formatOptions` you pass to the `useTimeField` composable. You will need to bind the prop objects returned by the composable to the corresponding DOM elements in the [anatomy](#anatomy).
+
+If you do not pass the `formatOptions` prop, the time field will use an `HH:mm` format.
+
+<MdxRepl client:load>
+
+<div slot="TimeField.vue">
+  <TimeFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import TimeField from './TimeField.vue';
+</script>
+
+<template>
+  <TimeField name="time" label="Time" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+<Aside title="Value type">
+
+The value type for the time field is `string`, it is always formatted in `HH:mm` format.
+
+This will change in the future once the Temporal API is sufficiently supported, then the value will be a `Temporal.PlainTime` object.
+
+</Aside>
+
+## Validation
+
+### HTML Constraints
+
+You can use the following properties to validate the time field with native HTML constraint validation:
+
+| Name       | Type      | Description                           |
+| ---------- | --------- | ------------------------------------- |
+| `min`      | `Date`    | The minimum time that can be entered. |
+| `max`      | `Date`    | The maximum time that can be entered. |
+| `required` | `boolean` | Whether the time field is required.   |
+
+<MdxRepl client:load>
+
+<div slot="!TimeField.vue">
+  <TimeFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import TimeField from './TimeField.vue';
+</script>
+
+<template>
+  <TimeField label="HTML Constraints" required min="00:00" max="10:04" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Standard Schema
+
+`useTimeField` supports [Standard Schema](https://github.com/standard-schema/standard-schema) validation through the `schema` prop. This includes multiple providers like [Zod](https://zod.dev/), [Valibot](https://valibot.dev/), [Arktype](https://arktype.dev/), and more.
+
+In this example, we are validating that the time field is between 00:00 and 10:04.
+
+<MdxRepl client:load>
+
+<div slot="!TimeField.vue">
+  <TimeFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { z } from 'zod';
+import TimeField from './TimeField.vue';
+
+const schema = z.string().refine(
+  (value) => {
+    const time = new Date(`1970-01-01T${value}`);
+
+    return (
+      time.getHours() >= 0 &&
+      time.getHours() <= 10 &&
+      time.getMinutes() >= 0 &&
+      time.getMinutes() <= 4
+    );
+  },
+  {
+    message: 'Time must be between 00:00 and 10:04',
+  },
+);
+</script>
+
+<template>
+  <TimeField label="Standard Schema" :schema="schema" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Mixed Validation
+
+All time fields created with Formwerk support mixed validation, which means you can use both HTML constraints and Standard Schema validation to validate the field, and they work seamlessly together.
+
+<MdxRepl client:load>
+
+<div slot="!TimeField.vue">
+  <TimeFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { z } from 'zod';
+import TimeField from './TimeField.vue';
+
+const schema = z.string().refine(
+  (value) => {
+    const time = new Date(`1970-01-01T${value}`);
+
+    return (
+      time.getHours() >= 0 &&
+      time.getHours() <= 10 &&
+      time.getMinutes() >= 0 &&
+      time.getMinutes() <= 4
+    );
+  },
+  {
+    message: 'Time must be between 00:00 and 10:04',
+  },
+);
+</script>
+
+<template>
+  <TimeField label="Mixed Validation" :schema="schema" required />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+## Usage
+
+### Disabled
+
+Use the `disabled` prop to disable the time field. Disabled time fields are not validated and are not submitted.
+
+<MdxRepl client:load>
+
+<div slot="!TimeField.vue">
+  <TimeFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import TimeField from './TimeField.vue';
+</script>
+
+<template>
+  <TimeField label="Disabled" value="10:04" disabled />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Readonly
+
+Use the `readonly` prop to make the time field read-only. Read-only time fields are still validated and submitted.
+
+If you need to prevent the user from interacting with the field while still allowing it to submit, consider using `readonly` instead.
+
+<MdxRepl client:load>
+
+<div slot="!TimeField.vue">
+  <TimeFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import TimeField from './TimeField.vue';
+</script>
+
+<template>
+  <TimeField label="Readonly" value="10:04" readonly />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Min and Max
+
+You can pass `min` and `max` props to set the minimum and maximum times that can be entered.
+
+<MdxRepl client:load>
+
+<div slot="!TimeField.vue">
+  <TimeFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import TimeField from './TimeField.vue';
+</script>
+
+<template>
+  <TimeField label="Min and Max" min="00:00" max="10:04" />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+### Format Options
+
+You can pass a partial of the `Intl.DateTimeFormatOptions` to the `formatOptions` prop to customize the time field's display format. For example, we can switch to 12-hour format.
+
+<MdxRepl client:load>
+
+<div slot="!TimeField.vue">
+  <TimeFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import TimeField from './TimeField.vue';
+</script>
+
+<template>
+  <TimeField
+    label="Format Options"
+    :formatOptions="{
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }"
+  />
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+<Aside title="Format options and value type">
+
+Switching to 12-hour format won't change the value type or its format. It will still be in `HH:mm` format or 24-hour format. Format options only affect display.
+
+</Aside>
+
+## API
+
+### useTimeField
+
+#### Props
+
+These are the properties that can be passed to the `useTimeField` composable.
+
+<MdxTableAPI typeName="TimeFieldProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useTimeField` composable.
+
+<MdxTableAPI fnName="useTimeField" />
+
+### useDateSegment
+
+#### Props
+
+These are the properties that can be passed to the `useDateSegment` composable.
+
+<MdxTableAPI typeName="DateTimeSegmentProps" />
+
+#### Returns
+
+These are the properties in the object returned by the `useDateTimeSegment` composable.
+
+<MdxTableAPI fnName="useDateTimeSegment" />

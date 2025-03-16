@@ -1,12 +1,12 @@
-```vue collapse={41-124}
+```vue collapse={41-125}
 <script setup lang="ts">
 import {
-  useDateField,
-  type DateFieldProps,
+  useTimeField,
+  type TimeFieldProps,
   DateTimeSegment,
 } from '@formwerk/core';
 
-const props = defineProps<DateFieldProps>();
+const props = defineProps<TimeFieldProps>();
 
 const {
   controlProps,
@@ -16,11 +16,11 @@ const {
   errorMessage,
   segments,
   direction,
-} = useDateField(props);
+} = useTimeField(props);
 </script>
 
 <template>
-  <div class="InputDate" :class="{ touched: isTouched }" :dir="direction">
+  <div class="InputTime" :class="{ touched: isTouched }" :dir="direction">
     <span class="label">{{ label }}</span>
 
     <div class="control">
@@ -40,7 +40,7 @@ const {
 </template>
 
 <style scoped>
-.InputDate {
+.InputTime {
   position: relative;
   width: 100%;
   margin-bottom: 1.5em;
@@ -86,6 +86,7 @@ const {
   padding: 0.125rem;
   border-radius: 0.25rem;
   caret-color: transparent;
+  min-width: 2ch;
 
   &:focus {
     background-color: var(--color-focus);
@@ -107,18 +108,18 @@ const {
   color: var(--color-error);
 }
 
-.InputDate:has(:user-invalid),
-.InputDate:has(.error-message:not(:empty)) {
+.InputTime:has(:user-invalid),
+.InputTime:has(.error-message:not(:empty)) {
   --color-border: var(--color-error);
   --color-focus: var(--color-error);
 }
 
-.InputDate:has(:user-invalid) .error-message,
-.InputDate:has(.error-message:not(:empty)) .error-message {
+.InputTime:has(:user-invalid) .error-message,
+.InputTime:has(.error-message:not(:empty)) .error-message {
   display: block;
 }
 
-.InputDate:has(:disabled) .control {
+.InputTime:has(:disabled) .control {
   cursor: not-allowed;
   opacity: 0.7;
 }
