@@ -1,5 +1,13 @@
 <template>
-  <div class="flex items-center gap-1">
+  <div class="absolute right-2 top-3 flex flex-col items-end gap-1 text-xs">
+    <label for="view-select ">Current View</label>
+    <select id="view-select" class="rounded-md py-1 text-sm" v-model="view">
+      <option value="single">Single</option>
+      <option value="group">Group</option>
+    </select>
+  </div>
+
+  <div v-if="view === 'single'" class="flex items-center gap-1">
     <AnatomyPart
       text="Input"
       :distance="30"
@@ -14,9 +22,8 @@
     </AnatomyPart>
   </div>
 
-  <AnatomySeparator />
-
   <AnatomyPart
+    v-else
     text="Checkbox Group"
     :distance="40"
     position="right"
@@ -48,7 +55,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import AnatomyPart from './AnatomyPart.vue';
 import PhCheckSquareFill from '~icons/ph/check-square-fill';
 import PhSquare from '~icons/ph/square';
+
+const view = ref<'single' | 'group'>('single');
 </script>
