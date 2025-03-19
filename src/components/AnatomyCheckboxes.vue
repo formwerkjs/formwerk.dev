@@ -1,6 +1,6 @@
 <template>
   <div class="absolute right-2 top-3 flex flex-col items-end gap-1 text-xs">
-    <label for="view-select ">Current View</label>
+    <label for="view-select">Current View</label>
     <select id="view-select" class="rounded-md py-1 text-sm" v-model="view">
       <option value="single">Single</option>
       <option value="group">Group</option>

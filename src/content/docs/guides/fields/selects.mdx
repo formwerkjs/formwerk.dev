@@ -8,8 +8,7 @@ sidebar:
 import { Aside } from '@astrojs/starlight/components';
 
 import AnatomyCanvas from '@components/AnatomyCanvas.vue';
-import AnatomySelectClosed from '@components/AnatomySelectClosed.vue';
-import AnatomySelectOpened from '@components/AnatomySelectOpened.vue';
+import AnatomySelect from '@components/AnatomySelect.vue';
 import MdxRepl from '@components/MdxRepl.vue';
 import MdxTableAPI from '@components/MdxTableAPI.vue';
 import Kbd from '@components/KeyboardKey.vue';
@@ -70,8 +69,7 @@ Most people aren't aware of these keyboard shortcuts, but they do make a big dif
 ## Anatomy
 
 <AnatomyCanvas>
-  <AnatomySelectClosed />
-  <AnatomySelectOpened />
+  <AnatomySelect client:load />
 </AnatomyCanvas>
 
 ## Building a Select Field

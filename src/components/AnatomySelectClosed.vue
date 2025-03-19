@@ -19,7 +19,7 @@
 
       <AnatomyPart
         text="Description or Error Message"
-        position="bottom"
+        position="right"
         class="w-min whitespace-nowrap"
       >
         <span class="mt-1 text-sm">Help text</span>
