@@ -4,7 +4,7 @@
       text="Radio Group"
       :distance="40"
       position="right"
-      class="border-r border-zinc-500"
+      class="rounded-md border border-dashed border-zinc-500 p-4"
     >
       <AnatomyPart text="Group Label" position="left">
         <span>Choose Drink</span>
