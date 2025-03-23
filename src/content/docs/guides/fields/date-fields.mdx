@@ -14,6 +14,7 @@ import DateFieldPartial from './_partials/_dateFieldPartial.mdx';
 import CalendarPartial from './_partials/_calendarPartial.mdx';
 import MdxTableAPI from '@components/MdxTableAPI.vue';
 import DateFieldPartialWithCalendar from './_partials/_dateFieldPartialWithCalendar.mdx';
+import PreviewCard from '@components/PreviewCard.vue';
 
 <Aside title="Dependency Disclaimer">
 
@@ -433,6 +434,21 @@ import DateField from './DateField.vue';
 </div>
 
 </MdxRepl>
+
+## Examples
+
+These are some examples of date fields built with Formwerk.
+
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+  <PreviewCard
+    title="NumberFlow"
+    description="Showcase of a date/time field using the excellent `@number-flow/vue` to animate value transitions."
+    link="https://stackblitz.com/edit/formwerk-numberflow-datetime"
+    src="/thumbs/numberflow-datetime.mp4"
+    external
+    client:idle
+  />
+</div>
 
 ## API
 
