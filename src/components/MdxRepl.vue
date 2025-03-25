@@ -1,7 +1,7 @@
 <template>
   <div
     ref="replContainer"
-    class="preview-container not-content mt-8 flex flex-col overflow-hidden rounded-md"
+    class="preview-container not-content group mt-8 flex flex-col overflow-hidden rounded-md"
     :style="{
       '--preview-size': `${sizes[props.previewSize || 'md']}px`,
     }"
@@ -27,7 +27,7 @@
 
     <div
       v-if="tabs.length > 1 && !props.previewOnly"
-      class="flex items-center border-x border-t border-zinc-700 bg-zinc-950"
+      class="flex items-center border-t border-zinc-700 bg-zinc-950"
     >
       <button
         v-for="(tab, idx) in tabs"
@@ -40,21 +40,37 @@
       >
         <component v-if="tab.icon" :is="tab.icon" class="size-4" />
         {{ tab.filename }}
-
         <div
           class="absolute bottom-0 left-px right-0 z-10 hidden h-0.5 translate-y-px bg-emerald-500 group-aria-selected:block"
         ></div>
       </button>
     </div>
 
-    <div
-      v-for="({ render, hidden }, key) in files"
-      :key="key"
-      v-show="activeFile === key"
-      :data-file-name="key"
-      :hidden="hidden || props.previewOnly"
-    >
-      <component :is="render" />
+    <div ref="scope" class="files-container">
+      <motion.div
+        v-for="({ render, hidden }, key) in files"
+        :key="key"
+        :animate="{ height: isExpanded ? 'auto' : '400px' }"
+        v-show="activeFile === key"
+        :data-file-name="key"
+        :hidden="hidden || props.previewOnly"
+        :class="{ expanded: isExpanded }"
+      >
+        <component :is="render" />
+
+        <div
+          class="expand-container absolute bottom-0 flex h-10 w-full items-center justify-center"
+        >
+          <button
+            type="button"
+            class="flex cursor-pointer items-center gap-1 rounded-md bg-zinc-950 px-2 py-1 text-xs font-medium text-zinc-500 opacity-0 transition-opacity duration-200 hover:text-zinc-300 group-hover:opacity-100"
+            @click="isExpanded = !isExpanded"
+          >
+            <PhCaretDown class="size-4" :class="{ 'rotate-180': isExpanded }" />
+            {{ isExpanded ? 'Collapse' : 'Expand' }}
+          </button>
+        </div>
+      </motion.div>
     </div>
   </div>
 </template>
@@ -72,6 +88,7 @@ import {
   type Component,
   type Ref,
 } from 'vue';
+import { motion } from 'motion-v';
 import { rewriteTypeImports, useVueImportMap } from './Repl/importMap';
 import { merge } from 'lodash-es';
 import { useStore } from './Repl/store';
@@ -80,6 +97,7 @@ import { version as fwVersion } from '@formwerk/core';
 import VueIcon from '~icons/vscode-icons/file-type-vue';
 import TsIcon from '~icons/vscode-icons/file-type-typescript';
 import CssIcon from '~icons/vscode-icons/file-type-css';
+import PhCaretDown from '~icons/ph/caret-down-bold';
 import type { SFCOptions } from './Repl/types';
 
 const Repl = defineAsyncComponent(() => import('./Repl.vue'));
@@ -92,6 +110,8 @@ const props = defineProps<{
   previewSize?: 'md' | 'lg' | 'xl';
   previewOnly?: boolean;
 }>();
+
+const isExpanded = ref(false);
 
 const sizes = {
   sm: 150,
@@ -235,14 +255,33 @@ function useSlotFiles() {
 
 <style lang="postcss" scoped>
 .preview-container {
+  @apply border-0 ring-1 ring-zinc-700;
+
   &:deep(.iframe-container) {
     height: var(--preview-size, 100%);
   }
 
   &:deep(pre) {
+    border: none;
     border-top-width: 0;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+  }
+}
+
+[data-file-name] {
+  position: relative;
+  overflow: hidden;
+
+  .expand-container {
+    @apply bg-gradient-to-b from-transparent to-zinc-950/70;
+  }
+
+  &.expanded {
+    .expand-container {
+      background: none;
+      @apply bg-transparent;
+    }
   }
 }
 </style>

@@ -36,6 +36,7 @@
     "astro-expressive-code": "^0.40.2",
     "byte-size": "^9.0.1",
     "fflate": "^0.8.2",
+    "motion-v": "^0.13.0",
     "radix-vue": "^1.9.17",
     "sharp": "^0.33.5",
     "tailwindcss": "^3.4.17",
