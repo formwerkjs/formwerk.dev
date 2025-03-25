@@ -415,6 +415,44 @@ There is a lot more to directionality and localization. For more info, check out
 
 </Aside>
 
+## Radio button Value Type and Generics
+
+By default, the value of a radio button is a string. You can change the value type by passing in the generic type to the `RadioProps` or `RadioGroupProps` types.
+
+The following example shows how to change the value type to a string.
+
+```ts
+import { useRadio, type RadioProps } from '@formwerk/core';
+
+const props = defineProps<RadioProps<string>>();
+
+// ...
+```
+
+But ideally, to make sure your component is type-safe and as flexible as possible, you should use generics on the component itself.
+
+```vue
+<script setup lang="ts" generic="TValue">
+import { useRadio, type RadioProps } from '@formwerk/core';
+
+const props = defineProps<RadioProps<TValue>>();
+
+//...
+</script>
+```
+
+You can do the same for the `RadioGroup` components as well.
+
+```vue
+<script setup lang="ts" generic="TValue">
+import { useRadioGroup, type RadioGroupProps } from '@formwerk/core';
+
+const props = defineProps<RadioGroupProps<TValue>>();
+
+// ...
+</script>
+```
+
 ## API
 
 Most of the values expressed below are wrapped in `Ref` as they are reactive values.

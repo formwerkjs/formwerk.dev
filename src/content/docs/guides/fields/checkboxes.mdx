@@ -455,6 +455,44 @@ import CheckboxGroup from './CheckboxGroup.vue';
 
 </MdxRepl>
 
+## Checkbox Value Type and Generics
+
+By default, the value of a checkbox is a boolean. You can change the value type by passing in the generic type to the `CheckboxProps` or `CheckboxGroupProps` types.
+
+The following example shows how to change the value type to a string.
+
+```ts
+import { useCheckbox, type CheckboxProps } from '@formwerk/core';
+
+const props = defineProps<CheckboxProps<string>>();
+
+// ...
+```
+
+But ideally, to make sure your component is type-safe and as flexible as possible, you should use generics on the component itself.
+
+```vue
+<script setup lang="ts" generic="TValue">
+import { useCheckbox, type CheckboxProps } from '@formwerk/core';
+
+const props = defineProps<CheckboxProps<TValue>>();
+
+//...
+</script>
+```
+
+You can do the same for the `CheckboxGroup` components as well.
+
+```vue
+<script setup lang="ts" generic="TValue">
+import { useCheckboxGroup, type CheckboxGroupProps } from '@formwerk/core';
+
+const props = defineProps<CheckboxGroupProps<TValue>>();
+
+// ...
+</script>
+```
+
 ## API
 
 ### Checkbox

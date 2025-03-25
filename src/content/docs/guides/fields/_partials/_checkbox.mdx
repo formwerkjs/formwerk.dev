@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { type CheckboxProps, useCheckbox } from '@formwerk/core';
 
-const props = defineProps<CheckboxProps>();
+const props = defineProps<CheckboxProps<string>>();
 
 const { labelProps, inputProps, errorMessage, errorMessageProps, isChecked } =
   useCheckbox(props);
