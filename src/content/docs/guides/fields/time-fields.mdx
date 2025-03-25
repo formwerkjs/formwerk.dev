@@ -13,6 +13,7 @@ import MdxRepl from '@components/MdxRepl.vue';
 import MdxTableAPI from '@components/MdxTableAPI.vue';
 
 import TimeFieldPartial from './_partials/_timeField.mdx';
+import PreviewCard from '@components/PreviewCard.vue';
 
 <Aside title="Dependency Disclaimer">
 
@@ -332,6 +333,37 @@ import TimeField from './TimeField.vue';
 Switching to 12-hour format won't change the value type or its format. It will still be in `HH:mm` format or 24-hour format. Format options only affect display.
 
 </Aside>
+
+### Show Seconds
+
+Not only you can change the 12-hour format to 24-hour format, you can also control the visibility of the seconds segment with the `formatOptions` as well.
+
+<MdxRepl client:load>
+
+<div slot="!TimeField.vue">
+  <TimeFieldPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import TimeField from './TimeField.vue';
+</script>
+
+<template>
+  <TimeField
+    label="With Seconds"
+    :formatOptions="{
+      second: '2-digit',
+    }"
+  />
+</template>
+```
+
+</div>
+
+</MdxRepl>
 
 ## Examples
 
