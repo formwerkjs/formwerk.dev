@@ -46,11 +46,15 @@
       </button>
     </div>
 
-    <div ref="scope" class="files-container">
+    <div class="files-container">
       <motion.div
         v-for="({ render, hidden }, key) in files"
         :key="key"
-        :animate="{ height: isExpanded ? 'auto' : '400px' }"
+        :animate="{
+          height: isExpanded
+            ? 'auto'
+            : `${actualHeight > 300 ? 300 : actualHeight}px`,
+        }"
         v-show="activeFile === key"
         :data-file-name="key"
         :hidden="hidden || props.previewOnly"
@@ -59,6 +63,7 @@
         <component :is="render" />
 
         <div
+          v-if="actualHeight > 300"
           class="expand-container absolute bottom-0 flex h-10 w-full items-center justify-center"
         >
           <button
@@ -112,6 +117,7 @@ const props = defineProps<{
 }>();
 
 const isExpanded = ref(false);
+const actualHeight = ref(300);
 
 const sizes = {
   sm: 150,
@@ -201,6 +207,14 @@ onMounted(async () => {
   }
 
   store.setFiles(contents);
+
+  setTimeout(() => {
+    const rect = replContainer.value
+      ?.querySelector('.files-container .expressive-code')
+      ?.getBoundingClientRect();
+
+    actualHeight.value = rect?.height || 300;
+  }, 100);
 });
 
 function useSlotFiles() {
