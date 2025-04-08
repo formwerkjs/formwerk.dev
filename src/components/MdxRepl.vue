@@ -47,35 +47,16 @@
     </div>
 
     <div class="files-container">
-      <motion.div
-        v-for="({ render, hidden }, key) in files"
-        :key="key"
-        :animate="{
-          height: isExpanded
-            ? 'auto'
-            : `${actualHeight > 300 ? 300 : actualHeight}px`,
-        }"
-        v-show="activeFile === key"
-        :data-file-name="key"
-        :hidden="hidden || props.previewOnly"
-        :class="{ expanded: isExpanded }"
+      <MdxReplFile
+        v-for="file in files"
+        :key="file.filename"
+        :name="file.filename"
+        :active="activeFile === file.filename"
+        :hidden="file.hidden"
+        :preview-only="props.previewOnly"
       >
-        <component :is="render" />
-
-        <div
-          v-if="actualHeight > 300"
-          class="expand-container absolute bottom-0 flex h-10 w-full items-center justify-center"
-        >
-          <button
-            type="button"
-            class="flex cursor-pointer items-center gap-1 rounded-md bg-zinc-950 px-2 py-1 text-xs font-medium text-zinc-500 opacity-0 transition-opacity duration-200 hover:text-zinc-300 group-hover:opacity-100"
-            @click="isExpanded = !isExpanded"
-          >
-            <PhCaretDown class="size-4" :class="{ 'rotate-180': isExpanded }" />
-            {{ isExpanded ? 'Collapse' : 'Expand' }}
-          </button>
-        </div>
-      </motion.div>
+        <component :is="file.render" />
+      </MdxReplFile>
     </div>
   </div>
 </template>
@@ -93,7 +74,6 @@ import {
   type Component,
   type Ref,
 } from 'vue';
-import { motion } from 'motion-v';
 import { rewriteTypeImports, useVueImportMap } from './Repl/importMap';
 import { merge } from 'lodash-es';
 import { useStore } from './Repl/store';
@@ -102,8 +82,8 @@ import { version as fwVersion } from '@formwerk/core';
 import VueIcon from '~icons/vscode-icons/file-type-vue';
 import TsIcon from '~icons/vscode-icons/file-type-typescript';
 import CssIcon from '~icons/vscode-icons/file-type-css';
-import PhCaretDown from '~icons/ph/caret-down-bold';
 import type { SFCOptions } from './Repl/types';
+import MdxReplFile from './MdxReplFile.vue';
 
 const Repl = defineAsyncComponent(() => import('./Repl.vue'));
 
@@ -117,7 +97,6 @@ const props = defineProps<{
 }>();
 
 const isExpanded = ref(false);
-const actualHeight = ref(300);
 
 const sizes = {
   sm: 150,
@@ -207,19 +186,14 @@ onMounted(async () => {
   }
 
   store.setFiles(contents);
-
-  setTimeout(() => {
-    const rect = replContainer.value
-      ?.querySelector('.files-container .expressive-code')
-      ?.getBoundingClientRect();
-
-    actualHeight.value = rect?.height || 300;
-  }, 100);
 });
 
 function useSlotFiles() {
   const slots = useSlots();
-  const slotFiles: Record<string, { render: Component; hidden: boolean }> = {};
+  const slotFiles: Record<
+    string,
+    { render: Component; hidden: boolean; filename: string }
+  > = {};
   for (const slot in slots) {
     const hidden = slot.startsWith('!');
     const slotName = slot.replace('!', '');
@@ -227,11 +201,13 @@ function useSlotFiles() {
     slotFiles[`${slotName}`] = {
       render: markRaw(defineComponent(() => () => slots[slot]?.())),
       hidden,
+      filename: slotName,
     };
   }
 
-  const files: Ref<Record<string, { render: Component; hidden: boolean }>> =
-    ref(slotFiles);
+  const files: Ref<
+    Record<string, { render: Component; hidden: boolean; filename: string }>
+  > = ref(slotFiles);
 
   const tabs = computed(() => {
     return Object.keys(files.value)
@@ -283,19 +259,7 @@ function useSlotFiles() {
   }
 }
 
-[data-file-name] {
-  position: relative;
-  overflow: hidden;
-
-  .expand-container {
-    @apply bg-gradient-to-b from-transparent to-zinc-950/70;
-  }
-
-  &.expanded {
-    .expand-container {
-      background: none;
-      @apply bg-transparent;
-    }
-  }
+.files-container {
+  background: var(--ec-frm-edBg);
 }
 </style>
