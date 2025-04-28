@@ -76,10 +76,18 @@ export default defineConfig({
         },
       ],
       favicon: '/favicon.svg',
-      social: {
-        github: 'https://github.com/formwerkjs/formwerk',
-        discord: 'https://discord.gg/gQ7wqpvT5X',
-      },
+      social: [
+        {
+          label: 'GitHub',
+          icon: 'github',
+          href: 'https://github.com/formwerkjs/formwerk',
+        },
+        {
+          label: 'Discord',
+          icon: 'discord',
+          href: 'https://discord.gg/gQ7wqpvT5X',
+        },
+      ],
       customCss: ['./src/tailwind.css'],
       sidebar: [
         {
