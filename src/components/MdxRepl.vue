@@ -1,11 +1,20 @@
 <template>
   <div
     ref="replContainer"
-    class="preview-container not-content group mt-8 flex flex-col overflow-hidden rounded-md"
+    class="preview-container not-content group relative mt-8 flex flex-col overflow-hidden rounded-md"
     :style="{
       '--preview-size': `${sizes[props.previewSize || 'md']}px`,
     }"
   >
+    <button
+      class="absolute right-2 top-2 flex size-7 cursor-pointer items-center justify-center rounded-md bg-zinc-800 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+      type="button"
+      title="Open in Stackblitz"
+      @click="openInStackblitz"
+    >
+      <VscodeIconsStackblitz class="size-4" />
+    </button>
+
     <Repl
       ref="replRef"
       :store="store"
@@ -75,15 +84,18 @@ import {
   type Ref,
 } from 'vue';
 import { rewriteTypeImports, useVueImportMap } from './Repl/importMap';
-import { merge } from 'lodash-es';
+import { merge, omit } from 'lodash-es';
 import { useStore } from './Repl/store';
 import Types from '@formwerk/core/dist/core.d.ts?raw';
 import { version as fwVersion } from '@formwerk/core';
 import VueIcon from '~icons/vscode-icons/file-type-vue';
 import TsIcon from '~icons/vscode-icons/file-type-typescript';
 import CssIcon from '~icons/vscode-icons/file-type-css';
+import VscodeIconsStackblitz from '~icons/vscode-icons/file-type-stackblitz';
 import type { SFCOptions } from './Repl/types';
 import MdxReplFile from './MdxReplFile.vue';
+import Stackblitz from '@stackblitz/sdk';
+import { getViteProjectConfig } from '@utils/fork';
 
 const Repl = defineAsyncComponent(() => import('./Repl.vue'));
 
@@ -240,6 +252,18 @@ function useSlotFiles() {
   );
 
   return { files, tabs, activeFile };
+}
+
+async function openInStackblitz() {
+  Stackblitz.openProject(
+    await getViteProjectConfig(
+      omit(store.getFiles(), ['main.js', 'import-map.json']),
+    ),
+    {
+      newWindow: true,
+      openFile: 'App.vue',
+    },
+  );
 }
 </script>
 
