@@ -18,7 +18,7 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
       '@astrojs/starlight':
-        specifier: ^0.34.1
+        specifier: ^0.34.3
         version: 0.34.3(astro@5.8.0(@types/node@22.15.21)(jiti@2.4.2)(rollup@4.41.1)(typescript@5.8.3)(yaml@2.8.0))
       '@astrojs/starlight-tailwind':
         specifier: ^3.0.1
