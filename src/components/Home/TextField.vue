@@ -73,18 +73,29 @@ const { inputProps, labelProps, errorMessage, errorMessageProps } =
   .error {
     position: absolute;
     left: 0;
+    top: 100%;
+    margin-top: 0.25rem;
     display: none;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
     color: rgb(239, 68, 68);
-    white-space: nowrap;
-    text-overflow: ellipsis;
     width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    max-height: 3rem;
+    overflow-y: auto;
+    padding: 0.25rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(239, 68, 68) transparent;
+    overflow-y: overlay;
   }
 
   &:has(:user-invalid) {
     .error {
       display: block;
     }
+    margin-bottom: calc(1em * 1.5 + 3rem);
   }
 }
 </style>
