@@ -1,0 +1,50 @@
+---
+title: Stepped Form Flow
+description: Learn how to create a stepped form flow
+---
+
+import MdxRepl from '@components/MdxRepl.vue';
+import MdxTableAPI from '@components/MdxTableAPI.vue';
+
+Stepped form flows are a very common pattern around the web. They are used to guide users through a form in a typically linear way, but not necessarily.
+
+Aside from collecting information from users, they serve many purposes, common ones being:
+
+- Split up large forms into smaller, more manageable parts.
+- Conditionally navigate through steps based on user input.
+
+Before we dive into the details, let's clear up some terminology:
+
+- **Linear flow**: The user is required to complete all steps in order, every step is non-skippable.
+- **Non-linear flow**: The user can skip steps, some steps might be constrained by previous steps.
+
+## Features
+
+- Automatic navigation through steps in a linear flow or jumping to steps in non-linear flows.
+- Schema validation for steps and validates steps before moving to the next one.
+- Accessible next/previous navigation buttons.
+- Custom step names.
+
+## Anatomy
+
+## Creating a Stepped Form Flow
+
+## Example
+
+## Usage
+
+## API
+
+### `useSteppedFormFlow`
+
+#### Props
+
+#### Returns
+
+#### Slot Props
+
+### `<FormStep />`
+
+#### Props
+
+#### Slot Props
