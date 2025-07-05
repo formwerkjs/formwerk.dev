@@ -13,7 +13,7 @@ import TextFieldPartial from '../fields/_partials/_textField.mdx';
 import CheckboxPartial from '../fields/_partials/_checkbox.mdx';
 import SwitchPartial from '../fields/_partials/_switch.mdx';
 
-Stepped form flows are a very common pattern around the web. They are used to guide users through a form in a typically linear way, but not necessarily.
+Stepped form flows are a very common pattern around the web. They are used to guide users through a form by dividing the form into multiple steps. Typically the user navigates the steps in a linear way but not necessarily.
 
 Aside from collecting information from users, they serve many purposes, common ones being:
 
@@ -32,6 +32,7 @@ Before we dive into the details, let's clear up some terminology:
 - Schema validation for steps and validates steps before moving to the next one.
 - Accessible next/previous navigation buttons.
 - Custom step names.
+- Step Navigation API.
 
 ## Anatomy
 
@@ -282,11 +283,11 @@ onDone((data) => {
 
 ## Usage
 
-### Named Steps
+### Navigation with Named Steps
 
-You can name your steps by passing a `name` prop to the `FormStep` component.
+You can name your steps by passing a `name` prop to the `FormStep` component and this allows them to be programmatically navigate-able.
 
-This is particularly useful if you want to navigate to a step programmatically with `goToStep`. Try filling out the steps and then navigate through them.
+You can navigate to a step by passing its name to the `goToStep` function. Try filling out the steps and then clicking the buttons to navigate through them.
 
 <MdxRepl preview-size="xl" client:load>
 
@@ -389,8 +390,6 @@ goToStep(1);
 ```
 
 ### Non-linear Flow
-
-#### Imperative Logic
 
 Sometimes you might wish to allow the user to skip steps, or to navigate to a step based on a condition or a current value.
 
