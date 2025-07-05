@@ -3,6 +3,7 @@ title: Stepped Forms
 description: Learn how to create a stepped form flow
 ---
 
+import { Aside } from '@astrojs/starlight/components';
 import MdxRepl from '@components/MdxRepl.vue';
 import MdxTableAPI from '@components/MdxTableAPI.vue';
 import AnatomyCanvas from '@components/AnatomyCanvas.vue';
@@ -10,6 +11,7 @@ import AnatomySteppedFormFlow from '@components/AnatomySteppedFormFlow.vue';
 
 import TextFieldPartial from '../fields/_partials/_textField.mdx';
 import CheckboxPartial from '../fields/_partials/_checkbox.mdx';
+import SwitchPartial from '../fields/_partials/_switch.mdx';
 
 Stepped form flows are a very common pattern around the web. They are used to guide users through a form in a typically linear way, but not necessarily.
 
@@ -39,7 +41,7 @@ Before we dive into the details, let's clear up some terminology:
 
 ## Creating a Stepped Form Flow
 
-To create a stepped form, you can use the `useSteppedFormFlow` composable. Just like fields, the `useSteppedFormFlow` composable returns values that should be bound to the anatomy elements.
+To create a stepped form, you can use the `useStepFormFlow` composable. Just like fields, the `useStepFormFlow` composable returns values that should be bound to the anatomy elements.
 
 The `useStepFormFlow` composable returns a fully featured-API that allows you to easily organize your form into steps and respond to whenever the user has finished the last step.
 
@@ -94,13 +96,11 @@ onDone((data) => {
       <Checkbox name="terms" label="I agree to the terms and conditions" />
     </FormStep>
 
-    <div>
-      <button v-bind="previousButtonProps">⬅️ Previous</button>
+    <button v-bind="previousButtonProps">⬅️ Previous</button>
 
-      <button v-bind="nextButtonProps">
-        {{ isLastStep ? 'Submit' : 'Next ➡️' }}
-      </button>
-    </div>
+    <button v-bind="nextButtonProps">
+      {{ isLastStep ? 'Submit' : 'Next ➡️' }}
+    </button>
   </form>
 </template>
 ```
@@ -109,7 +109,11 @@ onDone((data) => {
 
 </MdxRepl>
 
+<Aside type="note">
+
 Note that the `FormStep` component is automatically created for you by the composable, you don't need to create it.
+
+</Aside>
 
 ## Validation
 
@@ -176,13 +180,11 @@ onDone((data) => {
       />
     </FormStep>
 
-    <div>
-      <button v-bind="previousButtonProps">⬅️ Previous</button>
+    <button v-bind="previousButtonProps">⬅️ Previous</button>
 
-      <button v-bind="nextButtonProps">
-        {{ isLastStep ? 'Submit' : 'Next ➡️' }}
-      </button>
-    </div>
+    <button v-bind="nextButtonProps">
+      {{ isLastStep ? 'Submit' : 'Next ➡️' }}
+    </button>
   </form>
 </template>
 ```
@@ -265,13 +267,11 @@ onDone((data) => {
       <Checkbox name="terms" label="I agree to the terms and conditions" />
     </FormStep>
 
-    <div>
-      <button v-bind="previousButtonProps">⬅️ Previous</button>
+    <button v-bind="previousButtonProps">⬅️ Previous</button>
 
-      <button v-bind="nextButtonProps">
-        {{ isLastStep ? 'Submit' : 'Next ➡️' }}
-      </button>
-    </div>
+    <button v-bind="nextButtonProps">
+      {{ isLastStep ? 'Submit' : 'Next ➡️' }}
+    </button>
   </form>
 </template>
 ```
@@ -282,17 +282,349 @@ onDone((data) => {
 
 ## Usage
 
-## Example
+### Named Steps
 
-## Usage
+You can name your steps by passing a `name` prop to the `FormStep` component.
+
+This is particularly useful if you want to navigate to a step programmatically with `goToStep`. Try filling out the steps and then navigate through them.
+
+<MdxRepl preview-size="xl" client:load>
+
+<div slot="!TextField.vue">
+  <TextFieldPartial />
+</div>
+
+<div slot="!Checkbox.vue">
+  <CheckboxPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { z } from 'zod';
+import { useStepFormFlow } from '@formwerk/core';
+import TextField from './TextField.vue';
+import Checkbox from './Checkbox.vue';
+
+const {
+  formProps,
+  nextButtonProps,
+  previousButtonProps,
+  isLastStep,
+  FormStep,
+  onDone,
+  goToStep,
+} = useStepFormFlow();
+
+const info = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+});
+
+const address = z.object({
+  city: z.string().min(1),
+  zip: z.string().min(1),
+});
+
+const terms = z.object({
+  terms: z.boolean().refine((val) => val, {
+    message: 'You must agree to the terms and conditions',
+  }),
+});
+
+onDone((data) => {
+  console.log(JSON.stringify(data.toObject(), null, 2));
+});
+</script>
+
+<template>
+  <div>
+    <button @click="goToStep('info')">Info</button>
+    <button @click="goToStep('address')">Address</button>
+    <button @click="goToStep('terms')">Terms</button>
+  </div>
+
+  <form v-bind="formProps">
+    <FormStep name="info" :schema="info">
+      <div>Step 1</div>
+      <TextField name="name" label="Name" />
+      <TextField name="email" label="Email" />
+    </FormStep>
+
+    <FormStep name="address" :schema="address">
+      <div>Step 2</div>
+      <TextField name="city" label="City" />
+      <TextField name="zip" label="ZIP" />
+    </FormStep>
+
+    <FormStep name="terms" :schema="terms">
+      <div>Step 3</div>
+      <Checkbox name="terms" label="I agree to the terms and conditions" />
+    </FormStep>
+
+    <button v-bind="previousButtonProps">⬅️ Previous</button>
+
+    <button v-bind="nextButtonProps">
+      {{ isLastStep ? 'Submit' : 'Next ➡️' }}
+    </button>
+  </form>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+By default you cannot navigate to a step unless it has been already visited. You can override this by passing the `force` prop to the `goToStep` function call, that way you will navigate to the step regardless if the user has visited it or not.
+
+```ts
+goToStep('info', { force: true });
+```
+
+You can also navigate to a step by passing its index to the `goToStep` function.
+
+```ts
+goToStep(1);
+```
+
+### Non-linear Flow
+
+#### Imperative Logic
+
+Sometimes you might wish to allow the user to skip steps, or to navigate to a step based on a condition or a current value.
+
+You can do by using the `onBeforeStepResolve` function returned by the `useStepFormFlow` composable to register a callback. The callback should return the name or the index of the next step to navigate to.
+
+In the next example we will create a form that allows the user to skip the school step if they are not a student in either direction.
+
+<MdxRepl preview-size="xl" client:load>
+
+<div slot="!TextField.vue">
+  <TextFieldPartial />
+</div>
+
+<div slot="!Checkbox.vue">
+  <CheckboxPartial />
+</div>
+
+<div slot="!Switch.vue">
+  <SwitchPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { z } from 'zod';
+import { useStepFormFlow } from '@formwerk/core';
+import TextField from './TextField.vue';
+import Checkbox from './Checkbox.vue';
+import Switch from './Switch.vue';
+
+const {
+  formProps,
+  nextButtonProps,
+  previousButtonProps,
+  isLastStep,
+  FormStep,
+  onDone,
+  onBeforeStepResolve,
+} = useStepFormFlow();
+
+const info = z.object({
+  name: z.string().min(1),
+  isStudent: z.boolean().default(false),
+});
+
+const school = z.object({
+  schoolName: z.string().min(1),
+});
+
+const address = z.object({
+  city: z.string().min(1),
+  zip: z.string().min(1),
+});
+
+onBeforeStepResolve(async ({ currentStep, values, next, direction }) => {
+  const nextStep = await next();
+  if (nextStep.name === 'school' && !values.isStudent) {
+    return direction === 'next' ? 'address' : 'info';
+  }
+
+  return next();
+});
+
+onDone((data) => {
+  console.log(JSON.stringify(data.toObject(), null, 2));
+});
+</script>
+
+<template>
+  <form v-bind="formProps">
+    <FormStep name="info" :schema="info">
+      <TextField name="name" label="Name" />
+      <Switch name="isStudent" label="Are you a student?" />
+    </FormStep>
+
+    <FormStep name="school" :schema="school">
+      <TextField name="schoolName" label="Your school name" />
+    </FormStep>
+
+    <FormStep name="address" :schema="address">
+      <TextField name="city" label="City" />
+      <TextField name="zip" label="ZIP" />
+    </FormStep>
+
+    <button v-bind="previousButtonProps">⬅️ Previous</button>
+
+    <button v-bind="nextButtonProps">
+      {{ isLastStep ? 'Submit' : 'Next ➡️' }}
+    </button>
+  </form>
+</template>
+```
+
+</div>
+
+</MdxRepl>
+
+For large forms it could be hard to check the direction of the navigation for each step, so it is recommended to use something like state machines to determine the next step.
+
+<Aside type="note">
+
+There are more useful properties in the `StepResolveContext` object that you can use to determine the next step, such as the current step, the values, the direction of the navigation, and the next step. You can find more information in the [API reference](#stepresolvecontext).
+
+</Aside>
+
+### Querying the current step
+
+You can query which step is currently active by using the `isCurrentStep` function. The next example uses the `isCurrentStep` function to the buttons to highlight the active step by adding a `data-active` attribute.
+
+<MdxRepl preview-size="xl" client:load>
+
+<div slot="!TextField.vue">
+  <TextFieldPartial />
+</div>
+
+<div slot="!Checkbox.vue">
+  <CheckboxPartial />
+</div>
+
+<div slot="App.vue">
+
+```vue
+<script setup lang="ts">
+import { z } from 'zod';
+import { useStepFormFlow } from '@formwerk/core';
+import TextField from './TextField.vue';
+import Checkbox from './Checkbox.vue';
+
+const {
+  formProps,
+  nextButtonProps,
+  previousButtonProps,
+  isLastStep,
+  FormStep,
+  onDone,
+  goToStep,
+  isCurrentStep,
+} = useStepFormFlow();
+
+const info = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+});
+
+const address = z.object({
+  city: z.string().min(1),
+  zip: z.string().min(1),
+});
+
+const terms = z.object({
+  terms: z.boolean().refine((val) => val, {
+    message: 'You must agree to the terms and conditions',
+  }),
+});
+
+onDone((data) => {
+  console.log(JSON.stringify(data.toObject(), null, 2));
+});
+</script>
+
+<template>
+  <div>
+    <button :data-active="isCurrentStep('info')" @click="goToStep('info')">
+      Info
+    </button>
+
+    <button
+      :data-active="isCurrentStep('address')"
+      @click="goToStep('address')"
+    >
+      Address
+    </button>
+
+    <button :data-active="isCurrentStep('terms')" @click="goToStep('terms')">
+      Terms
+    </button>
+  </div>
+
+  <form v-bind="formProps">
+    <FormStep name="info" :schema="info">
+      <div>Step 1</div>
+      <TextField name="name" label="Name" />
+      <TextField name="email" label="Email" />
+    </FormStep>
+
+    <FormStep name="address" :schema="address">
+      <div>Step 2</div>
+      <TextField name="city" label="City" />
+      <TextField name="zip" label="ZIP" />
+    </FormStep>
+
+    <FormStep name="terms" :schema="terms">
+      <div>Step 3</div>
+      <Checkbox name="terms" label="I agree to the terms and conditions" />
+    </FormStep>
+
+    <button v-bind="previousButtonProps">⬅️ Previous</button>
+
+    <button v-bind="nextButtonProps">
+      {{ isLastStep ? 'Submit' : 'Next ➡️' }}
+    </button>
+  </form>
+</template>
+
+<style>
+button[data-active='true'] {
+  background-color: #000;
+  color: #fff;
+}
+</style>
+```
+
+</div>
+
+</MdxRepl>
+
+## Examples
 
 ## API
 
-### `useSteppedFormFlow`
+### `useStepFormFlow`
 
 #### Props
 
+These are the props that can be passed to the `useStepFormFlow` composable.
+
+<MdxTableAPI typeName="StepFormFlowProps" />
+
 #### Returns
+
+These are the values that are returned by the `useStepFormFlow` composable.
+
+<MdxTableAPI fnName="useStepFormFlow" />
 
 #### Slot Props
 
@@ -300,8 +632,12 @@ onDone((data) => {
 
 #### Props
 
-#### Slot Props
+These are the props that can be passed to the `<FormStep />` component.
 
-```
+<MdxTableAPI typeName="FormStepProps" />
 
-```
+### `StepResolveContext`
+
+This is the object that gets passed to the `onBeforeStepResolve` function.
+
+<MdxTableAPI typeName="StepResolveContext" />
