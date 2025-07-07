@@ -36,8 +36,8 @@ importers:
         specifier: ^1.1.6
         version: 1.1.6(vue@3.5.16(typescript@5.8.3))
       '@formwerk/core':
-        specifier: ^0.11.0
-        version: 0.11.0(vue@3.5.16(typescript@5.8.3))
+        specifier: ^0.11.1
+        version: 0.11.1(vue@3.5.16(typescript@5.8.3))
       '@iconify-json/vscode-icons':
         specifier: ^1.2.22
         version: 1.2.22
@@ -902,13 +902,13 @@ packages:
   '@floating-ui/vue@1.1.6':
     resolution: {integrity: sha512-XFlUzGHGv12zbgHNk5FN2mUB7ROul3oG2ENdTpWdE+qMFxyNxWSRmsoyhiEnpmabNm6WnUvR1OvJfUfN4ojC1A==}
 
-  '@formwerk/core@0.11.0':
-    resolution: {integrity: sha512-A6MgJOgADRw2kntQIgmhiyOy8TW01uNFeZIyfDUUTEKyxoX+kvBxqu5Wj2RnaS0c6ioA5GuhWON9qqhKkC+gMg==}
+  '@formwerk/core@0.11.1':
+    resolution: {integrity: sha512-JMr23vH2DmkyFQM9QIqzmEDHiA7Gj84YDr5tjXwk54yD51sLRy0sPRChFMO9LJz2m7tjO3Prx9w/riIdtsYe8g==}
     peerDependencies:
       vue: '>=3.5.0'
 
-  '@formwerk/devtools@0.11.0':
-    resolution: {integrity: sha512-1QifA3RUuBFSY7jbx35ME6h3m7j3wbaKq+1SLpvXrEuJOllC7L0BHv4JIvfTDdCr3u7Ja6c5leUI23c8nN+psA==}
+  '@formwerk/devtools@0.11.1':
+    resolution: {integrity: sha512-o6feCLblJoOCrGoEc96VDZrIdelsk+Qduj/L8Jme/6jwTc45E9a8XFNfMnAeUlaYc+MZdA/16hR3GnyeJlhqwA==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -5339,9 +5339,9 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@formwerk/core@0.11.0(vue@3.5.16(typescript@5.8.3))':
+  '@formwerk/core@0.11.1(vue@3.5.16(typescript@5.8.3))':
     dependencies:
-      '@formwerk/devtools': 0.11.0
+      '@formwerk/devtools': 0.11.1
       '@internationalized/date': 3.8.2
       '@standard-schema/spec': 1.0.0
       '@standard-schema/utils': 0.3.0
@@ -5349,7 +5349,7 @@ snapshots:
       type-fest: 4.41.0
       vue: 3.5.16(typescript@5.8.3)
 
-  '@formwerk/devtools@0.11.0':
+  '@formwerk/devtools@0.11.1':
     dependencies:
       '@vue/devtools-api': 7.7.7
       '@vue/devtools-kit': 7.7.7

@@ -8,6 +8,7 @@ import MdxRepl from '@components/MdxRepl.vue';
 import MdxTableAPI from '@components/MdxTableAPI.vue';
 import AnatomyCanvas from '@components/AnatomyCanvas.vue';
 import AnatomySteppedFormFlow from '@components/AnatomySteppedFormFlow.vue';
+import PreviewCard from '@components/PreviewCard.vue';
 
 import TextFieldPartial from '../fields/_partials/_textField.mdx';
 import CheckboxPartial from '../fields/_partials/_checkbox.mdx';
@@ -608,6 +609,19 @@ button[data-active='true'] {
 </MdxRepl>
 
 ## Examples
+
+These are some examples of number fields built with Formwerk.
+
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+  <PreviewCard
+    title="State Machine Example"
+    description="Showcase of a stepped form flow using a state machine to determine the next step."
+    link="https://stackblitz.com/edit/vitejs-vite-yhgeehxd?file=src%2FApp.vue"
+    src="/thumbs/stepped-form-flow.mp4"
+    external
+    client:idle
+  />
+</div>
 
 ## API
 
