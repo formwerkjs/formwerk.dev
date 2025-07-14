@@ -160,7 +160,7 @@ const selectedOption = computed(() => {
   }
 
   .trigger {
-    @apply cursor-pointer rounded-md border border-zinc-700 bg-zinc-800 py-3 pr-3 pl-4 whitespace-nowrap text-zinc-400 transition-all duration-200 focus:bg-zinc-900;
+    @apply w-full cursor-pointer rounded-md border border-zinc-700 bg-zinc-800 py-3 pr-3 pl-4 whitespace-nowrap text-zinc-400 transition-all duration-200 focus:bg-zinc-900;
     anchor-name: v-bind(id);
 
     &:focus {

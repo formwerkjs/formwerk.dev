@@ -47,7 +47,7 @@ defineOptions({
 });
 </script>
 
-<style scoped>
+<style>
 @reference '@inject-css';
 
 .AnatomyPopover {

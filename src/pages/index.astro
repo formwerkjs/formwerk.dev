@@ -165,18 +165,18 @@ const description =
     }
 
     .preview-frame {
-      @apply -right-0 bottom-4 mx-auto my-auto flex w-full min-w-[32%] flex-col items-center justify-center overflow-hidden rounded-lg border border-zinc-700 bg-zinc-800/60 lg:absolute lg:mx-0 lg:w-auto;
+      @apply -right-0 bottom-4 mx-auto my-auto flex w-full min-w-[32%] flex-col items-center justify-center overflow-hidden rounded-lg border border-zinc-700 bg-zinc-800/60 lg:absolute lg:mx-0 lg:w-max;
 
       .preview-frame-header {
         @apply w-full border-b border-zinc-700 bg-zinc-900 px-4 py-2 text-[13px] font-medium text-white;
       }
 
       .preview-frame-content {
-        @apply p-8;
+        @apply w-full p-6;
       }
 
       .preview-frame-title {
-        @apply my-0 px-4 text-sm;
+        @apply my-0 text-sm;
       }
     }
 

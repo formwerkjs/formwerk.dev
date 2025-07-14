@@ -78,6 +78,7 @@ const { inputProps, labelProps, errorMessage, errorMessageProps } =
     color: rgb(239, 68, 68);
     white-space: nowrap;
     text-overflow: ellipsis;
+    overflow: hidden;
     width: 100%;
   }
 
