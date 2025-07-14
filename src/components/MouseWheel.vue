@@ -44,6 +44,8 @@ defineProps<{
 </script>
 
 <style scoped>
+@reference '@inject-css';
+
 .wheel {
   @apply fill-current text-zinc-700 dark:text-zinc-400;
   animation: scrollUp 1s infinite;

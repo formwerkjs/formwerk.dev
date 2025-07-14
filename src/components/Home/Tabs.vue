@@ -109,7 +109,7 @@ function getInitialStyle(name: string) {
         v-for="tab in tabs"
         :key="tab"
         :data-tab-trigger="tab"
-        class="relative flex select-none px-4 py-2 text-center font-medium text-white transition-colors duration-300 focus:text-balance aria-selected:text-black"
+        class="relative flex bg-transparent px-4 py-2 text-center text-base font-semibold text-white transition-colors duration-300 select-none focus:text-balance aria-selected:text-black"
         role="tab"
         :aria-selected="currentTab === tab"
         @click="activateTab(tab)"
@@ -118,13 +118,13 @@ function getInitialStyle(name: string) {
       </button>
     </div>
 
-    <div class="flex w-full min-w-full max-w-full overflow-hidden">
+    <div class="flex w-full max-w-full min-w-full overflow-hidden">
       <div
         v-for="tab in tabsContent"
         :key="tab.name"
         :data-active="currentTab === tab.name"
         :data-tab-content="tab.name"
-        class="tab-content"
+        class="tab-content w-full flex-shrink-0"
         :style="getInitialStyle(tab.name)"
         @animationend="onTransitionEnd"
       >
@@ -134,10 +134,10 @@ function getInitialStyle(name: string) {
   </div>
 </template>
 
-<style scoped lang="postcss">
-.tab-content {
-  @apply w-full flex-shrink-0;
+<style scoped>
+@reference '@inject-css';
 
+.tab-content {
   &[data-active='true'] {
     animation: slide-in 300ms ease;
   }

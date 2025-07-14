@@ -15,8 +15,10 @@ const { optionProps } = useOption(props);
 </script>
 
 <style scoped>
+@reference '@inject-css';
+
 .option {
-  @apply cursor-pointer select-none border border-transparent font-normal text-white;
+  @apply cursor-pointer border border-transparent font-normal text-white select-none;
 
   &:focus {
     @apply border-emerald-500 outline-none;

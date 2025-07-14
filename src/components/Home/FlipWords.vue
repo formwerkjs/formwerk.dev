@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useIntervalFn } from '@vueuse/core';
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, computed } from 'vue';
 
 interface Props {
   words: string[];
@@ -28,7 +28,7 @@ useIntervalFn(() => {
 <template>
   <div class="relative inline-block">
     <div class="invisible">{{ biggestWord }}</div>
-    <div class="viewport">
+    <div class="viewport absolute inset-0 h-full w-full">
       <Transition name="flip" mode="out-in">
         <span :key="currentWordIndex" :class="class">
           {{ props.words[currentWordIndex] }}
@@ -38,12 +38,13 @@ useIntervalFn(() => {
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference '@inject-css';
+
 .viewport {
   display: flex;
   flex-direction: column;
   overflow: clip;
-  position: relative;
 }
 
 .flip-enter-active,
@@ -57,9 +58,5 @@ useIntervalFn(() => {
 
 .flip-leave-to {
   transform: translateY(75px);
-}
-
-.viewport {
-  @apply absolute inset-0 h-full w-full;
 }
 </style>

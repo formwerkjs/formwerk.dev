@@ -61,7 +61,7 @@ const { fields } = props.fnName
   </table>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
 button[popovertarget] {
   anchor-name: var(--popover-anchor-name);
 }

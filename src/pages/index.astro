@@ -1,5 +1,5 @@
 ---
-import '../tailwind.css';
+import '../styles/global.css';
 import FlipWords from '@components/Home/FlipWords.vue';
 import BringYourOwnStyles from '@components/Home/BringYourOwnStyles.astro';
 import InternationalReady from '@components/Home/InternationalReady.astro';
@@ -67,7 +67,7 @@ const description =
       <img src={Logo.src} alt="Formwerk" class="reveal h-10 lg:h-16" />
 
       <h1
-        class="mt-6 text-balance text-center text-4xl font-bold lg:text-6xl lg:leading-tight"
+        class="mt-6 text-center text-4xl font-bold text-balance lg:text-6xl lg:leading-tight"
       >
         <span class="heading-grad">Build</span>
         <FlipWords
@@ -86,7 +86,7 @@ const description =
       </h1>
 
       <p
-        class="mt-3 max-w-4xl text-balance text-center text-2xl font-medium text-zinc-400"
+        class="mt-3 max-w-4xl text-center text-2xl font-medium text-balance text-zinc-400"
       >
         A suite of Vue.js composables designed to enhance your forms with
         built-in behaviors, interactions, internationalization, and
@@ -95,14 +95,14 @@ const description =
 
       <div class="mt-16 grid grid-cols-2 gap-4">
         <a
-          class="rounded-full bg-emerald-600 px-5 py-3 text-center text-base font-semibold text-white transition-colors duration-500 hover:bg-emerald-700"
+          class="rounded-full bg-emerald-600 px-5 py-3 text-center text-base font-semibold text-white no-underline transition-colors duration-500 hover:bg-emerald-700"
           href="/guides/getting-started/"
         >
           Get started
         </a>
 
         <a
-          class="rounded-full bg-zinc-700 px-5 py-3 text-center text-base font-semibold text-white transition-colors duration-500 hover:bg-zinc-800"
+          class="rounded-full bg-zinc-700 px-5 py-3 text-center text-base font-semibold text-white no-underline transition-colors duration-500 hover:bg-zinc-800"
           href="/guides/composables/"
         >
           Composables
@@ -125,8 +125,6 @@ const description =
 </html>
 
 <style>
-  @import 'https://cdn.jsdelivr.net/npm/tailwindcss@3.4.14/lib/css/preflight.min.css';
-
   html,
   body {
     height: 100%;
@@ -148,12 +146,18 @@ const description =
 </style>
 
 <style is:global>
+  @reference '@inject-css';
+
+  body {
+    @apply m-0;
+  }
+
   section {
     @apply mt-20 w-full self-start px-5 pt-10 lg:px-0 lg:pt-20;
 
     h2,
     .heading-grad {
-      @apply text-center text-3xl font-bold leading-tight lg:text-left lg:text-5xl lg:leading-tight;
+      @apply text-center text-3xl leading-tight font-bold lg:text-left lg:text-5xl lg:leading-tight;
     }
 
     .section-description {
@@ -169,6 +173,10 @@ const description =
 
       .preview-frame-content {
         @apply p-8;
+      }
+
+      .preview-frame-title {
+        @apply my-0 px-4 text-sm;
       }
     }
 
@@ -229,5 +237,13 @@ const description =
 
   button[type='submit'] {
     @apply mt-2 rounded border-none bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800;
+  }
+
+  a {
+    @apply no-underline;
+  }
+
+  h3 {
+    @apply my-0;
   }
 </style>

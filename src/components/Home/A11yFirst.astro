@@ -33,7 +33,7 @@ const features = [
         <div class="flex flex-col items-center rounded-lg border border-transparent bg-zinc-800/60 p-6 transition-colors duration-500 hover:border-amber-500/20 lg:items-start">
           <h3 class="heading-grad !text-2xl font-semibold">{f.title}</h3>
           <p
-            class="mt-3 text-balance text-center text-zinc-400 lg:text-left"
+            class="mt-3 text-center text-balance text-zinc-400 lg:text-left"
             set:html={f.description}
           />
 
@@ -50,6 +50,8 @@ const features = [
 </section>
 
 <style>
+  @reference '@inject-css';
+
   section {
     background: radial-gradient(
       closest-corner,

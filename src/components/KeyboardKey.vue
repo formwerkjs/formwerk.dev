@@ -75,9 +75,11 @@ const key = computed(() => {
   </span>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference '@inject-css';
+
 .kbd {
-  @apply relative box-border inline-flex h-7 select-none items-center gap-1 overflow-hidden rounded-md border border-gray-200 bg-gray-300 px-2 pb-0.5 text-center align-baseline capitalize leading-none transition-colors duration-100 dark:border-gray-500 dark:bg-gray-800;
+  @apply relative box-border inline-flex h-7 items-center gap-1 overflow-hidden rounded-md border border-gray-200 bg-gray-300 px-2 pb-0.5 text-center align-baseline leading-none capitalize transition-colors duration-100 select-none dark:border-gray-500 dark:bg-gray-800;
 
   .key-part {
     @apply leading-none transition-transform duration-100;
@@ -88,7 +90,7 @@ const key = computed(() => {
   }
 
   .key-text {
-    @apply whitespace-nowrap text-[13px] font-medium;
+    @apply text-[13px] font-medium whitespace-nowrap;
   }
 
   .notch {

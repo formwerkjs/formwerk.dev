@@ -193,7 +193,7 @@ onMounted(() => {
     </div>
 
     <div
-      class="flex flex-grow flex-col border-t border-zinc-700/70 py-8 pl-8 lg:border-l lg:border-t-0"
+      class="flex flex-grow flex-col border-t border-zinc-700/70 py-8 pl-8 lg:border-t-0 lg:border-l"
     >
       <h3 class="mb-4 text-lg font-semibold text-white">
         Try the following interactions:
@@ -233,7 +233,9 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference '@inject-css';
+
 li {
   @apply inline-flex items-center gap-1 transition-colors duration-200;
 

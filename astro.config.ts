@@ -1,20 +1,28 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import tailwind from '@astrojs/tailwind';
-
 import vue from '@astrojs/vue';
 import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
 import Components from 'unplugin-vue-components/vite';
-
 import partytown from '@astrojs/partytown';
-
 import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
+import { resolve } from 'path';
+
+const __dirname = resolve();
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://formwerk.dev',
   vite: {
+    resolve: {
+      alias: [
+        {
+          find: '@inject-css',
+          replacement: resolve(__dirname, './src/styles/global.css'),
+        },
+      ],
+    },
     plugins: [
       Components({
         resolvers: [
@@ -27,6 +35,7 @@ export default defineConfig({
         compiler: 'vue3',
         defaultClass: 'fill-current flex-shrink-0',
       }),
+      tailwindcss(),
     ],
   },
   integrations: [
@@ -88,7 +97,7 @@ export default defineConfig({
           href: 'https://discord.gg/gQ7wqpvT5X',
         },
       ],
-      customCss: ['./src/tailwind.css'],
+      customCss: ['./src/styles/global.css'],
       sidebar: [
         {
           label: 'Introduction',
@@ -119,9 +128,6 @@ export default defineConfig({
       editLink: {
         baseUrl: 'https://github.com/formwerkjs/formwerk.dev/edit/main/',
       },
-    }),
-    tailwind({
-      applyBaseStyles: false,
     }),
     vue(),
     partytown({ config: { forward: ['dataLayer.push'] } }),

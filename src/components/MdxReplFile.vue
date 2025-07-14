@@ -16,7 +16,7 @@
     <template v-if="actualHeight > 300">
       <button
         type="button"
-        class="absolute bottom-2.5 left-1/2 z-10 flex -translate-x-1/2 cursor-pointer items-center gap-1 rounded-md bg-zinc-950 px-2 py-1 text-xs font-medium text-zinc-500 opacity-0 transition-opacity duration-200 hover:text-zinc-300 group-hover:opacity-100"
+        class="absolute bottom-2.5 left-1/2 z-10 flex -translate-x-1/2 cursor-pointer items-center gap-1 rounded-md bg-zinc-950 px-2 py-1 text-xs font-medium text-zinc-500 opacity-0 transition-opacity duration-200 group-hover:opacity-100 hover:text-zinc-300"
         @click="isExpanded = !isExpanded"
       >
         <PhCaretDown class="size-4" :class="{ 'rotate-180': isExpanded }" />
@@ -59,7 +59,9 @@ watchEffect(async () => {
 });
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference '@inject-css';
+
 [data-file-name] {
   position: relative;
   overflow: hidden;

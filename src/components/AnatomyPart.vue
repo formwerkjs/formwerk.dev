@@ -4,7 +4,7 @@
   </div>
 
   <div
-    class="AnatomyPopover__popover text-sm font-medium italic text-zinc-500 dark:dark:text-zinc-400"
+    class="AnatomyPopover__popover text-sm font-medium text-zinc-500 italic dark:dark:text-zinc-400"
     :class="[`is-${direction}`, mirrored ? 'is-mirrored' : '']"
   >
     {{ text }}
@@ -47,7 +47,9 @@ defineOptions({
 });
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference '@inject-css';
+
 .AnatomyPopover {
   anchor-name: v-bind(id);
 }
@@ -97,7 +99,7 @@ defineOptions({
     @apply ml-1 flex-row-reverse;
 
     &::after {
-      @apply ml-0 mr-1;
+      @apply mr-1 ml-0;
     }
   }
 

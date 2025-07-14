@@ -52,7 +52,9 @@ const {
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference '@inject-css';
+
 .InputNumber {
   @apply relative w-full max-w-xs;
   margin-bottom: calc(1em * 1.5);
@@ -85,7 +87,7 @@ const {
   }
 
   button {
-    @apply h-full p-2 transition-all duration-200 hover:bg-zinc-900;
+    @apply h-full bg-zinc-800 p-2 transition-all duration-200 hover:bg-zinc-900;
 
     &:disabled {
       @apply cursor-not-allowed opacity-50 hover:bg-transparent;

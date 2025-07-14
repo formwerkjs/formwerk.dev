@@ -144,13 +144,15 @@ const selectedOption = computed(() => {
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference '@inject-css';
+
 .InputSelect {
   @apply relative w-full max-w-xs;
   margin-bottom: calc(1em * 1.5);
 
   .label {
-    @apply mb-1 block w-full whitespace-nowrap text-sm font-semibold text-white;
+    @apply mb-1 block w-full text-sm font-semibold whitespace-nowrap text-white;
   }
 
   .dropdown-icon {
@@ -158,11 +160,11 @@ const selectedOption = computed(() => {
   }
 
   .trigger {
-    @apply w-full cursor-pointer whitespace-nowrap rounded-md border border-zinc-700 bg-zinc-800 py-3 pl-4 pr-3 text-zinc-400 transition-all duration-200 focus:bg-zinc-900;
+    @apply cursor-pointer rounded-md border border-zinc-700 bg-zinc-800 py-3 pr-3 pl-4 whitespace-nowrap text-zinc-400 transition-all duration-200 focus:bg-zinc-900;
     anchor-name: v-bind(id);
 
     &:focus {
-      @apply border-emerald-500 outline-none ring-1 ring-emerald-500;
+      @apply border-emerald-500 ring-1 ring-emerald-500 outline-none;
     }
 
     &:hover {

@@ -7,7 +7,7 @@
     }"
   >
     <button
-      class="absolute right-2 top-2 flex size-7 cursor-pointer items-center justify-center rounded-md bg-zinc-800 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+      class="absolute top-2 right-2 flex size-7 cursor-pointer items-center justify-center rounded-md bg-zinc-800 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
       type="button"
       title="Open in Stackblitz"
       @click="openInStackblitz"
@@ -50,7 +50,7 @@
         <component v-if="tab.icon" :is="tab.icon" class="size-4" />
         {{ tab.filename }}
         <div
-          class="absolute bottom-0 left-px right-0 z-10 hidden h-0.5 translate-y-px bg-emerald-500 group-aria-selected:block"
+          class="absolute right-0 bottom-0 left-px z-10 hidden h-0.5 translate-y-px bg-emerald-500 group-aria-selected:block"
         ></div>
       </button>
     </div>
@@ -267,7 +267,9 @@ async function openInStackblitz() {
 }
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference '@inject-css';
+
 .preview-container {
   @apply border-0 ring-1 ring-zinc-700;
 

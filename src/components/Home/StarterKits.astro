@@ -23,8 +23,8 @@ import TailwindLogo from '~icons/vscode-icons/file-type-tailwind';
       rel="noopener"
       class="card"
     >
-      <h3 class="heading-grad flex items-center gap-2">
-        <PhFeather class="size-8 text-rose-500" />
+      <h3 class="heading-grad my-0 flex items-center gap-2">
+        <PhFeather class="!size-8 text-rose-500" />
         Minimal
       </h3>
 
@@ -41,7 +41,7 @@ import TailwindLogo from '~icons/vscode-icons/file-type-tailwind';
     </a>
 
     <a href="#starter-kits" class="card in-progress">
-      <h3 class="heading-grad">
+      <h3 class="heading-grad my-0">
         <TailwindLogo class="logo" />
         Tailwind
       </h3>
@@ -60,6 +60,8 @@ import TailwindLogo from '~icons/vscode-icons/file-type-tailwind';
 </section>
 
 <style>
+  @reference '@inject-css';
+
   section {
     background: radial-gradient(
       closest-corner,
@@ -100,7 +102,7 @@ import TailwindLogo from '~icons/vscode-icons/file-type-tailwind';
     }
 
     .cta {
-      @apply mt-6 inline-block text-lg font-semibold;
+      @apply mt-6 inline-flex items-center gap-1 text-lg font-semibold;
 
       svg {
         @apply inline-block size-6;

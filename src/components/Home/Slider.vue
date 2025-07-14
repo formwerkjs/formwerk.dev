@@ -28,7 +28,7 @@ const t2 = useThumbMetadata(1);
 
     <div
       v-bind="trackProps"
-      class="track mb-6 mt-5 flex h-1.5 items-center rounded-md bg-stone-500"
+      class="track mt-5 mb-6 flex h-1.5 items-center rounded-md bg-stone-500"
     >
       <Thumb />
       <Thumb />
@@ -41,6 +41,8 @@ const t2 = useThumbMetadata(1);
 </template>
 
 <style scoped>
+@reference '@inject-css';
+
 .slider {
   --track-width: 200px;
 
