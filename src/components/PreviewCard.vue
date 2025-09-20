@@ -15,7 +15,6 @@
           muted
           :src="src"
           role="presentation"
-          :poster="src?.replace('.mp4', '.webp')"
           class="h-full w-full object-cover"
         />
       </slot>
