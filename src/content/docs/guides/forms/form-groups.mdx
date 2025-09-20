@@ -231,13 +231,12 @@ The group tracks and aggregates the fields' state that are part of it. The follo
 
 It also exposes the following getters and functions:
 
-| Name           | Type                                  | Description                                                                     |
-| -------------- | ------------------------------------- | ------------------------------------------------------------------------------- |
-| `getErrors`    | () => IssueCollection[]               | Returns all errors within the group.                                            |
-| `getValues`    | () => Record\<string, any>            | Returns all values within the group.                                            |
-| `getError`     | (name: string) => string \| undefined | Returns the error for a given field within the group.                           |
-| `displayError` | (name: string) => string \| undefined | Displays the error for a given field within the group if the field was touched. |
-| `validate`     | () => Promise                         | Validates all fields within the group.                                          |
+| Name        | Type                                  | Description                                           |
+| ----------- | ------------------------------------- | ----------------------------------------------------- |
+| `getErrors` | () => IssueCollection[]               | Returns all errors within the group.                  |
+| `getValues` | () => Record\<string, any>            | Returns all values within the group.                  |
+| `getError`  | (name: string) => string \| undefined | Returns the error for a given field within the group. |
+| `validate`  | () => Promise                         | Validates all fields within the group.                |
 
 ## Group Names and Nested Paths
 

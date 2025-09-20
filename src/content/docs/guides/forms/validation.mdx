@@ -158,7 +158,6 @@ All Formwerk components expose a few properties that can help you with error dis
 - `isTouched`: A boolean indicating if the field has been interacted with (blurred).
 - `isValid`: A boolean indicating if the field is valid.
 - `isDirty`: A boolean indicating if the field's value has changed.
-- `displayError`: A function that returns the error message if the field has been touched and is invalid.
 
 Given these properties, you can mix between them to produce the desired behavior.
 
@@ -214,53 +213,3 @@ import TextField from './TextField.vue';
 </MdxRepl>
 
 Notice that even though the error message is present initially, it is still not displayed. This is because the field is not yet touched.
-
-You can shorten this logic by using the `displayError` function.
-
-<MdxRepl client:load>
-
-<div slot="TextField.vue">
-```vue
-<script setup lang="ts">
-import { type TextFieldProps, useTextField } from '@formwerk/core';
-
-const props = defineProps<TextFieldProps>();
-
-const {
-inputProps,
-labelProps,
-displayError,
-errorMessageProps,
-descriptionProps,
-} = useTextField(props);
-
-</script>
-
-<template>
-  <div>
-    <label v-bind="labelProps">{{ label }}</label>
-    <input v-bind="inputProps" :style="{ display: 'block' }" />
-
-    <div v-bind="errorMessageProps">
-      {{ displayError() }}
-    </div>
-
-  </div>
-</template>
-```
-</div>
-
-<div slot="App.vue">
-```vue
-<script setup lang="ts">
-import TextField from './TextField.vue';
-</script>
-
-<template>
-  <TextField label="Email" type="email" required />
-</template>
-```
-
-</div>
-
-</MdxRepl>

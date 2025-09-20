@@ -25,10 +25,10 @@ const {
   labelProps,
   errorMessageProps,
   isTouched,
-  displayError,
   fieldValue,
   listBoxProps,
   listBoxEl,
+  errorMessage,
   isPopupOpen,
 } = useSelect(props);
 
@@ -139,7 +139,7 @@ const selectedOption = computed(() => {
     </div>
 
     <span v-bind="errorMessageProps" class="error-message">
-      {{ displayError() }}
+      {{ errorMessage }}
     </span>
   </div>
 </template>

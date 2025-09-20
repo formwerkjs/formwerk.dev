@@ -24,7 +24,7 @@
     "@astrojs/ts-plugin": "^1.10.4",
     "@astrojs/vue": "^5.1.0",
     "@floating-ui/vue": "^1.1.7",
-    "@formwerk/core": "^0.11.1",
+    "@formwerk/core": "^0.13.0",
     "@iconify-json/vscode-icons": "^1.2.23",
     "@stackblitz/sdk": "^1.11.0",
     "@tailwindcss/vite": "^4.1.11",

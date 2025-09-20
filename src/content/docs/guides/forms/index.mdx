@@ -822,7 +822,6 @@ There are three ways to access errors with `useForm`:
 
 - `getError` to get the error of a specific field.
 - `getErrors` to get all errors in the form grouped by field.
-- `displayError` to display the error of a specific field if it has been touched.
 
 <Tabs>
 
@@ -911,51 +910,6 @@ const { handleSubmit, getErrors } = useForm({
 
 </TabItem>
 
-<TabItem label="displayError()">
-
-The `displayError` function is similar to `getError`, but it only displays the error if the field has been touched. This is useful when you want to show errors only after the user has interacted with the field.
-
-You can alternatively use CSS with the `:user-invalid` pseudo-class to show errors only when the field is invalid and has been interacted with. More info on that in the [Styling guide](/extras/styling/).
-
-<MdxRepl  client:load>
-
-<div slot="!TextField.vue">
-  <TextFieldPartial />
-</div>
-
-<div slot="App.vue">
-
-```vue
-<script setup lang="ts">
-import { useForm } from '@formwerk/core';
-import TextField from './TextField.vue';
-import { z } from 'zod';
-
-const { handleSubmit, displayError } = useForm({
-  schema: z.object({
-    url: z.string().url().max(8),
-    email: z.string().email(),
-  }),
-});
-</script>
-
-<template>
-  <TextField name="url" label="URL" required />
-  <TextField name="email" label="Email" required />
-
-  <ul>
-    <li>URL Error: {{ displayError('url') }}</li>
-    <li>Email Error: {{ displayError('email') }}</li>
-  </ul>
-</template>
-```
-
-</div>
-
-</MdxRepl>
-
-</TabItem>
-
 </Tabs>
 
 ## Submit Errors
@@ -1028,7 +982,7 @@ function onResetClick() {
 
 Notice that even though we called reset, the errors are still displayed. By default, reset re-validates the form afterward. This is to ensure that the validation state of the fields matches their actual validity.
 
-You should consider using `isTouched` or `displayError` to show errors only when the field has been interacted with, which would eliminate this caveat. Alternatively, you can disable this behavior by passing `revalidate: false` to the `reset` function.
+You should consider using `isTouched` to show errors only when the field has been interacted with, which would eliminate this caveat. Alternatively, you can disable this behavior by passing `revalidate: false` to the `reset` function.
 
 ```ts
 import { useForm } from '@formwerk/core';
