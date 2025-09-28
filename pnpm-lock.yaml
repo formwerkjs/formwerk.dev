@@ -33,8 +33,8 @@ importers:
         specifier: ^1.1.9
         version: 1.1.9(vue@3.5.21(typescript@5.9.2))
       '@formwerk/core':
-        specifier: ^0.13.0
-        version: 0.13.0(vue@3.5.21(typescript@5.9.2))
+        specifier: ^0.14.0
+        version: 0.14.0(vue@3.5.21(typescript@5.9.2))
       '@iconify-json/vscode-icons':
         specifier: ^1.2.30
         version: 1.2.30
@@ -749,13 +749,13 @@ packages:
   '@floating-ui/vue@1.1.9':
     resolution: {integrity: sha512-BfNqNW6KA83Nexspgb9DZuz578R7HT8MZw1CfK9I6Ah4QReNWEJsXWHN+SdmOVLNGmTPDi+fDT535Df5PzMLbQ==}
 
-  '@formwerk/core@0.13.0':
-    resolution: {integrity: sha512-oQPm345J9dZuRM4/CVRkCu4Ew1iT0b6I6YS+fya+yKsLhKc4FZ2x78YEUhEPiFRYrJxvPVfRB20Px7//aGUYBg==}
+  '@formwerk/core@0.14.0':
+    resolution: {integrity: sha512-9jomx0zgr6YEjgFuJf7Ci6Dd89dFYqVvrzlczOH2ck7+UDbBbFz4rOg2tkkxVzaDYlUPuduBYq+bcZjWInDaUQ==}
     peerDependencies:
       vue: '>=3.5.0'
 
-  '@formwerk/devtools@0.13.0':
-    resolution: {integrity: sha512-7PO2EoQ8tLumjeMq73S3PCMzOSnxTSQsp4XANmZmkFSiBDUh4ZR6mFH6iPn5qTA80yPe5s91FVTvnjNcd7yb4A==}
+  '@formwerk/devtools@0.14.0':
+    resolution: {integrity: sha512-VyRh14IQqbTR7Co3ld/9LmtNX5pzfxUtCtNxjtkxlOOpZGH0+6mH6oXGTehQO3PIIrD2uXwKMrb6+K7j7ZD6Zg==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1712,6 +1712,9 @@ packages:
 
   birpc@2.5.0:
     resolution: {integrity: sha512-VSWO/W6nNQdyP520F1mhf+Lc2f8pjGQOtoHHm7Ze8Go1kX7akpVIrtTa0fn+HB0QJEDVacl6aO08YE0PgXfdnQ==}
+
+  birpc@2.6.1:
+    resolution: {integrity: sha512-LPnFhlDpdSH6FJhJyn4M0kFO7vtQ5iPw24FnG0y21q09xC7e8+1LeR31S1MAIrDAHp4m7aas4bEkTDTvMAtebQ==}
 
   blob-to-buffer@1.2.9:
     resolution: {integrity: sha512-BF033y5fN6OCofD3vgHmNtwZWRcq9NLyyxyILx9hfMy1sXYy4ojFl765hJ2lP0YaN2fuxPaLO2Vzzoxy0FLFFA==}
@@ -5078,9 +5081,9 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@formwerk/core@0.13.0(vue@3.5.21(typescript@5.9.2))':
+  '@formwerk/core@0.14.0(vue@3.5.21(typescript@5.9.2))':
     dependencies:
-      '@formwerk/devtools': 0.13.0
+      '@formwerk/devtools': 0.14.0
       '@internationalized/date': 3.9.0
       '@standard-schema/spec': 1.0.0
       '@standard-schema/utils': 0.3.0
@@ -5088,7 +5091,7 @@ snapshots:
       type-fest: 4.41.0
       vue: 3.5.21(typescript@5.9.2)
 
-  '@formwerk/devtools@0.13.0':
+  '@formwerk/devtools@0.14.0':
     dependencies:
       '@vue/devtools-api': 8.0.2
       '@vue/devtools-kit': 8.0.2
@@ -5903,7 +5906,7 @@ snapshots:
   '@vue/devtools-kit@8.0.2':
     dependencies:
       '@vue/devtools-shared': 8.0.2
-      birpc: 2.5.0
+      birpc: 2.6.1
       hookable: 5.5.3
       mitt: 3.0.1
       perfect-debounce: 2.0.0
@@ -6205,6 +6208,8 @@ snapshots:
   binary-extensions@2.3.0: {}
 
   birpc@2.5.0: {}
+
+  birpc@2.6.1: {}
 
   blob-to-buffer@1.2.9: {}
 
