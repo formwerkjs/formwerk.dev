@@ -7,7 +7,7 @@
     @mouseenter="onEnter"
     @mouseleave="onLeave"
   >
-    <div class="h-40 bg-gray-300">
+    <div class="h-40 rounded-lg">
       <slot>
         <video
           ref="videoEl"
