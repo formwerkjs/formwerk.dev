@@ -7,7 +7,7 @@
     @mouseenter="onEnter"
     @mouseleave="onLeave"
   >
-    <div class="h-40 bg-gray-300">
+    <div class="h-40 rounded-lg">
       <slot>
         <video
           ref="videoEl"
@@ -15,7 +15,6 @@
           muted
           :src="src"
           role="presentation"
-          :poster="src?.replace('.mp4', '.webp')"
           class="h-full w-full object-cover"
         />
       </slot>
